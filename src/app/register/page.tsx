@@ -47,11 +47,11 @@ export default function RegisterPage() {
     },
     de: {
       title: "Konto erstellen",
-      subtitle: "Werden Sie Teil einer vertrauenswürdigen Community für funktionelle, präventive und ganzheitliche Gesundheit.",
+      subtitle: "Werde Teil einer vertrauenswürdigen Community für funktionelle, präventive und ganzheitliche Gesundheit.",
       pitchTitle: "Warum dem OmniCheck Network beitreten",
-      pitch1: "Vernetzen Sie sich mit verifizierten Fachpersonen in Europa.",
-      pitch2: "Entdecken Sie passende Ressourcen und Leitfäden.",
-      pitch3: "Verfolgen Sie Ihren Weg und arbeiten Sie sicher zusammen.",
+      pitch1: "Vernetze dich mit verifizierten Fachpersonen in Europa.",
+      pitch2: "Entdecke passende Ressourcen und Leitfäden.",
+      pitch3: "Verfolge deinen Weg und arbeite sicher zusammen.",
       name: "Vollständiger Name",
       email: "E‑Mail‑Adresse",
       password: "Passwort",
@@ -106,11 +106,11 @@ export default function RegisterPage() {
       phonePlaceholder: "+49 123 456789", companyPlaceholder: "My company", addressPlaceholder: "Street and number", postalPlaceholder: "e.g. 10115", statePlaceholder: "e.g. Bavaria", cityPlaceholder: "e.g. Munich",
     },
     de: {
-      headerTitle: "Jetzt kostenlos registrieren", headerSub: "Registrieren und sofort Zugriff auf unsere Apps erhalten",
+      headerTitle: "Jetzt kostenlos registrieren", headerSub: "Registriere dich und erhalte sofort Zugriff auf unsere Apps",
       sectionPersonal: "Persönliche Daten", firstName: "Vorname", lastName: "Nachname",
       phone: "Telefon (optional)", company: "Unternehmen (optional)",
       sectionLocation: "Adresse", address: "Adresse", country: "Land", selectOption: "Auswählen", postalCode: "Postleitzahl", state: "Bundesland/Kanton", city: "Stadt",
-      sectionInterests: "Ihre Interessen", interestMobile: "Mobile‑App", interestMobileDesc: "Interessiert an unserer iOS & Android‑App?", interestWeb: "Web‑App", interestWebDesc: "Interessiert an unserer Web‑Plattform?", interestBoth: "Beides", interestBothDesc: "Interessiert an allen unseren Plattformen?",
+      sectionInterests: "Deine Interessen", interestMobile: "Mobile‑App", interestMobileDesc: "Interessiert an unserer iOS & Android‑App?", interestWeb: "Web‑App", interestWebDesc: "Interessiert an unserer Web‑Plattform?", interestBoth: "Beides", interestBothDesc: "Interessiert an allen unseren Plattformen?",
       back: "Zurück", next: "Weiter",
       sectionConfirm: "Bestätigung", newsletterLabel: "Ich möchte den Newsletter abonnieren", acceptPrefix: "Ich akzeptiere die ", privacy: "Datenschutzerklärung", acceptSuffix: ".", summary: "Zusammenfassung:", from: "aus",
       phonePlaceholder: "+49 123 456789", companyPlaceholder: "Mein Unternehmen", addressPlaceholder: "Straße und Hausnummer", postalPlaceholder: "z. B. 10115", statePlaceholder: "z. B. Bayern", cityPlaceholder: "z. B. München",
@@ -127,6 +127,29 @@ export default function RegisterPage() {
     },
   };
   const L = ui[lang] ?? ui.en;
+
+  // Localized display labels for the country select while keeping stable backend values
+  const countryLabels: Record<string, { Germany: string; Switzerland: string; Austria: string; France: string }> = {
+    en: {
+      Germany: "Germany",
+      Switzerland: "Switzerland",
+      Austria: "Austria",
+      France: "France",
+    },
+    de: {
+      Germany: "Deutschland",
+      Switzerland: "Schweiz",
+      Austria: "Österreich",
+      France: "Frankreich",
+    },
+    fr: {
+      Germany: "Allemagne",
+      Switzerland: "Suisse",
+      Austria: "Autriche",
+      France: "France",
+    },
+  };
+  const C = countryLabels[lang] ?? countryLabels.en;
 
   const [form, setForm] = useState({
     firstName: "",
@@ -157,6 +180,7 @@ export default function RegisterPage() {
     regFailed: string;
     regFailedDemo: string;
     regFailedLogin: string;
+    emailInUse: string;
     regSuccessToast: string;
     regSuccessRedirect: string;
   }> = {
@@ -168,17 +192,19 @@ export default function RegisterPage() {
       regFailed: "Registration failed",
       regFailedDemo: "Registration failed (demo).",
       regFailedLogin: "Account created, but login failed",
+      emailInUse: "An account with this email already exists. Please log in instead.",
       regSuccessToast: "Account created successfully",
       regSuccessRedirect: "Registered successfully. Redirecting...",
     },
     de: {
-      fillAll: "Bitte füllen Sie alle Felder aus.",
+      fillAll: "Bitte fülle alle Felder aus.",
       pwTooShort: "Das Passwort muss mindestens 8 Zeichen lang sein.",
       pwMismatch: "Die Passwörter stimmen nicht überein.",
-      acceptPrivacy: "Bitte akzeptieren Sie die Datenschutzerklärung, um fortzufahren.",
+      acceptPrivacy: "Bitte akzeptiere die Datenschutzerklärung, um fortzufahren.",
       regFailed: "Registrierung fehlgeschlagen",
       regFailedDemo: "Registrierung fehlgeschlagen (Demo).",
       regFailedLogin: "Konto erstellt, aber Anmeldung fehlgeschlagen",
+      emailInUse: "Für diese E‑Mail-Adresse besteht bereits ein Konto. Bitte melde dich stattdessen an.",
       regSuccessToast: "Konto erfolgreich erstellt",
       regSuccessRedirect: "Erfolgreich registriert. Weiterleitung...",
     },
@@ -190,6 +216,7 @@ export default function RegisterPage() {
       regFailed: "Échec de l’inscription",
       regFailedDemo: "Échec de l’inscription (démo).",
       regFailedLogin: "Compte créé, mais connexion impossible",
+      emailInUse: "Un compte existe déjà avec cet e‑mail. Veuillez vous connecter.",
       regSuccessToast: "Compte créé avec succès",
       regSuccessRedirect: "Inscription réussie. Redirection...",
     },
@@ -286,6 +313,11 @@ export default function RegisterPage() {
       });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
+        // Handle "account already exists" (HTTP 409 Conflict) with a friendly translated message
+        if (res.status === 409) {
+          setMessage(M.emailInUse);
+          return;
+        }
         const translated = translateApiError(j?.error);
         setMessage(translated || j?.error || M.regFailed);
         return;
@@ -449,10 +481,10 @@ export default function RegisterPage() {
                         <label htmlFor="country" className="form-label">{L.country}</label>
                         <select id="country" name="country" className="form-control" value={form.country} onChange={onChange}>
                           <option value="">{L.selectOption}</option>
-                          <option value="Germany">Germany</option>
-                          <option value="Switzerland">Switzerland</option>
-                          <option value="Austria">Austria</option>
-                          <option value="France">France</option>
+                          <option value="Germany">{C.Germany}</option>
+                          <option value="Switzerland">{C.Switzerland}</option>
+                          <option value="Austria">{C.Austria}</option>
+                          <option value="France">{C.France}</option>
                         </select>
                       </div>
                       <div className="col-md-6">

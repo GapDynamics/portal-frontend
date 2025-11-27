@@ -62,7 +62,7 @@ export default function AboutPage() {
       stats3: "Ressourcen",
       stats3d: "Hunderte von Guides",
       teamTitle: "Team & Partner",
-      ctaTitle: "Werden Sie Teil des Netzwerks und gestalten Sie bessere Gesundheit",
+      ctaTitle: "Werde Teil des Netzwerks und gestalte bessere Gesundheit",
       ctaBtn: "Jetzt starten",
     },
     fr: {

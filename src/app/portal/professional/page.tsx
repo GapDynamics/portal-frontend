@@ -13,6 +13,7 @@ export default function ProfessionalPortalPage() {
   const [bio, setBio] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
   const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
@@ -46,6 +47,7 @@ export default function ProfessionalPortalPage() {
           if (p.bio) setBio(p.bio);
           if (p.city) setCity(p.city);
           if (p.country) setCountry(p.country);
+          if (p.address) setAddress(p.address);
           if (typeof p.lat === 'number') setLat(p.lat);
           if (typeof p.lng === 'number') setLng(p.lng);
         }
@@ -91,6 +93,7 @@ export default function ProfessionalPortalPage() {
         if (pd.bio) setBio(pd.bio);
         if (pd.city) setCity(pd.city);
         if (pd.country) setCountry(pd.country);
+        if (pd.address) setAddress(pd.address);
         if (pd.phone || pd.telephone) setPhone(pd.phone || pd.telephone);
         if (pd.profilePictureUrl) setProfilePictureUrl(pd.profilePictureUrl);
         if (typeof pd.latitude === 'number') setLat(pd.latitude);
@@ -123,6 +126,7 @@ export default function ProfessionalPortalPage() {
       if (specialties) payload.specialties = specialties;
       if (city) payload.city = city;
       if (country) payload.country = country;
+      if (address) payload.address = address;
       if (phone) { payload.telephone = phone; }
       if (profilePictureUrl && !profilePictureUrl.startsWith('blob:')) payload.profilePictureUrl = profilePictureUrl;
       if (Number.isFinite(latVal)) payload.latitude = latVal;
@@ -209,27 +213,34 @@ export default function ProfessionalPortalPage() {
   async function useMyLocation() {
     try {
       setNotice(null);
+      let latVal: number | null = null;
+      let lngVal: number | null = null;
       await new Promise<void>((resolve, reject) => {
         if (!navigator.geolocation) return reject(new Error(t.errGeoUnsupported));
         navigator.geolocation.getCurrentPosition((pos) => {
-          setLat(pos.coords.latitude);
-          setLng(pos.coords.longitude);
+          latVal = pos.coords.latitude;
+          lngVal = pos.coords.longitude;
+          setLat(latVal);
+          setLng(lngVal);
           resolve();
         }, (err) => reject(err), { enableHighAccuracy: true, timeout: 8000 });
       });
-      // Reverse geocode (lightweight, client-side)
-      const la = typeof lat === 'number' ? lat : undefined;
-      const lo = typeof lng === 'number' ? lng : undefined;
-      const latVal = la ?? (typeof lat === 'string' ? toNum(lat) : NaN);
-      const lngVal = lo ?? (typeof lng === 'string' ? toNum(lng) : NaN);
-      if (Number.isFinite(latVal) && Number.isFinite(lngVal)) {
+
+      // Reverse geocode into human-readable address, city and country
+      if (latVal !== null && lngVal !== null) {
         const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latVal}&lon=${lngVal}`;
         const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
         if (res.ok) {
-          const data = await res.json();
-          const addr = data?.address || {};
-          setCity(addr.city || addr.town || addr.village || addr.county || "");
-          setCountry(addr.country || "");
+          const data = await res.json().catch(() => ({}));
+          const addr = (data as any)?.address || {};
+          let line = [addr.road, addr.house_number].filter(Boolean).join(" ");
+          if (!line && typeof (data as any)?.display_name === 'string') {
+            line = (data as any).display_name as string;
+          }
+          if (line) setAddress(line);
+          const cityName = addr.city || addr.town || addr.village || addr.county || "";
+          if (cityName) setCity(cityName);
+          if (addr.country) setCountry(addr.country);
         }
       }
     } catch (e: any) {
@@ -250,6 +261,7 @@ export default function ProfessionalPortalPage() {
       const payload: any = {};
       if (city) payload.city = city;
       if (country) payload.country = country;
+      if (address) payload.address = address;
       if (Number.isFinite(latVal)) payload.latitude = latVal;
       if (Number.isFinite(lngVal)) payload.longitude = lngVal;
       const res = await fetch(`${apiBase}/profiles/me`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(payload) });
@@ -266,7 +278,7 @@ export default function ProfessionalPortalPage() {
     heroTitle: string; heroSub: string;
     messagesTitle: string; noMessages: string; btnOpen: string;
     profileTitle: string; profileSub: string;
-    labelFullName: string; labelRole: string; labelLanguages: string; labelSpecialties: string; labelCity: string; labelCountry: string; labelLat: string; labelLng: string;
+    labelFullName: string; labelRole: string; labelLanguages: string; labelSpecialties: string; labelCity: string; labelCountry: string; labelAddress: string; labelLat: string; labelLng: string;
     labelBio: string; labelPhone: string;
     roleDoctor: string; roleDietitian: string; roleNutritionist: string; roleCoach: string; roleTherapist: string;
     profilePicLabel: string; btnChangePhoto: string; btnUploadPhoto: string;
@@ -294,6 +306,7 @@ export default function ProfessionalPortalPage() {
       labelSpecialties: "Specialties",
       labelCity: "City",
       labelCountry: "Country",
+      labelAddress: "Address",
       labelLat: "Lat",
       labelLng: "Lng",
       labelBio: "Bio",
@@ -329,19 +342,20 @@ export default function ProfessionalPortalPage() {
     de: {
       h1: "Fachpersonen-Portal",
       sub: "Willkommen zurück. Eine kurze Übersicht.",
-      heroTitle: "Mehr Sichtbarkeit für Ihre Praxis",
-      heroSub: "Halten Sie Ihr Profil vollständig, antworten Sie schnell und teilen Sie Ressourcen, um Vertrauen aufzubauen.",
+      heroTitle: "Mehr Sichtbarkeit für deine Praxis",
+      heroSub: "Halte dein Profil vollständig, antworte schnell und teile Ressourcen, um Vertrauen aufzubauen.",
       messagesTitle: "Nachrichten",
       noMessages: "Keine neuen Nachrichten",
       btnOpen: "Öffnen",
       profileTitle: "Profil",
-      profileSub: "Aktualisieren Sie Ihre Angaben, damit Patient:innen Sie finden und kontaktieren können.",
+      profileSub: "Aktualisiere deine Angaben, damit Patient:innen dich finden und kontaktieren können.",
       labelFullName: "Vollständiger Name",
       labelRole: "Rolle",
       labelLanguages: "Sprachen",
       labelSpecialties: "Fachgebiete",
       labelCity: "Stadt",
       labelCountry: "Land",
+      labelAddress: "Adresse",
       labelLat: "Breite",
       labelLng: "Länge",
       labelBio: "Kurzprofil",
@@ -372,7 +386,7 @@ export default function ProfessionalPortalPage() {
       metricProfile: "Profilvollständigkeit",
       metricInquiries: "Neue Anfragen",
       metricUnread: "Ungelesene Nachrichten",
-      locationWarning: "Bitte vervollständigen Sie Ihre Praxisangaben (Stadt, Land, Breiten- und Längengrad), um im Verzeichnis sichtbar zu sein und Kontaktanfragen zu erhalten.",
+      locationWarning: "Bitte vervollständige deine Praxisangaben (Stadt, Land, Breiten- und Längengrad), um im Verzeichnis sichtbar zu sein und Kontaktanfragen zu erhalten.",
     },
     fr: {
       h1: "Portail professionnel",
@@ -390,6 +404,7 @@ export default function ProfessionalPortalPage() {
       labelSpecialties: "Spécialités",
       labelCity: "Ville",
       labelCountry: "Pays",
+      labelAddress: "Adresse",
       labelLat: "Lat",
       labelLng: "Lng",
       labelBio: "Bio courte",
@@ -572,13 +587,9 @@ export default function ProfessionalPortalPage() {
                 <label className="form-label">{t.labelCountry}</label>
                 <input className="form-control" placeholder={t.labelCountry} value={country} onChange={(e) => setCountry(e.target.value)} />
               </div>
-              <div className="col-md-2">
-                <label className="form-label">{t.labelLat}</label>
-                <input className="form-control" placeholder={t.labelLat} value={lat} onChange={(e) => setLat(e.target.value as any)} />
-              </div>
-              <div className="col-md-2">
-                <label className="form-label">{t.labelLng}</label>
-                <input className="form-control" placeholder={t.labelLng} value={lng} onChange={(e) => setLng(e.target.value as any)} />
+              <div className="col-md-4">
+                <label className="form-label">{t.labelAddress}</label>
+                <input className="form-control" placeholder={t.labelAddress} value={address} onChange={(e) => setAddress(e.target.value)} />
               </div>
             </div>
             <div className="d-flex gap-2 mt-5">

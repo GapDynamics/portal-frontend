@@ -26,12 +26,12 @@ export default function ForgotPasswordPage() {
     },
     de: {
       title: "Passwort vergessen",
-      subtitle: "Geben Sie Ihre E‑Mail ein. Falls ein Konto existiert, senden wir einen Zurücksetzlink.",
+      subtitle: "Gib deine E‑Mail ein. Falls ein Konto existiert, schicken wir dir einen Link zum Zurücksetzen.",
       email: "E‑Mail‑Adresse",
       submit: "Link senden",
       back: "Zur Anmeldung",
       generic: "Falls ein Konto mit dieser E‑Mail existiert, wurde ein Link zum Zurücksetzen gesendet.",
-      invalidEmail: "Bitte geben Sie eine gültige E‑Mail ein.",
+      invalidEmail: "Bitte gib eine gültige E‑Mail ein.",
     },
     fr: {
       title: "Mot de passe oublié",

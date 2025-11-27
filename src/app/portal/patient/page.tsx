@@ -14,6 +14,7 @@ export default function PatientPortalPage() {
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [address, setAddress] = useState("");
   const [lat, setLat] = useState<number | "">("");
   const [lng, setLng] = useState<number | "">("");
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
@@ -47,6 +48,7 @@ export default function PatientPortalPage() {
           if (typeof tel === 'string') setPhone(tel || '');
           if (typeof pd.city === 'string') setCity(pd.city || '');
           if (typeof pd.country === 'string') setCountry(pd.country || '');
+          if (typeof pd.address === 'string') setAddress(pd.address || '');
           if (typeof pd.latitude === 'number') setLat(pd.latitude);
           if (typeof pd.longitude === 'number') setLng(pd.longitude);
           const pic = typeof pd.profilePictureUrl === 'string' ? pd.profilePictureUrl.trim() : null;
@@ -91,7 +93,7 @@ export default function PatientPortalPage() {
     c: string; cItems: string[]; cCta: string;
     // Added UI strings for profile section and labels
     profileTitle: string; profileSub: string;
-    labelFullName: string; labelLanguages: string; labelPhone: string; labelCity: string; labelCountry: string; labelLat: string; labelLng: string;
+    labelFullName: string; labelLanguages: string; labelPhone: string; labelCity: string; labelCountry: string; labelAddress: string; labelLat: string; labelLng: string;
     btnChangePhoto: string; btnUploadPhoto: string; btnUseLocation: string; btnSave: string; savingLabel: string; messagesLabel: string; profilePicLabel: string;
     couponsTitle: string; couponsEmpty: string; couponsViewAll: string; couponsCode: string; couponsStatus: string; couponsAvailable: string; couponsRedeemed: string; couponsLoading: string; couponsLoadFailed: string;
     errNotAuthenticated: string; errUploadFailed: string; errUploadUrlMissing: string; errPhotoUploadFailed: string; errPhotoSelectFailed: string; errGeoUnsupported: string; errGeoFailed: string; errSaveFailed: string; errGenericFailed: string;
@@ -114,7 +116,7 @@ export default function PatientPortalPage() {
       b: "Messages", bEmpty: "No messages", bCta: "Contact us",
       c: "Resources", cItems: ["Getting started guide", "Nutrition basics", "Holistic wellness"], cCta: "View",
       profileTitle: "Profile", profileSub: "Update your details so professionals can better assist you.",
-      labelFullName: "Full name", labelLanguages: "Languages", labelPhone: "Phone", labelCity: "City", labelCountry: "Country", labelLat: "Lat", labelLng: "Lng",
+      labelFullName: "Full name", labelLanguages: "Languages", labelPhone: "Phone", labelCity: "City", labelCountry: "Country", labelAddress: "Address", labelLat: "Lat", labelLng: "Lng",
       btnChangePhoto: "Change photo", btnUploadPhoto: "Upload photo", btnUseLocation: "Use my location", btnSave: "Save", savingLabel: "Saving…", messagesLabel: "Messages", profilePicLabel: "Profile picture",
       couponsTitle: "My Coupons", couponsEmpty: "No coupons yet.", couponsViewAll: "View all", couponsCode: "Code", couponsStatus: "Status", couponsAvailable: "Available", couponsRedeemed: "Redeemed", couponsLoading: "Loading…", couponsLoadFailed: "Failed to load coupons",
       errNotAuthenticated: "Not authenticated",
@@ -133,7 +135,7 @@ export default function PatientPortalPage() {
     de: {
       h1: "Patient:innen-Portal",
       sub: "Willkommen zurück. Eine kurze Übersicht.",
-      heroTitle: "Bleiben Sie auf Kurs auf Ihrem Gesundheitsweg",
+      heroTitle: "Schritt für Schritt zu mehr Wohlbefinden – wir gehen den Weg mit dir",
       heroSub: "Überblick über Termine, Nachrichten und Ressourcen. Tipp: Profil aktuell halten für bessere Empfehlungen.",
       m1: "Bevorstehende Termine",
       m2: "Ungelesene Nachrichten",
@@ -146,8 +148,8 @@ export default function PatientPortalPage() {
       a: "Bevorstehende Termine", aEmpty: "Noch keine Termine", aCta: "Vereinbaren",
       b: "Nachrichten", bEmpty: "Keine Nachrichten", bCta: "Kontakt",
       c: "Ressourcen", cItems: ["Einstiegshilfe", "Grundlagen der Ernährung", "Ganzheitliches Wohlbefinden"], cCta: "Ansehen",
-      profileTitle: "Profil", profileSub: "Aktualisieren Sie Ihre Angaben, damit Fachpersonen Sie besser unterstützen können.",
-      labelFullName: "Vollständiger Name", labelLanguages: "Sprachen", labelPhone: "Telefon", labelCity: "Stadt", labelCountry: "Land", labelLat: "Breite", labelLng: "Länge",
+      profileTitle: "Profil", profileSub: "Aktualisiere deine Angaben, damit Fachpersonen dich besser unterstützen können.",
+      labelFullName: "Vollständiger Name", labelLanguages: "Sprachen", labelPhone: "Telefon", labelCity: "Stadt", labelCountry: "Land", labelAddress: "Adresse", labelLat: "Breite", labelLng: "Länge",
       btnChangePhoto: "Foto ändern", btnUploadPhoto: "Foto hochladen", btnUseLocation: "Meinen Standort verwenden", btnSave: "Speichern", savingLabel: "Speichern…", messagesLabel: "Nachrichten", profilePicLabel: "Profilbild",
       couponsTitle: "Meine Gutscheine", couponsEmpty: "Noch keine Gutscheine.", couponsViewAll: "Alle ansehen", couponsCode: "Code", couponsStatus: "Status", couponsAvailable: "Verfügbar", couponsRedeemed: "Eingelöst", couponsLoading: "Wird geladen…", couponsLoadFailed: "Gutscheine konnten nicht geladen werden",
       errNotAuthenticated: "Nicht authentifiziert",
@@ -180,7 +182,7 @@ export default function PatientPortalPage() {
       b: "Messages", bEmpty: "Aucun message", bCta: "Nous contacter",
       c: "Ressources", cItems: ["Guide de démarrage", "Bases de la nutrition", "Bien‑être holistique"], cCta: "Voir",
       profileTitle: "Profil", profileSub: "Mettez vos informations à jour pour aider les professionnel·le·s à mieux vous accompagner.",
-      labelFullName: "Nom complet", labelLanguages: "Langues", labelPhone: "Téléphone", labelCity: "Ville", labelCountry: "Pays", labelLat: "Lat", labelLng: "Lng",
+      labelFullName: "Nom complet", labelLanguages: "Langues", labelPhone: "Téléphone", labelCity: "Ville", labelCountry: "Pays", labelAddress: "Adresse", labelLat: "Lat", labelLng: "Lng",
       btnChangePhoto: "Modifier la photo", btnUploadPhoto: "Téléverser la photo", btnUseLocation: "Utiliser ma position", btnSave: "Enregistrer", savingLabel: "Enregistrement…", messagesLabel: "Messages", profilePicLabel: "Photo de profil",
       couponsTitle: "Mes coupons", couponsEmpty: "Aucun coupon pour l’instant.", couponsViewAll: "Tout voir", couponsCode: "Code", couponsStatus: "Statut", couponsAvailable: "Disponible", couponsRedeemed: "Utilisé", couponsLoading: "Chargement…", couponsLoadFailed: "Impossible de charger les coupons",
       errNotAuthenticated: "Non authentifié",
@@ -239,14 +241,36 @@ export default function PatientPortalPage() {
   async function useMyLocation() {
     try {
       setNotice(null);
+      let latVal: number | null = null;
+      let lngVal: number | null = null;
       await new Promise<void>((resolve, reject) => {
         if (!navigator.geolocation) return reject(new Error(t.errGeoUnsupported));
         navigator.geolocation.getCurrentPosition((pos) => {
-          setLat(pos.coords.latitude);
-          setLng(pos.coords.longitude);
+          latVal = pos.coords.latitude;
+          lngVal = pos.coords.longitude;
+          setLat(latVal);
+          setLng(lngVal);
           resolve();
         }, (err) => reject(err), { enableHighAccuracy: true, timeout: 8000 });
       });
+
+      // Reverse geocode coordinates into human-readable address
+      if (latVal !== null && lngVal !== null) {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latVal}&lon=${lngVal}`;
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if (res.ok) {
+          const data = await res.json().catch(() => ({}));
+          const addr = (data as any)?.address || {};
+          let line = [addr.road, addr.house_number].filter(Boolean).join(" ");
+          if (!line && typeof (data as any)?.display_name === 'string') {
+            line = (data as any).display_name as string;
+          }
+          if (line) setAddress(line);
+          const cityName = addr.city || addr.town || addr.village || addr.county || "";
+          if (cityName) setCity(cityName);
+          if (addr.country) setCountry(addr.country);
+        }
+      }
     } catch (e: any) {
       setNotice(e?.message || t.errGeoFailed);
     }
@@ -269,6 +293,7 @@ export default function PatientPortalPage() {
       if (specialties) payload.specialties = specialties;
       if (city) payload.city = city;
       if (country) payload.country = country;
+      if (address) payload.address = address;
       if (phone) payload.telephone = phone;
       if (profilePictureUrl && !profilePictureUrl.startsWith('blob:')) payload.profilePictureUrl = profilePictureUrl;
       if (Number.isFinite(latVal)) payload.latitude = latVal;
@@ -419,13 +444,9 @@ export default function PatientPortalPage() {
                 <label className="form-label">{t.labelCountry}</label>
                 <input className="form-control" placeholder={t.labelCountry} value={country} onChange={(e) => setCountry(e.target.value)} />
               </div>
-              <div className="col-md-2">
-                <label className="form-label">{t.labelLat}</label>
-                <input className="form-control" placeholder={t.labelLat} value={lat} onChange={(e) => setLat(e.target.value as any)} />
-              </div>
-              <div className="col-md-2">
-                <label className="form-label">{t.labelLng}</label>
-                <input className="form-control" placeholder={t.labelLng} value={lng} onChange={(e) => setLng(e.target.value as any)} />
+              <div className="col-md-4">
+                <label className="form-label">{t.labelAddress}</label>
+                <input className="form-control" placeholder={t.labelAddress} value={address} onChange={(e) => setAddress(e.target.value)} />
               </div>
             </div>
             <div className="d-flex gap-2 mt-4">

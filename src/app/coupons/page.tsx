@@ -61,7 +61,7 @@ export default function CouponsCatalogPage() {
     },
     de: {
       title: "OmniCheck Gutscheine",
-      lead: "Kaufen Sie Gutscheine für sich oder Ihre Liebsten.",
+      lead: "Kaufe Gutscheine für dich oder deine Liebsten.",
       price: "Preis",
       qty: "Menge",
       buy: "Kaufen",
@@ -80,10 +80,10 @@ export default function CouponsCatalogPage() {
       noDiscount: "Kein Mengenrabatt",
       estTotal: "Geschätzte Summe:",
       perCoupon: "pro Gutschein",
-      mustSignIn: "Bitte melden Sie sich an, um fortzufahren.",
+      mustSignIn: "Bitte melde dich an um fortzufahren!",
       checkoutFailed: "Checkout fehlgeschlagen",
       checkoutMissingUrl: "Checkout fehlgeschlagen: Weiterleitungs-URL fehlt.",
-      checkoutStartFailed: "Checkout konnte nicht gestartet werden. Bitte versuchen Sie es erneut.",
+      checkoutStartFailed: "Checkout konnte nicht gestartet werden. Bitte versuch es erneut.",
     },
     fr: {
       title: "Coupons OmniCheck",
