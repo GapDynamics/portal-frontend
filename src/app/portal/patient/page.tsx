@@ -64,14 +64,22 @@ export default function PatientPortalPage() {
           const res2 = await fetch(`${apiBase}/purchases`, { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` } });
           const j2 = await res2.json().catch(() => ([]));
           if (!res2.ok) {
+<<<<<<< HEAD
             setPurchErr(j2?.message || 'Failed to load coupons');
+=======
+            setPurchErr(j2?.message || t.couponsLoadFailed);
+>>>>>>> d6e849a (portal frontend updated translations and error message issues handled)
             setPurchases([]);
           } else {
             setPurchErr(null);
             setPurchases(Array.isArray(j2) ? j2 : []);
           }
         } catch (e: any) {
+<<<<<<< HEAD
           setPurchErr(e?.message || 'Failed to load coupons');
+=======
+          setPurchErr(e?.message || t.couponsLoadFailed);
+>>>>>>> d6e849a (portal frontend updated translations and error message issues handled)
           setPurchases([]);
         }
       } catch {}
@@ -93,7 +101,13 @@ export default function PatientPortalPage() {
     profileTitle: string; profileSub: string;
     labelFullName: string; labelLanguages: string; labelPhone: string; labelCity: string; labelCountry: string; labelLat: string; labelLng: string;
     btnChangePhoto: string; btnUploadPhoto: string; btnUseLocation: string; btnSave: string; savingLabel: string; messagesLabel: string; profilePicLabel: string;
+<<<<<<< HEAD
     couponsTitle: string; couponsEmpty: string; couponsViewAll: string; couponsCode: string; couponsStatus: string; couponsAvailable: string; couponsRedeemed: string;
+=======
+    couponsTitle: string; couponsEmpty: string; couponsViewAll: string; couponsCode: string; couponsStatus: string; couponsAvailable: string; couponsRedeemed: string; couponsLoading: string; couponsLoadFailed: string;
+    errNotAuthenticated: string; errUploadFailed: string; errUploadUrlMissing: string; errPhotoUploadFailed: string; errPhotoSelectFailed: string; errGeoUnsupported: string; errGeoFailed: string; errSaveFailed: string; errGenericFailed: string;
+    noticePhotoUploaded: string; noticePhotoSelected: string; saved: string;
+>>>>>>> d6e849a (portal frontend updated translations and error message issues handled)
   }>= {
     en: {
       h1: "Patient Portal",
@@ -114,7 +128,19 @@ export default function PatientPortalPage() {
       profileTitle: "Profile", profileSub: "Update your details so professionals can better assist you.",
       labelFullName: "Full name", labelLanguages: "Languages", labelPhone: "Phone", labelCity: "City", labelCountry: "Country", labelLat: "Lat", labelLng: "Lng",
       btnChangePhoto: "Change photo", btnUploadPhoto: "Upload photo", btnUseLocation: "Use my location", btnSave: "Save", savingLabel: "Saving…", messagesLabel: "Messages", profilePicLabel: "Profile picture",
-      couponsTitle: "My Coupons", couponsEmpty: "No coupons yet.", couponsViewAll: "View all", couponsCode: "Code", couponsStatus: "Status", couponsAvailable: "Available", couponsRedeemed: "Redeemed",
+      couponsTitle: "My Coupons", couponsEmpty: "No coupons yet.", couponsViewAll: "View all", couponsCode: "Code", couponsStatus: "Status", couponsAvailable: "Available", couponsRedeemed: "Redeemed", couponsLoading: "Loading…", couponsLoadFailed: "Failed to load coupons",
+      errNotAuthenticated: "Not authenticated",
+      errUploadFailed: "Upload failed",
+      errUploadUrlMissing: "Upload URL missing",
+      errPhotoUploadFailed: "Photo upload failed",
+      errPhotoSelectFailed: "Photo select failed",
+      errGeoUnsupported: "Geolocation not supported",
+      errGeoFailed: "Failed to get location",
+      errSaveFailed: "Failed to save",
+      errGenericFailed: "Failed",
+      noticePhotoUploaded: "Photo uploaded",
+      noticePhotoSelected: "Photo selected. Click Upload to send.",
+      saved: "Saved",
     },
     de: {
       h1: "Patient:innen-Portal",
@@ -135,7 +161,19 @@ export default function PatientPortalPage() {
       profileTitle: "Profil", profileSub: "Aktualisieren Sie Ihre Angaben, damit Fachpersonen Sie besser unterstützen können.",
       labelFullName: "Vollständiger Name", labelLanguages: "Sprachen", labelPhone: "Telefon", labelCity: "Stadt", labelCountry: "Land", labelLat: "Breite", labelLng: "Länge",
       btnChangePhoto: "Foto ändern", btnUploadPhoto: "Foto hochladen", btnUseLocation: "Meinen Standort verwenden", btnSave: "Speichern", savingLabel: "Speichern…", messagesLabel: "Nachrichten", profilePicLabel: "Profilbild",
-      couponsTitle: "Meine Gutscheine", couponsEmpty: "Noch keine Gutscheine.", couponsViewAll: "Alle ansehen", couponsCode: "Code", couponsStatus: "Status", couponsAvailable: "Verfügbar", couponsRedeemed: "Eingelöst",
+      couponsTitle: "Meine Gutscheine", couponsEmpty: "Noch keine Gutscheine.", couponsViewAll: "Alle ansehen", couponsCode: "Code", couponsStatus: "Status", couponsAvailable: "Verfügbar", couponsRedeemed: "Eingelöst", couponsLoading: "Wird geladen…", couponsLoadFailed: "Gutscheine konnten nicht geladen werden",
+      errNotAuthenticated: "Nicht authentifiziert",
+      errUploadFailed: "Upload fehlgeschlagen",
+      errUploadUrlMissing: "Upload‑URL fehlt",
+      errPhotoUploadFailed: "Foto‑Upload fehlgeschlagen",
+      errPhotoSelectFailed: "Fotoauswahl fehlgeschlagen",
+      errGeoUnsupported: "Geolokalisierung nicht unterstützt",
+      errGeoFailed: "Standort konnte nicht ermittelt werden",
+      errSaveFailed: "Speichern fehlgeschlagen",
+      errGenericFailed: "Fehler",
+      noticePhotoUploaded: "Foto hochgeladen",
+      noticePhotoSelected: "Foto ausgewählt. Klicken Sie auf Upload zum Senden.",
+      saved: "Gespeichert",
     },
     fr: {
       h1: "Portail Patient",
@@ -156,34 +194,46 @@ export default function PatientPortalPage() {
       profileTitle: "Profil", profileSub: "Mettez vos informations à jour pour aider les professionnel·le·s à mieux vous accompagner.",
       labelFullName: "Nom complet", labelLanguages: "Langues", labelPhone: "Téléphone", labelCity: "Ville", labelCountry: "Pays", labelLat: "Lat", labelLng: "Lng",
       btnChangePhoto: "Modifier la photo", btnUploadPhoto: "Téléverser la photo", btnUseLocation: "Utiliser ma position", btnSave: "Enregistrer", savingLabel: "Enregistrement…", messagesLabel: "Messages", profilePicLabel: "Photo de profil",
-      couponsTitle: "Mes coupons", couponsEmpty: "Aucun coupon pour l’instant.", couponsViewAll: "Tout voir", couponsCode: "Code", couponsStatus: "Statut", couponsAvailable: "Disponible", couponsRedeemed: "Utilisé",
+      couponsTitle: "Mes coupons", couponsEmpty: "Aucun coupon pour l’instant.", couponsViewAll: "Tout voir", couponsCode: "Code", couponsStatus: "Statut", couponsAvailable: "Disponible", couponsRedeemed: "Utilisé", couponsLoading: "Chargement…", couponsLoadFailed: "Impossible de charger les coupons",
+      errNotAuthenticated: "Non authentifié",
+      errUploadFailed: "Échec de l’upload",
+      errUploadUrlMissing: "URL d’upload manquante",
+      errPhotoUploadFailed: "Échec de l’upload de la photo",
+      errPhotoSelectFailed: "Échec de la sélection de la photo",
+      errGeoUnsupported: "Géolocalisation non prise en charge",
+      errGeoFailed: "Impossible d’obtenir la position",
+      errSaveFailed: "Échec de l’enregistrement",
+      errGenericFailed: "Échec",
+      noticePhotoUploaded: "Photo téléversée",
+      noticePhotoSelected: "Photo sélectionnée. Cliquez sur Upload pour l’envoyer.",
+      saved: "Enregistré",
     },
   };
   const t = copy[lang] ?? copy.en;
   async function uploadSelectedPhoto() {
     try {
       setNotice(null);
-      if (!profilePictureFile) { setNotice('No photo selected'); return; }
+      if (!profilePictureFile) { setNotice(t.errPhotoSelectFailed); return; }
       const token = (() => {
         try { const t = localStorage.getItem('auth_token'); if (t) return t; } catch {}
         try { const m = document.cookie.match(/(?:^|; )auth_token=([^;]+)/); return m ? decodeURIComponent(m[1]) : null; } catch {};
         return null;
       })();
-      if (!token) throw new Error('Not authenticated');
+      if (!token) throw new Error(t.errNotAuthenticated);
       const fd = new FormData();
       fd.append('file', profilePictureFile);
       const upRes = await fetch(`${apiBase}/profiles/upload`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: fd });
-      if (!upRes.ok) throw new Error('Upload failed');
+      if (!upRes.ok) throw new Error(t.errUploadFailed);
       const j = await upRes.json().catch(() => ({}));
       const url = j?.url || j?.profilePictureUrl || j?.location || j?.path;
-      if (!url) throw new Error('Upload URL missing');
+      if (!url) throw new Error(t.errUploadUrlMissing);
       setProfilePictureUrl(typeof url === 'string' ? url.trim() : url);
       setImgError(false);
       setProfilePictureFile(null);
       setProfilePicturePreviewUrl(null);
-      setNotice('Photo uploaded');
+      setNotice(t.noticePhotoUploaded);
     } catch (e: any) {
-      setNotice(e?.message || 'Photo upload failed');
+      setNotice(e?.message || t.errPhotoUploadFailed);
     }
   }
 
@@ -192,9 +242,9 @@ export default function PatientPortalPage() {
       setProfilePictureFile(file);
       const url = URL.createObjectURL(file);
       setProfilePicturePreviewUrl(url);
-      setNotice('Photo selected. Click Upload to send.');
+      setNotice(t.noticePhotoSelected);
     } catch (e: any) {
-      setNotice(e?.message || 'Photo select failed');
+      setNotice(e?.message || t.errPhotoSelectFailed);
     }
   }
 
@@ -202,7 +252,7 @@ export default function PatientPortalPage() {
     try {
       setNotice(null);
       await new Promise<void>((resolve, reject) => {
-        if (!navigator.geolocation) return reject(new Error('Geolocation not supported'));
+        if (!navigator.geolocation) return reject(new Error(t.errGeoUnsupported));
         navigator.geolocation.getCurrentPosition((pos) => {
           setLat(pos.coords.latitude);
           setLng(pos.coords.longitude);
@@ -210,7 +260,7 @@ export default function PatientPortalPage() {
         }, (err) => reject(err), { enableHighAccuracy: true, timeout: 8000 });
       });
     } catch (e: any) {
-      setNotice(e?.message || 'Failed to get location');
+      setNotice(e?.message || t.errGeoFailed);
     }
   }
 
@@ -236,10 +286,10 @@ export default function PatientPortalPage() {
       if (Number.isFinite(latVal)) payload.latitude = latVal;
       if (Number.isFinite(lngVal)) payload.longitude = lngVal;
       const res = await fetch(`${apiBase}/profiles/me`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(payload) });
-      if (!res.ok) throw new Error('Failed to save');
-      setNotice('Saved');
+      if (!res.ok) throw new Error(t.errSaveFailed);
+      setNotice(t.saved);
     } catch (e: any) {
-      setNotice(e?.message || 'Failed');
+      setNotice(e?.message || t.errGenericFailed);
     } finally {
       setSavingAll(false);
     }
@@ -297,7 +347,7 @@ export default function PatientPortalPage() {
               <a href="/portal/coupons" className="btn btn-outline-secondary btn-sm">{t.couponsViewAll}</a>
             </div>
             {purchases === null ? (
-              <div className="text-muted py-2 small">Loading…</div>
+              <div className="text-muted py-2 small">{t.couponsLoading}</div>
             ) : (purchases?.length || 0) === 0 ? (
               <div className="text-muted py-2 small">{t.couponsEmpty}</div>
             ) : (

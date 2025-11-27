@@ -41,6 +41,9 @@ export default function DirectoryPage() {
     mapAria: string; mapBadge: string;
     viewBtn: string; messageBtn: string;
     alertTitle: string; alertDesc: string; alertOpen: string;
+    loadingProfile: string;
+    youAreHere: string;
+    profileUnavailable: string;
   }> = {
     en: {
       h1: "Find Healthcare Professionals",
@@ -58,9 +61,12 @@ export default function DirectoryPage() {
       mapAria: "Map placeholder", mapBadge: "google",
       viewBtn: "View",
       messageBtn: "Message",
-      alertTitle: "Health Assistant",
+      alertTitle: "OmniCheck",
       alertDesc: "Unsure where to start? Get instant insights and suggestions.",
       alertOpen: "Open",
+      loadingProfile: "Loading profile…",
+      youAreHere: "You are here",
+      profileUnavailable: "Profile ID unavailable",
     },
     de: {
       h1: "Gesundheitsfachpersonen finden",
@@ -78,9 +84,12 @@ export default function DirectoryPage() {
       mapAria: "Kartenplatzhalter", mapBadge: "google",
       viewBtn: "Ansehen",
       messageBtn: "Nachricht",
-      alertTitle: "Health Assistant",
+      alertTitle: "OmniCheck",
       alertDesc: "Nicht sicher, wo Sie beginnen sollen? Erhalten Sie sofortige Einblicke und Vorschläge.",
       alertOpen: "Öffnen",
+      loadingProfile: "Profil wird geladen…",
+      youAreHere: "Sie sind hier",
+      profileUnavailable: "Profil-ID nicht verfügbar",
     },
     fr: {
       h1: "Trouver des professionnels de santé",
@@ -101,6 +110,9 @@ export default function DirectoryPage() {
       alertTitle: "Assistant santé",
       alertDesc: "Vous ne savez pas par où commencer ? Obtenez des idées et des suggestions instantanées.",
       alertOpen: "Ouvrir",
+      loadingProfile: "Chargement du profil…",
+      youAreHere: "Vous êtes ici",
+      profileUnavailable: "ID du profil indisponible",
     },
   };
 
@@ -280,7 +292,7 @@ export default function DirectoryPage() {
       if (provider === 'google') {
         const g = (window as any).google; if (!g || !g.maps) return;
         if (userMarkerRef.current) { userMarkerRef.current.setMap(null); }
-        userMarkerRef.current = new g.maps.Marker({ position: { lat, lng }, map, title: 'You are here' });
+        userMarkerRef.current = new g.maps.Marker({ position: { lat, lng }, map, title: t.youAreHere });
         if (map.setCenter && map.setZoom) { map.setCenter({ lat, lng }); map.setZoom(zoom); }
       } else {
         const L = (window as any).L; if (!L) return;
@@ -612,7 +624,11 @@ export default function DirectoryPage() {
                 <div className={styles.count}>{countLabel}</div>
                 {/* Details panel */}
                 {detailsLoading && (
+<<<<<<< HEAD
                   <div className="alert alert-secondary" role="status" style={{borderRadius:12}}>Loading profile…</div>
+=======
+                  <div className="alert alert-secondary" role="status" style={{borderRadius:12}}>{t.loadingProfile}</div>
+>>>>>>> d6e849a (portal frontend updated translations and error message issues handled)
                 )}
                 {selectedProfile && (
                   <div className="card mb-3" style={{borderRadius:12}}>
@@ -648,7 +664,7 @@ export default function DirectoryPage() {
                           {(() => { const pid = (typeof p.id === 'number' || typeof p.id === 'string') ? Number(p.id) : NaN; const canView = Number.isFinite(pid); return canView ? (
                             <Link style={{color:"var(--brand-primary)", border: "1px solid var(--brand-primary)"}} href={`/profiles/${pid}`} className={`btn btn-sm btn-outline-primary ${styles.viewBtn}`}>{t.viewBtn}</Link>
                           ) : (
-                            <button className="btn btn-sm btn-outline-secondary" disabled title="Profile ID unavailable">{t.viewBtn}</button>
+                            <button className="btn btn-sm btn-outline-secondary" disabled title={t.profileUnavailable}>{t.viewBtn}</button>
                           ); })()}
                           <Link style={{backgroundColor:"var(--brand-primary)",color:"white", border: "1px solid var(--brand-primary)"}} href={`/portal/chat/${p.id}`} className="btn btn-sm btn-primary">{t.messageBtn}</Link>
                         </div>

@@ -56,7 +56,7 @@ export default function MobileApp() {
                 <div className={styles.iphoneScreen}>
                   <video
                     className={styles.iphoneImg}
-                    src={"/assets/video/app-video.mp4"}
+                    src={"/assets/video/omni-mob-video.mp4"}
                     autoPlay
                     loop
                     muted

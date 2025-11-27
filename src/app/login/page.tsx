@@ -23,6 +23,10 @@ export default function LoginPage() {
     submit: string;
     noAccount: string;
     register: string;
+    msgFillEmailPw: string;
+    msgInvalidCreds: string;
+    msgLoginFailed: string;
+    toastSignedIn: string;
   }> = {
     en: {
       title: "Welcome back",
@@ -38,6 +42,10 @@ export default function LoginPage() {
       submit: "Sign in",
       noAccount: "Don't have an account?",
       register: "Create one",
+      msgFillEmailPw: "Please enter email and password.",
+      msgInvalidCreds: "Invalid credentials.",
+      msgLoginFailed: "Login failed.",
+      toastSignedIn: "Signed in successfully",
     },
     de: {
       title: "Willkommen zurück",
@@ -53,6 +61,10 @@ export default function LoginPage() {
       submit: "Anmelden",
       noAccount: "Noch kein Konto?",
       register: "Jetzt erstellen",
+      msgFillEmailPw: "Bitte E‑Mail und Passwort eingeben.",
+      msgInvalidCreds: "Anmeldedaten ungültig.",
+      msgLoginFailed: "Anmeldung fehlgeschlagen.",
+      toastSignedIn: "Erfolgreich angemeldet",
     },
     fr: {
       title: "Bon retour",
@@ -68,6 +80,10 @@ export default function LoginPage() {
       submit: "Se connecter",
       noAccount: "Pas de compte ?",
       register: "Créer un compte",
+      msgFillEmailPw: "Veuillez saisir l’e‑mail et le mot de passe.",
+      msgInvalidCreds: "Identifiants invalides.",
+      msgLoginFailed: "Échec de la connexion.",
+      toastSignedIn: "Connexion réussie",
     },
   };
 
@@ -101,7 +117,7 @@ export default function LoginPage() {
     e.preventDefault();
     setMessage(null);
     if (!form.email || !form.password) {
-      setMessage("Please enter email and password.");
+      setMessage(t.msgFillEmailPw);
       return;
     }
     try {
@@ -113,7 +129,7 @@ export default function LoginPage() {
       });
       if (!loginRes.ok) {
         const j = await loginRes.json().catch(() => ({}));
-        setMessage(j?.error || "Invalid credentials.");
+        setMessage((j?.error && typeof j.error === 'string') ? j.error : t.msgInvalidCreds);
         return;
       }
       const data = await loginRes.json().catch(() => ({} as any));
@@ -143,7 +159,7 @@ export default function LoginPage() {
       if (Swal) {
         Swal.fire({
           toast: true, position: 'top-end', showConfirmButton: false, timer: 1800, timerProgressBar: true,
-          icon: 'success', title: 'Signed in successfully'
+          icon: 'success', title: t.toastSignedIn
         });
       }
       const path = roleUpper === 'PROFESSIONAL' ? '/portal/professional' : '/portal/patient';
@@ -155,7 +171,7 @@ export default function LoginPage() {
         }
       }, 50);
     } catch (err) {
-      setMessage("Login failed.");
+      setMessage(t.msgLoginFailed);
     } finally {
       setSubmitting(false);
     }

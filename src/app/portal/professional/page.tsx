@@ -98,6 +98,12 @@ export default function ProfessionalPortalPage() {
       } catch {}
     })();
   }, []);
+  // Auto-hide notices after 5 seconds
+  useEffect(() => {
+    if (!notice) return;
+    const id = setTimeout(() => setNotice(null), 5000);
+    return () => clearTimeout(id);
+  }, [notice]);
   async function saveAll() {
     try {
       setSavingAll(true); setNotice(null);
@@ -106,7 +112,7 @@ export default function ProfessionalPortalPage() {
         try { const m = document.cookie.match(/(?:^|; )auth_token=([^;]+)/); return m ? decodeURIComponent(m[1]) : null; } catch {};
         return null;
       })();
-      if (!token) throw new Error('Not authenticated');
+      if (!token) throw new Error(t.errNotAuthenticated);
       const latVal = typeof lat === 'number' ? lat : toNum(String(lat));
       const lngVal = typeof lng === 'number' ? lng : toNum(String(lng));
 
@@ -126,7 +132,7 @@ export default function ProfessionalPortalPage() {
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error('Failed to save');
+      if (!res.ok) throw new Error(t.errSaveFailed);
       const updated = await res.json().catch(() => null);
       if (updated) setDash((d: any) => ({ ...(d || {}), profileData: updated }));
       // Post-save refresh to get authoritative state
@@ -155,9 +161,9 @@ export default function ProfessionalPortalPage() {
           }
         }
       } catch {}
-      setNotice('Saved');
+      setNotice(t.noticeSaved);
     } catch (e: any) {
-      setNotice(e?.message || 'Failed');
+      setNotice(e?.message || t.errGenericFailed);
     } finally {
       setSavingAll(false);
     }
@@ -168,43 +174,43 @@ export default function ProfessionalPortalPage() {
       setProfilePictureFile(file);
       const url = URL.createObjectURL(file);
       setProfilePicturePreviewUrl(url);
-      setNotice('Photo selected. Click Upload to send.');
+      setNotice(t.noticePhotoSelected);
     } catch (e: any) {
-      setNotice(e?.message || 'Photo select failed');
+      setNotice(e?.message || t.errPhotoSelectFailed);
     }
   }
 
   async function uploadSelectedPhoto() {
     try {
       setNotice(null);
-      if (!profilePictureFile) { setNotice('No photo selected'); return; }
+      if (!profilePictureFile) { setNotice(t.errPhotoSelectFailed); return; }
       const token = (() => {
         try { const t = localStorage.getItem('auth_token'); if (t) return t; } catch {}
         try { const m = document.cookie.match(/(?:^|; )auth_token=([^;]+)/); return m ? decodeURIComponent(m[1]) : null; } catch {};
         return null;
       })();
-      if (!token) throw new Error('Not authenticated');
+      if (!token) throw new Error(t.errNotAuthenticated);
       const fd = new FormData();
       fd.append('file', profilePictureFile);
       const upRes = await fetch(`${apiBase}/profiles/upload`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: fd });
-      if (!upRes.ok) throw new Error('Upload failed');
+      if (!upRes.ok) throw new Error(t.errUploadFailed);
       const j = await upRes.json().catch(() => ({}));
       const url = j?.url || j?.profilePictureUrl || j?.location || j?.path;
-      if (!url) throw new Error('Upload URL missing');
+      if (!url) throw new Error(t.errUploadUrlMissing);
       setProfilePictureUrl(typeof url === 'string' ? url.trim() : url);
       setImgError(false);
       setProfilePictureFile(null);
       setProfilePicturePreviewUrl(null);
-      setNotice('Photo uploaded');
+      setNotice(t.noticePhotoUploaded);
     } catch (e: any) {
-      setNotice(e?.message || 'Photo upload failed');
+      setNotice(e?.message || t.errPhotoUploadFailed);
     }
   }
   async function useMyLocation() {
     try {
       setNotice(null);
       await new Promise<void>((resolve, reject) => {
-        if (!navigator.geolocation) return reject(new Error('Geolocation not supported'));
+        if (!navigator.geolocation) return reject(new Error(t.errGeoUnsupported));
         navigator.geolocation.getCurrentPosition((pos) => {
           setLat(pos.coords.latitude);
           setLng(pos.coords.longitude);
@@ -227,7 +233,7 @@ export default function ProfessionalPortalPage() {
         }
       }
     } catch (e: any) {
-      setNotice(e?.message || 'Failed to get location');
+      setNotice(e?.message || t.errGeoFailed);
     }
   }
   async function saveLocation() {
@@ -247,10 +253,10 @@ export default function ProfessionalPortalPage() {
       if (Number.isFinite(latVal)) payload.latitude = latVal;
       if (Number.isFinite(lngVal)) payload.longitude = lngVal;
       const res = await fetch(`${apiBase}/profiles/me`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(payload) });
-      if (!res.ok) throw new Error('Failed to save');
-      setNotice('Saved');
+      if (!res.ok) throw new Error(t.errSaveFailed);
+      setNotice(t.noticeSaved);
     } catch (e: any) {
-      setNotice(e?.message || 'Failed');
+      setNotice(e?.message || t.errGenericFailed);
     } finally {
       setSaving(false);
     }
@@ -261,7 +267,16 @@ export default function ProfessionalPortalPage() {
     messagesTitle: string; noMessages: string; btnOpen: string;
     profileTitle: string; profileSub: string;
     labelFullName: string; labelRole: string; labelLanguages: string; labelSpecialties: string; labelCity: string; labelCountry: string; labelLat: string; labelLng: string;
-    btnUseLocation: string; btnSave: string;
+    labelBio: string; labelPhone: string;
+    roleDoctor: string; roleDietitian: string; roleNutritionist: string; roleCoach: string; roleTherapist: string;
+    profilePicLabel: string; btnChangePhoto: string; btnUploadPhoto: string;
+    btnUseLocation: string; btnSave: string; savingLabel: string;
+    errNotAuthenticated: string; errSaveFailed: string; errGenericFailed: string;
+    errPhotoSelectFailed: string; errPhotoUploadFailed: string; errUploadFailed: string; errUploadUrlMissing: string;
+    errGeoUnsupported: string; errGeoFailed: string;
+    noticeSaved: string; noticePhotoSelected: string; noticePhotoUploaded: string;
+    metricProfile: string; metricInquiries: string; metricUnread: string;
+    locationWarning: string;
   }>= {
     en: {
       h1: "Professional portal",
@@ -281,8 +296,35 @@ export default function ProfessionalPortalPage() {
       labelCountry: "Country",
       labelLat: "Lat",
       labelLng: "Lng",
+      labelBio: "Bio",
+      labelPhone: "Phone",
+      roleDoctor: "Doctor",
+      roleDietitian: "Dietitian",
+      roleNutritionist: "Nutritionist",
+      roleCoach: "Health Coach",
+      roleTherapist: "Therapist",
+      profilePicLabel: "Profile picture",
+      btnChangePhoto: "Change photo",
+      btnUploadPhoto: "Upload photo",
       btnUseLocation: "Use my location",
       btnSave: "Save",
+      savingLabel: "Saving…",
+      errNotAuthenticated: "Not authenticated",
+      errSaveFailed: "Failed to save",
+      errGenericFailed: "Failed",
+      errPhotoSelectFailed: "Photo select failed",
+      errPhotoUploadFailed: "Photo upload failed",
+      errUploadFailed: "Upload failed",
+      errUploadUrlMissing: "Upload URL missing",
+      errGeoUnsupported: "Geolocation not supported",
+      errGeoFailed: "Failed to get location",
+      noticeSaved: "Profile saved",
+      noticePhotoSelected: "Photo selected. Click Upload to send.",
+      noticePhotoUploaded: "Photo uploaded",
+      metricProfile: "Profile completeness",
+      metricInquiries: "New inquiries",
+      metricUnread: "Unread messages",
+      locationWarning: "Please complete your practice location (city, country, latitude and longitude) to be visible in the directory and enable patient contact.",
     },
     de: {
       h1: "Fachpersonen-Portal",
@@ -302,8 +344,35 @@ export default function ProfessionalPortalPage() {
       labelCountry: "Land",
       labelLat: "Breite",
       labelLng: "Länge",
+      labelBio: "Kurzprofil",
+      labelPhone: "Telefon",
+      roleDoctor: "Ärzt:in",
+      roleDietitian: "Diätolog:in",
+      roleNutritionist: "Ernährungsberater:in",
+      roleCoach: "Health Coach",
+      roleTherapist: "Therapeut:in",
+      profilePicLabel: "Profilbild",
+      btnChangePhoto: "Foto ändern",
+      btnUploadPhoto: "Foto hochladen",
       btnUseLocation: "Meinen Standort verwenden",
       btnSave: "Speichern",
+      savingLabel: "Wird gespeichert…",
+      errNotAuthenticated: "Nicht authentifiziert",
+      errSaveFailed: "Speichern fehlgeschlagen",
+      errGenericFailed: "Fehler",
+      errPhotoSelectFailed: "Fotoauswahl fehlgeschlagen",
+      errPhotoUploadFailed: "Foto-Upload fehlgeschlagen",
+      errUploadFailed: "Upload fehlgeschlagen",
+      errUploadUrlMissing: "Upload-URL fehlt",
+      errGeoUnsupported: "Geolokalisierung nicht unterstützt",
+      errGeoFailed: "Standort konnte nicht ermittelt werden",
+      noticeSaved: "Profil gespeichert",
+      noticePhotoSelected: "Foto ausgewählt. Klicken Sie auf Upload zum Senden.",
+      noticePhotoUploaded: "Foto hochgeladen",
+      metricProfile: "Profilvollständigkeit",
+      metricInquiries: "Neue Anfragen",
+      metricUnread: "Ungelesene Nachrichten",
+      locationWarning: "Bitte vervollständigen Sie Ihre Praxisangaben (Stadt, Land, Breiten- und Längengrad), um im Verzeichnis sichtbar zu sein und Kontaktanfragen zu erhalten.",
     },
     fr: {
       h1: "Portail professionnel",
@@ -323,8 +392,35 @@ export default function ProfessionalPortalPage() {
       labelCountry: "Pays",
       labelLat: "Lat",
       labelLng: "Lng",
+      labelBio: "Bio courte",
+      labelPhone: "Téléphone",
+      roleDoctor: "Médecin",
+      roleDietitian: "Diététicien·ne",
+      roleNutritionist: "Nutritionniste",
+      roleCoach: "Coach santé",
+      roleTherapist: "Thérapeute",
+      profilePicLabel: "Photo de profil",
+      btnChangePhoto: "Modifier la photo",
+      btnUploadPhoto: "Téléverser la photo",
       btnUseLocation: "Utiliser ma position",
       btnSave: "Enregistrer",
+      savingLabel: "Enregistrement…",
+      errNotAuthenticated: "Non authentifié",
+      errSaveFailed: "Échec de l’enregistrement",
+      errGenericFailed: "Échec",
+      errPhotoSelectFailed: "Échec de la sélection de la photo",
+      errPhotoUploadFailed: "Échec de l’upload de la photo",
+      errUploadFailed: "Échec de l’upload",
+      errUploadUrlMissing: "URL d’upload manquante",
+      errGeoUnsupported: "Géolocalisation non prise en charge",
+      errGeoFailed: "Impossible d’obtenir la position",
+      noticeSaved: "Profil enregistré",
+      noticePhotoSelected: "Photo sélectionnée. Cliquez sur Upload pour l’envoyer.",
+      noticePhotoUploaded: "Photo téléversée",
+      metricProfile: "Complétude du profil",
+      metricInquiries: "Nouvelles demandes",
+      metricUnread: "Messages non lus",
+      locationWarning: "Veuillez compléter l’emplacement de votre cabinet (ville, pays, latitude et longitude) pour être visible dans l’annuaire et recevoir des demandes de patients.",
     },
   };
   const t = copy[lang] ?? copy.en;
@@ -334,8 +430,7 @@ export default function ProfessionalPortalPage() {
         {/* Top header bar */}
         <div className={styles.topBar}>
           <div className={styles.topLeft}>
-            <span>Dashboard</span>
-           
+            <span>{t.h1}</span>
           </div>
           {/* <nav className={styles.topCenter} aria-label="Portal navigation">
             <a href="/portal/patient">Patients</a>
@@ -363,7 +458,7 @@ export default function ProfessionalPortalPage() {
         </div>
         {needsLocation && (
           <div className="alert alert-warning mt-3" role="alert">
-            Please complete your practice location (city, country, latitude and longitude) to be visible in the directory and enable patient contact.
+            {t.locationWarning}
           </div>
         )}
         <header className={styles.header}>
@@ -379,9 +474,9 @@ export default function ProfessionalPortalPage() {
                 <h3 className={styles.heroTitle}>{t.heroTitle}</h3>
                 <p className={styles.heroSub}>{t.heroSub}</p>
                 <div className={styles.metrics}>
-                  <div className={styles.metric}><strong>{typeof (dash?.stats?.profileCompleteness) === 'number' ? `${dash.stats.profileCompleteness}%` : '70%'}</strong><span>Profile completeness</span></div>
-                  <div className={styles.metric}><strong>{typeof (dash?.stats?.newInquiries) === 'number' ? dash.stats.newInquiries : 0}</strong><span>New inquiries</span></div>
-                  <div className={styles.metric}><strong>{typeof (dash?.stats?.unreadMessages) === 'number' ? dash.stats.unreadMessages : 0}</strong><span>Unread messages</span></div>
+                  <div className={styles.metric}><strong>{typeof (dash?.stats?.profileCompleteness) === 'number' ? `${dash.stats.profileCompleteness}%` : '70%'}</strong><span>{t.metricProfile}</span></div>
+                  <div className={styles.metric}><strong>{typeof (dash?.stats?.newInquiries) === 'number' ? dash.stats.newInquiries : 0}</strong><span>{t.metricInquiries}</span></div>
+                  <div className={styles.metric}><strong>{typeof (dash?.stats?.unreadMessages) === 'number' ? dash.stats.unreadMessages : 0}</strong><span>{t.metricUnread}</span></div>
                 </div>
               </div>
             </div>
@@ -401,13 +496,18 @@ export default function ProfessionalPortalPage() {
           <div className={styles.card}>
             <div className={styles.sectionTitle}>{t.profileTitle}</div>
             <p className="text-muted">{t.profileSub}</p>
+            {notice && (
+              <div className="alert alert-info py-2 mb-3" role="status" style={{ borderRadius: 8 }}>
+                {notice}
+              </div>
+            )}
             {/* Avatar + upload at top */}
             <div className="d-flex align-items-center gap-3 mb-3">
               {profilePicturePreviewUrl || (profilePictureUrl && !imgError) ? (
                 <img
                   key={(profilePicturePreviewUrl || profilePictureUrl) as string}
                   src={profilePicturePreviewUrl || profilePictureUrl || ''}
-                  alt="Profile"
+                  alt={t.profilePicLabel}
                   style={{ width: 72, height: 72, objectFit: 'cover', borderRadius: 12, border: '1px solid #e5e7eb' }}
                   onError={() => { setProfilePicturePreviewUrl(null); setImgError(true); }}
                 />
@@ -418,14 +518,14 @@ export default function ProfessionalPortalPage() {
               )}
               <div>
                 <div className="fw-semibold">{name || dash?.welcomeName || 'Profile'}</div>
-                <div className="text-muted small">Profile picture</div>
+                <div className="text-muted small">{t.profilePicLabel}</div>
                 <label className="btn btn-sm" style={{backgroundColor:"var(--brand-primary)", color:"white", border:"1px solid var(--brand-primary)"}}>
-                  Change photo
+                  {t.btnChangePhoto}
                   <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadPhoto(f); }} />
                 </label>
                 {profilePictureFile && (
                   <button type="button" className="btn btn-sm ms-2" onClick={uploadSelectedPhoto} style={{backgroundColor:"#0ea5e9", color:"white", border:"1px solid #0ea5e9"}}>
-                    Upload photo
+                    {t.btnUploadPhoto}
                   </button>
                 )}
               </div>
@@ -433,58 +533,57 @@ export default function ProfessionalPortalPage() {
             <div className="row g-2">
               <div className="col-md-4">
                 <label className="form-label">{t.labelFullName}</label>
-                <input className="form-control" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} disabled />
+                <input className="form-control" placeholder={t.labelFullName} value={name} onChange={(e) => setName(e.target.value)} disabled />
               </div>
               <div className="col-md-4">
                 <label className="form-label">{t.labelRole}</label>
                 <select className="form-select" value={category} onChange={(e) => setCategory(e.target.value)}>
-                  <option value="doctor">Doctor</option>
-                  <option value="dietitian">Dietitian</option>
-                  <option value="nutritionist">Nutritionist</option>
-                  <option value="coach">Health Coach</option>
-                  <option value="therapist">Therapist</option>
+                  <option value="doctor">{t.roleDoctor}</option>
+                  <option value="dietitian">{t.roleDietitian}</option>
+                  <option value="nutritionist">{t.roleNutritionist}</option>
+                  <option value="coach">{t.roleCoach}</option>
+                  <option value="therapist">{t.roleTherapist}</option>
                 </select>
               </div>
               <div className="col-md-4">
                 <label className="form-label">{t.labelLanguages}</label>
-                <input className="form-control" placeholder="Languages" value={languages} onChange={(e) => setLanguages(e.target.value)} />
+                <input className="form-control" placeholder={t.labelLanguages} value={languages} onChange={(e) => setLanguages(e.target.value)} />
               </div>
               <div className="col-12">
                 <label className="form-label">{t.labelSpecialties}</label>
-                <input className="form-control" placeholder="Specialties" value={specialties} onChange={(e) => setSpecialties(e.target.value)} />
+                <input className="form-control" placeholder={t.labelSpecialties} value={specialties} onChange={(e) => setSpecialties(e.target.value)} />
               </div>
               <div className="col-12">
-                <label className="form-label">Bio</label>
-                <textarea className="form-control" placeholder="Short bio" rows={3} value={bio} onChange={(e) => setBio(e.target.value)} />
+                <label className="form-label">{t.labelBio}</label>
+                <textarea className="form-control" placeholder={t.labelBio} rows={3} value={bio} onChange={(e) => setBio(e.target.value)} />
               </div>
 
               <div className="col-md-4">
-                <label className="form-label">Phone</label>
-                <input className="form-control" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <label className="form-label">{t.labelPhone}</label>
+                <input className="form-control" placeholder={t.labelPhone} value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
               {/* bottom photo controls removed per request */}
 
               <div className="col-md-4">
                 <label className="form-label">{t.labelCity}</label>
-                <input className="form-control" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} />
+                <input className="form-control" placeholder={t.labelCity} value={city} onChange={(e) => setCity(e.target.value)} />
               </div>
               <div className="col-md-4">
                 <label className="form-label">{t.labelCountry}</label>
-                <input className="form-control" placeholder="Country" value={country} onChange={(e) => setCountry(e.target.value)} />
+                <input className="form-control" placeholder={t.labelCountry} value={country} onChange={(e) => setCountry(e.target.value)} />
               </div>
               <div className="col-md-2">
                 <label className="form-label">{t.labelLat}</label>
-                <input className="form-control" placeholder="Lat" value={lat} onChange={(e) => setLat(e.target.value as any)} />
+                <input className="form-control" placeholder={t.labelLat} value={lat} onChange={(e) => setLat(e.target.value as any)} />
               </div>
               <div className="col-md-2">
                 <label className="form-label">{t.labelLng}</label>
-                <input className="form-control" placeholder="Lng" value={lng} onChange={(e) => setLng(e.target.value as any)} />
+                <input className="form-control" placeholder={t.labelLng} value={lng} onChange={(e) => setLng(e.target.value as any)} />
               </div>
             </div>
             <div className="d-flex gap-2 mt-5">
               <button style={{backgroundColor:"var(--brand-primary)",color:"white", border: "1px solid var(--brand-primary)"}} className="btn btn-outline-secondary btn-sm" onClick={useMyLocation}>{t.btnUseLocation}</button>
-              <button style={{backgroundColor:"var(--brand-primary)",color:"white", border: "1px solid var(--brand-primary)"}} className="btn btn-primary btn-sm" onClick={saveAll} disabled={savingAll}>{savingAll ? 'Saving…' : t.btnSave}</button>
-              {notice ? <span className="text-muted small ms-2">{notice}</span> : null}
+              <button style={{backgroundColor:"var(--brand-primary)",color:"white", border: "1px solid var(--brand-primary)"}} className="btn btn-primary btn-sm" onClick={saveAll} disabled={savingAll}>{savingAll ? t.savingLabel : t.btnSave}</button>
             </div>
           </div>
         </section>

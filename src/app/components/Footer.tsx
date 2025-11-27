@@ -15,6 +15,15 @@ export default function Footer() {
     newsletterPlaceholder: string;
     subscribe: string;
     rights: string;
+    linkHome: string;
+    linkAbout: string;
+    linkFaq: string;
+    linkContact: string;
+    linkBlog: string;
+    linkGuides: string;
+    linkSupport: string;
+    linkPrivacy: string;
+    linkTerms: string;
   }> = {
     en: {
       aboutTitle: "About OmniCheck Network",
@@ -25,6 +34,15 @@ export default function Footer() {
       newsletterPlaceholder: "Your email address",
       subscribe: "Subscribe",
       rights: "All rights reserved.",
+      linkHome: "Home",
+      linkAbout: "About",
+      linkFaq: "FAQ",
+      linkContact: "Contact",
+      linkBlog: "Blog",
+      linkGuides: "Guides",
+      linkSupport: "Support",
+      linkPrivacy: "Privacy",
+      linkTerms: "Terms",
     },
     de: {
       aboutTitle: "Über OmniCheck Network",
@@ -35,6 +53,15 @@ export default function Footer() {
       newsletterPlaceholder: "Ihre E‑Mail‑Adresse",
       subscribe: "Abonnieren",
       rights: "Alle Rechte vorbehalten.",
+      linkHome: "Startseite",
+      linkAbout: "Über uns",
+      linkFaq: "FAQ",
+      linkContact: "Kontakt",
+      linkBlog: "Blog",
+      linkGuides: "Leitfäden",
+      linkSupport: "Support",
+      linkPrivacy: "Datenschutz",
+      linkTerms: "Nutzungsbedingungen",
     },
     fr: {
       aboutTitle: "À propos de OmniCheck Network",
@@ -45,6 +72,15 @@ export default function Footer() {
       newsletterPlaceholder: "Votre adresse e‑mail",
       subscribe: "S'abonner",
       rights: "Tous droits réservés.",
+      linkHome: "Accueil",
+      linkAbout: "À propos",
+      linkFaq: "FAQ",
+      linkContact: "Contact",
+      linkBlog: "Blog",
+      linkGuides: "Guides",
+      linkSupport: "Support",
+      linkPrivacy: "Confidentialité",
+      linkTerms: "Conditions",
     },
   };
 
@@ -78,20 +114,19 @@ export default function Footer() {
           <div className="col-6 col-lg-2">
             <h4 className={styles.columnTitle}>{t.quickTitle}</h4>
             <ul className={styles.links}>
-              <li><a href="/">Home</a></li>
-              <li><a href="/about">About</a></li>
-              <li><a href="/faq">FAQ</a></li>
-              <li><a href="/contact">Contact</a></li>
+              <li><a href="/">{t.linkHome}</a></li>
+              <li><a href="/about">{t.linkAbout}</a></li>
+              <li><a href="/faq">{t.linkFaq}</a></li>
+              <li><a href="/contact">{t.linkContact}</a></li>
             </ul>
           </div>
 
           <div className="col-6 col-lg-2">
             <h4 className={styles.columnTitle}>{t.resTitle}</h4>
             <ul className={styles.links}>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Guides</a></li>
-              <li><a href="#">Support</a></li>
-              <li><a href="#">Contact</a></li>
+              <li><a href="#">{t.linkBlog}</a></li>
+              <li><a href="#">{t.linkGuides}</a></li>
+              <li><a href="#">{t.linkSupport}</a></li>
             </ul>
           </div>
 
@@ -107,8 +142,8 @@ export default function Footer() {
         <div className={styles.bottom}>
           <span>© {year} OmniCheck AI. {t.rights}</span>
           <div className={styles.bottomLinks}>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
+            <a href="#">{t.linkPrivacy}</a>
+            <a href="#">{t.linkTerms}</a>
             {/* <a href="#">Imprint</a> */}
           </div>
         </div>

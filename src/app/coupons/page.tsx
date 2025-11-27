@@ -28,6 +28,10 @@ export default function CouponsCatalogPage() {
     perkTeams: string; perkVolume: string;
     offApplied: (n: number)=>string; noDiscount: string;
     estTotal: string; perCoupon: string;
+    mustSignIn: string;
+    checkoutFailed: string;
+    checkoutMissingUrl: string;
+    checkoutStartFailed: string;
   }>= {
     en: {
       title: "OmniCheck Coupons",
@@ -50,6 +54,10 @@ export default function CouponsCatalogPage() {
       noDiscount: "No bulk discount",
       estTotal: "Estimated total:",
       perCoupon: "per coupon",
+      mustSignIn: "Please sign in to continue.",
+      checkoutFailed: "Checkout failed",
+      checkoutMissingUrl: "Checkout failed: missing redirect URL.",
+      checkoutStartFailed: "Failed to start checkout. Please try again.",
     },
     de: {
       title: "OmniCheck Gutscheine",
@@ -72,6 +80,10 @@ export default function CouponsCatalogPage() {
       noDiscount: "Kein Mengenrabatt",
       estTotal: "Geschätzte Summe:",
       perCoupon: "pro Gutschein",
+      mustSignIn: "Bitte melden Sie sich an, um fortzufahren.",
+      checkoutFailed: "Checkout fehlgeschlagen",
+      checkoutMissingUrl: "Checkout fehlgeschlagen: Weiterleitungs-URL fehlt.",
+      checkoutStartFailed: "Checkout konnte nicht gestartet werden. Bitte versuchen Sie es erneut.",
     },
     fr: {
       title: "Coupons OmniCheck",
@@ -94,6 +106,10 @@ export default function CouponsCatalogPage() {
       noDiscount: "Pas de remise de volume",
       estTotal: "Total estimé :",
       perCoupon: "par coupon",
+      mustSignIn: "Veuillez vous connecter pour continuer.",
+      checkoutFailed: "Échec du paiement",
+      checkoutMissingUrl: "Échec du paiement : URL de redirection manquante.",
+      checkoutStartFailed: "Impossible de démarrer le paiement. Veuillez réessayer.",
     },
   };
   const t = copy[lang] ?? copy.en;
@@ -127,7 +143,7 @@ export default function CouponsCatalogPage() {
         return null;
       })();
       if (!token) {
-        alert('Please sign in to continue.');
+        alert(t.mustSignIn);
         return;
       }
       const res = await fetch(`${apiBase}/payments/create-checkout-session`, {
@@ -137,18 +153,18 @@ export default function CouponsCatalogPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const msg = data?.message || data?.error || 'Checkout failed';
-        alert(typeof msg === 'string' ? msg : 'Checkout failed');
+        const msg = data?.message || data?.error || t.checkoutFailed;
+        alert(typeof msg === 'string' ? msg : t.checkoutFailed);
         return;
       }
       if (data?.url) {
         window.location.href = data.url;
       } else {
-        alert('Checkout failed: missing redirect URL.');
+        alert(t.checkoutMissingUrl);
       }
     } catch (e) {
       console.error(e);
-      alert('Failed to start checkout. Please try again.');
+      alert(t.checkoutStartFailed);
     }
   }
 

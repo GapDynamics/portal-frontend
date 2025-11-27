@@ -21,6 +21,7 @@ export default function AppPlatforms() {
         desc:
           "Use our web app from anywhere. Full functionality in the browser with modern design and optimal performance on all devices.",
         bullets: ["Responsive design", "Cloud sync", "Real‑time collaboration"],
+        cta: "Open Web App",
       },
     },
     de: {
@@ -39,6 +40,7 @@ export default function AppPlatforms() {
           "Cloud‑Synchronisation",
           "Echtzeit‑Zusammenarbeit",
         ],
+        cta: "Web‑App öffnen",
       },
     },
     fr: {
@@ -57,6 +59,7 @@ export default function AppPlatforms() {
           "Synchronisation cloud",
           "Collaboration en temps réel",
         ],
+        cta: "Ouvrir l’application Web",
       },
     },
   };
@@ -154,7 +157,7 @@ export default function AppPlatforms() {
                 ))}
               </ul>
               <div className={styles.actions}>
-                <a href="/portal" className={styles.primaryBtn}>Open Web App</a>
+                <a href="/portal" className={styles.primaryBtn}>{copy.web.cta}</a>
               </div>
             </div>
           </article>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import Footer from "../../components/Footer";
+import { useLanguage } from "../../providers/LanguageProvider";
 
 function LabelValue({ label, value }: { label: string; value?: any }) {
   if (!value && value !== 0) return null;
@@ -15,6 +16,105 @@ function LabelValue({ label, value }: { label: string; value?: any }) {
 }
 
 export default function ProfilePage() {
+  const { lang } = useLanguage();
+  const copy: Record<string, {
+    loadingProfile: string;
+    profileNotFound: string;
+    backDirectory: string;
+    headerBadge: string;
+    headerFallbackName: string;
+    openInMaps: string;
+    message: string;
+    about: string;
+    noBio: string;
+    details: string;
+    specialties: string;
+    languages: string;
+    company: string;
+    country: string;
+    city: string;
+    coordinates: string;
+    contact: string;
+    emailLabel: string;
+    phoneLabel: string;
+    emailBtn: string;
+    messageBtn: string;
+    backBtn: string;
+  }> = {
+    en: {
+      loadingProfile: "Loading profile…",
+      profileNotFound: "Profile not found.",
+      backDirectory: "Back to directory",
+      headerBadge: "Professional profile",
+      headerFallbackName: "Professional",
+      openInMaps: "Open in Maps",
+      message: "Message",
+      about: "About",
+      noBio: "No bio provided.",
+      details: "Details",
+      specialties: "Specialties",
+      languages: "Languages",
+      company: "Company",
+      country: "Country",
+      city: "City",
+      coordinates: "Coordinates",
+      contact: "Contact",
+      emailLabel: "Email",
+      phoneLabel: "Phone",
+      emailBtn: "Email",
+      messageBtn: "Message",
+      backBtn: "Back to directory",
+    },
+    de: {
+      loadingProfile: "Profil wird geladen…",
+      profileNotFound: "Profil nicht gefunden.",
+      backDirectory: "Zurück zum Verzeichnis",
+      headerBadge: "Profil der Fachperson",
+      headerFallbackName: "Fachperson",
+      openInMaps: "In Maps öffnen",
+      message: "Nachricht",
+      about: "Über",
+      noBio: "Keine Beschreibung vorhanden.",
+      details: "Details",
+      specialties: "Fachgebiete",
+      languages: "Sprachen",
+      company: "Praxis / Unternehmen",
+      country: "Land",
+      city: "Stadt",
+      coordinates: "Koordinaten",
+      contact: "Kontakt",
+      emailLabel: "E‑Mail",
+      phoneLabel: "Telefon",
+      emailBtn: "E‑Mail",
+      messageBtn: "Nachricht",
+      backBtn: "Zurück zum Verzeichnis",
+    },
+    fr: {
+      loadingProfile: "Chargement du profil…",
+      profileNotFound: "Profil introuvable.",
+      backDirectory: "Retour à l’annuaire",
+      headerBadge: "Profil professionnel",
+      headerFallbackName: "Professionnel",
+      openInMaps: "Ouvrir dans Maps",
+      message: "Message",
+      about: "À propos",
+      noBio: "Aucune biographie fournie.",
+      details: "Détails",
+      specialties: "Spécialités",
+      languages: "Langues",
+      company: "Cabinet / Entreprise",
+      country: "Pays",
+      city: "Ville",
+      coordinates: "Coordonnées",
+      contact: "Contact",
+      emailLabel: "E‑mail",
+      phoneLabel: "Téléphone",
+      emailBtn: "E‑mail",
+      messageBtn: "Message",
+      backBtn: "Retour à l’annuaire",
+    },
+  };
+  const t = copy[lang] ?? copy.en;
   const routeParams = useParams();
   const id = useMemo(() => {
     const raw = (routeParams as any)?.id;
@@ -37,7 +137,7 @@ export default function ProfilePage() {
         const data = await res.json();
         if (!ignore) setProfile(data);
       } catch (e: any) {
-        if (!ignore) setError('Profile not found.');
+        if (!ignore) setError(t.profileNotFound);
       } finally {
         if (!ignore) setLoading(false);
       }
@@ -50,7 +150,7 @@ export default function ProfilePage() {
     return (
       <main className="py-5">
         <div className="container">
-          <div className="alert alert-secondary" role="alert" style={{ borderRadius: 12 }}>Loading profile…</div>
+          <div className="alert alert-secondary" role="alert" style={{ borderRadius: 12 }}>{t.loadingProfile}</div>
         </div>
       </main>
     );
@@ -60,9 +160,9 @@ export default function ProfilePage() {
       <main className="py-5">
         <div className="container">
           <div className="alert alert-danger" role="alert" style={{ borderRadius: 12 }}>
-            {error || 'Profile not found.'}
+            {error || t.profileNotFound}
           </div>
-          <Link href="/directory" className="btn btn-outline-primary">Back to directory</Link>
+          <Link href="/directory" className="btn btn-outline-primary">{t.backDirectory}</Link>
         </div>
       </main>
     );
@@ -90,8 +190,8 @@ export default function ProfilePage() {
               </div>
             )}
             <div>
-              <div className="text-uppercase text-muted small">Professional profile</div>
-              <h1 className="h2 fw-bold mb-1">{fullName || "Professional"}</h1>
+              <div className="text-uppercase text-muted small">{t.headerBadge}</div>
+              <h1 className="h2 fw-bold mb-1">{fullName || t.headerFallbackName}</h1>
               <div className="d-flex flex-wrap gap-2">
                 {profile.specialties ? (<span className="badge text-bg-light">{profile.specialties}</span>) : null}
                 {profile.languages ? (<span className="badge text-bg-light">{profile.languages}</span>) : null}
@@ -101,9 +201,9 @@ export default function ProfilePage() {
           </div>
           <div className="d-flex gap-2">
             {gmaps ? (
-              <a className="btn btn-outline-secondary" href={gmaps} target="_blank" rel="noopener noreferrer">Open in Maps</a>
+              <a className="btn btn-outline-secondary" href={gmaps} target="_blank" rel="noopener noreferrer">{t.openInMaps}</a>
             ) : null}
-            <Link style={{backgroundColor:"var(--brand-primary)", color:"white", border:"1px solid var(--brand-primary)"}} className="btn" href={`/portal/chat/${profile.id}`}>Message</Link>
+            <Link style={{backgroundColor:"var(--brand-primary)", color:"white", border:"1px solid var(--brand-primary)"}} className="btn" href={`/portal/chat/${profile.id}`}>{t.message}</Link>
           </div>
         </div>
       </div>
@@ -113,25 +213,25 @@ export default function ProfilePage() {
           <div className="col-lg-8">
             <div className="card" style={{ borderRadius: 12 }}>
               <div className="card-body p-4">
-                <h5 className="card-title mb-3">About</h5>
-                <p className="mb-0" style={{ whiteSpace: 'pre-wrap' }}>{profile.bio || "No bio provided."}</p>
+                <h5 className="card-title mb-3">{t.about}</h5>
+                <p className="mb-0" style={{ whiteSpace: 'pre-wrap' }}>{profile.bio || t.noBio}</p>
               </div>
             </div>
 
             <div className="card mt-3" style={{ borderRadius: 12 }}>
               <div className="card-body p-4">
-                <h5 className="card-title mb-3">Details</h5>
+                <h5 className="card-title mb-3">{t.details}</h5>
                 <div className="row">
                   <div className="col-md-6">
-                    <LabelValue label="Specialties" value={profile.specialties} />
-                    <LabelValue label="Languages" value={profile.languages} />
-                    <LabelValue label="Company" value={profile.company} />
+                    <LabelValue label={t.specialties} value={profile.specialties} />
+                    <LabelValue label={t.languages} value={profile.languages} />
+                    <LabelValue label={t.company} value={profile.company} />
                   </div>
                   <div className="col-md-6">
-                    <LabelValue label="Country" value={profile.country} />
-                    <LabelValue label="City" value={profile.city} />
+                    <LabelValue label={t.country} value={profile.country} />
+                    <LabelValue label={t.city} value={profile.city} />
                     {typeof profile.latitude === 'number' && typeof profile.longitude === 'number' ? (
-                      <LabelValue label="Coordinates" value={`${profile.latitude}, ${profile.longitude}`} />
+                      <LabelValue label={t.coordinates} value={`${profile.latitude}, ${profile.longitude}`} />
                     ) : null}
                   </div>
                 </div>
@@ -142,25 +242,25 @@ export default function ProfilePage() {
           <div className="col-lg-4">
             <div className="card" style={{ borderRadius: 12 }}>
               <div className="card-body p-4">
-                <h5 className="card-title mb-3">Contact</h5>
+                <h5 className="card-title mb-3">{t.contact}</h5>
                 {profile?.user?.email ? (
                   <div className="mb-2">
-                    <div className="text-uppercase text-muted small">Email</div>
+                    <div className="text-uppercase text-muted small">{t.emailLabel}</div>
                     <a href={`mailto:${profile.user.email}`} className="fw-semibold">{profile.user.email}</a>
                   </div>
                 ) : null}
                 {phone ? (
                   <div className="mb-2">
-                    <div className="text-uppercase text-muted small">Phone</div>
+                    <div className="text-uppercase text-muted small">{t.phoneLabel}</div>
                     <a href={`tel:${phone}`} className="fw-semibold">{phone}</a>
                   </div>
                 ) : null}
                 <div className="d-grid gap-2 mt-3">
                   {profile?.user?.email ? (
-                    <a href={`mailto:${profile.user.email}`} className="btn btn-outline-secondary">Email</a>
+                    <a href={`mailto:${profile.user.email}`} className="btn btn-outline-secondary">{t.emailBtn}</a>
                   ) : null}
-                  <Link href={`/portal/chat/${profile.id}`} className="btn" style={{backgroundColor:"var(--brand-primary)", color:"white", border:"1px solid var(--brand-primary)"}}>Message</Link>
-                  <Link href="/directory" className="btn btn-outline-secondary">Back to directory</Link>
+                  <Link href={`/portal/chat/${profile.id}`} className="btn" style={{backgroundColor:"var(--brand-primary)", color:"white", border:"1px solid var(--brand-primary)"}}>{t.messageBtn}</Link>
+                  <Link href="/directory" className="btn btn-outlineSecondary">{t.backBtn}</Link>
                 </div>
               </div>
             </div>

@@ -75,10 +75,22 @@ export default function Header() {
     }
   }
 
-  const nav: Record<string, { home: string; directory: string; coupons: string; register: string; login: string; about: string; faq: string; contact: string; ai: string; messages: string }>= {
-    en: { home: "Home", directory: "Directory", coupons: "Coupons", register: "Register", login: "Login", about: "About", faq: "FAQ", contact: "Contact", ai: "Health Assistant", messages: "Messages" },
-    de: { home: "Start", directory: "Verzeichnis", coupons: "Gutscheine", register: "Registrieren", login: "Anmelden", about: "Über uns", faq: "FAQ", contact: "Kontakt", ai: "Health Assistant", messages: "Nachrichten" },
-    fr: { home: "Accueil", directory: "Annuaire", coupons: "Coupons", register: "S'inscrire", login: "Se connecter", about: "À propos", faq: "FAQ", contact: "Contact", ai: "Assistant santé", messages: "Messages" },
+  const nav: Record<string, {
+    home: string; directory: string; coupons: string; register: string; login: string; about: string; faq: string; contact: string; ai: string; messages: string;
+    dashboard: string; logout: string; langLabel: string;
+  }>= {
+    en: {
+      home: "Home", directory: "Directory", coupons: "Coupons", register: "Register", login: "Login", about: "About", faq: "FAQ", contact: "Contact", ai: "OmniCheck", messages: "Messages",
+      dashboard: "Dashboard", logout: "Logout", langLabel: "Language",
+    },
+    de: {
+      home: "Start", directory: "Verzeichnis", coupons: "Gutscheine", register: "Registrieren", login: "Anmelden", about: "Über uns", faq: "FAQ", contact: "Kontakt", ai: "OmniCheck", messages: "Nachrichten",
+      dashboard: "Portal", logout: "Abmelden", langLabel: "Sprache",
+    },
+    fr: {
+      home: "Accueil", directory: "Annuaire", coupons: "Coupons", register: "S'inscrire", login: "Se connecter", about: "À propos", faq: "FAQ", contact: "Contact", ai: "Assistant santé", messages: "Messages",
+      dashboard: "Tableau de bord", logout: "Se déconnecter", langLabel: "Langue",
+    },
   };
   const t = nav[lang] ?? nav.en;
   return (
@@ -122,11 +134,11 @@ export default function Header() {
                 {menuOpen && (
                   <div role="menu" className={`${styles.userMenu} shadow-sm`}>
                     <button role="menuitem" className={styles.userMenuItem} onClick={()=>{ setMenuOpen(false); goToDashboard(); }}>
-                      Dashboard
+                      {t.dashboard}
                     </button>
                     <div className={styles.userMenuDivider} />
                     <button role="menuitem" className={styles.userMenuItem} style={{ color: '#fca5a5' }} onClick={()=>{ setMenuOpen(false); logout(); }}>
-                      Logout
+                      {t.logout}
                     </button>
                   </div>
                 )}
@@ -143,7 +155,7 @@ export default function Header() {
             )}
             <select
               className="form-select form-select-sm"
-              aria-label="Language"
+              aria-label={t.langLabel}
               value={lang}
               onChange={(e) => setLang(e.target.value as any)}
               style={{ width: 70 }}

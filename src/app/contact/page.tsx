@@ -13,10 +13,16 @@ export default function ContactPage() {
     email: string;
     message: string;
     submit: string;
+    submitting: string;
     sent: string;
     infoTitle: string;
     info1: string;
     info2: string;
+    fillAllFields: string;
+    failedToSend: string;
+    badgeSecure: string;
+    badgeFast: string;
+    badgeRegion: string;
   }> = {
     en: {
       h1: "Contact us",
@@ -25,10 +31,16 @@ export default function ContactPage() {
       email: "Email address",
       message: "Message",
       submit: "Send message",
+      submitting: "Sending…",
       sent: "Message sent (demo).",
       infoTitle: "How can we help?",
       info1: "Questions about joining OmniCheck Network as a patient or professional.",
       info2: "Partnerships, feedback, or media inquiries.",
+      fillAllFields: "Please fill in all fields.",
+      failedToSend: "Failed to send",
+      badgeSecure: "Secure",
+      badgeFast: "Fast response",
+      badgeRegion: "EU/CH",
     },
     de: {
       h1: "Kontakt",
@@ -37,10 +49,16 @@ export default function ContactPage() {
       email: "E‑Mail‑Adresse",
       message: "Nachricht",
       submit: "Nachricht senden",
+      submitting: "Wird gesendet…",
       sent: "Nachricht gesendet (Demo).",
       infoTitle: "Wie können wir helfen?",
       info1: "Fragen zur Teilnahme am OmniCheck Network als Patient:in oder Fachperson.",
       info2: "Partnerschaften, Feedback oder Medienanfragen.",
+      fillAllFields: "Bitte füllen Sie alle Felder aus.",
+      failedToSend: "Senden fehlgeschlagen",
+      badgeSecure: "Sicher",
+      badgeFast: "Schnelle Antwort",
+      badgeRegion: "EU/CH",
     },
     fr: {
       h1: "Contact",
@@ -49,10 +67,16 @@ export default function ContactPage() {
       email: "Adresse e‑mail",
       message: "Message",
       submit: "Envoyer",
+      submitting: "Envoi…",
       sent: "Message envoyé (démo).",
       infoTitle: "Comment pouvons-nous aider ?",
       info1: "Questions sur l’inscription à OmniCheck Network en tant que patient ou professionnel.",
       info2: "Partenariats, retours ou demandes média.",
+      fillAllFields: "Veuillez remplir tous les champs.",
+      failedToSend: "Échec de l’envoi",
+      badgeSecure: "Sécurisé",
+      badgeFast: "Réponse rapide",
+      badgeRegion: "UE/CH",
     },
   };
 
@@ -72,7 +96,7 @@ export default function ContactPage() {
     e.preventDefault();
     setNotice(null);
     if (!form.name || !form.email || !form.message) {
-      setNotice("Please fill in all fields.");
+      setNotice(t.fillAllFields);
       return;
     }
     try {
@@ -87,7 +111,7 @@ export default function ContactPage() {
         setNotice(j?.message || t.sent);
         setForm({ name: "", email: "", message: "" });
       } else {
-        const msg = Array.isArray(j?.message) ? j.message.join('\n') : (j?.message || 'Failed to send');
+        const msg = Array.isArray(j?.message) ? j.message.join('\n') : (j?.message || t.failedToSend);
         setNotice(msg);
       }
     } finally {
@@ -112,9 +136,9 @@ export default function ContactPage() {
             <div className="col-lg-6">
               <div className={styles.infoCard}>
                 <div className={styles.badgeRow}>
-                  <span className={styles.badge}>Secure</span>
-                  <span className={styles.badge}>Fast response</span>
-                  <span className={styles.badge}>EU/CH</span>
+                  <span className={styles.badge}>{t.badgeSecure}</span>
+                  <span className={styles.badge}>{t.badgeFast}</span>
+                  <span className={styles.badge}>{t.badgeRegion}</span>
                 </div>
                 <h3>{t.infoTitle}</h3>
                 <p className="text-muted mb-3">{t.info1}</p>
@@ -140,7 +164,7 @@ export default function ContactPage() {
                   </div>
                   {notice && <div className="alert alert-info py-2" role="status">{notice}</div>}
                   <button style={{backgroundColor:"var(--brand-primary)",color:"white", border: "1px solid #0c6172"}} type="submit" className={`btn btn-primary ${styles.submit}`} disabled={submitting}>
-                    {submitting ? "..." : t.submit}
+                    {submitting ? t.submitting : t.submit}
                   </button>
                 </form>
               </div>

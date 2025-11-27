@@ -57,8 +57,8 @@ export default function RegisterPage() {
       password: "Passwort",
       confirm: "Passwort bestätigen",
       role: "Ich bin",
-      role_patient: "Eine/r Patient:in",
-      role_professional: "Eine Gesundheitsfachperson",
+      role_patient: "Patient:in",
+      role_professional: "Gesundheitsfachperson",
       submit: "Konto erstellen",
       haveAccount: "Bereits ein Konto?",
       login: "Anmelden",
@@ -93,6 +93,7 @@ export default function RegisterPage() {
     sectionInterests: string; interestMobile: string; interestMobileDesc: string; interestWeb: string; interestWebDesc: string; interestBoth: string; interestBothDesc: string;
     back: string; next: string;
     sectionConfirm: string; newsletterLabel: string; acceptPrefix: string; privacy: string; acceptSuffix: string; summary: string; from: string;
+    phonePlaceholder: string; companyPlaceholder: string; addressPlaceholder: string; postalPlaceholder: string; statePlaceholder: string; cityPlaceholder: string;
   }> = {
     en: {
       headerTitle: "Register now for free", headerSub: "Sign up and get instant access to our apps",
@@ -102,6 +103,7 @@ export default function RegisterPage() {
       sectionInterests: "Your interests", interestMobile: "Mobile App", interestMobileDesc: "Interested in our iOS & Android app?", interestWeb: "Web App", interestWebDesc: "Interested in our web platform?", interestBoth: "Both", interestBothDesc: "Interested in all our platforms?",
       back: "Back", next: "Further",
       sectionConfirm: "Confirmation", newsletterLabel: "I would like to subscribe to the newsletter", acceptPrefix: "I accept the ", privacy: "privacy policy", acceptSuffix: ".", summary: "Summary:", from: "from",
+      phonePlaceholder: "+49 123 456789", companyPlaceholder: "My company", addressPlaceholder: "Street and number", postalPlaceholder: "e.g. 10115", statePlaceholder: "e.g. Bavaria", cityPlaceholder: "e.g. Munich",
     },
     de: {
       headerTitle: "Jetzt kostenlos registrieren", headerSub: "Registrieren und sofort Zugriff auf unsere Apps erhalten",
@@ -111,6 +113,7 @@ export default function RegisterPage() {
       sectionInterests: "Ihre Interessen", interestMobile: "Mobile‑App", interestMobileDesc: "Interessiert an unserer iOS & Android‑App?", interestWeb: "Web‑App", interestWebDesc: "Interessiert an unserer Web‑Plattform?", interestBoth: "Beides", interestBothDesc: "Interessiert an allen unseren Plattformen?",
       back: "Zurück", next: "Weiter",
       sectionConfirm: "Bestätigung", newsletterLabel: "Ich möchte den Newsletter abonnieren", acceptPrefix: "Ich akzeptiere die ", privacy: "Datenschutzerklärung", acceptSuffix: ".", summary: "Zusammenfassung:", from: "aus",
+      phonePlaceholder: "+49 123 456789", companyPlaceholder: "Mein Unternehmen", addressPlaceholder: "Straße und Hausnummer", postalPlaceholder: "z. B. 10115", statePlaceholder: "z. B. Bayern", cityPlaceholder: "z. B. München",
     },
     fr: {
       headerTitle: "Inscrivez‑vous gratuitement", headerSub: "Créez un compte et accédez instantanément à nos applications",
@@ -120,6 +123,7 @@ export default function RegisterPage() {
       sectionInterests: "Vos centres d’intérêt", interestMobile: "Application mobile", interestMobileDesc: "Intéressé par notre app iOS & Android ?", interestWeb: "Application web", interestWebDesc: "Intéressé par notre plateforme web ?", interestBoth: "Les deux", interestBothDesc: "Intéressé par toutes nos plateformes ?",
       back: "Retour", next: "Continuer",
       sectionConfirm: "Confirmation", newsletterLabel: "Je souhaite m’abonner à la newsletter", acceptPrefix: "J’accepte la ", privacy: "politique de confidentialité", acceptSuffix: ".", summary: "Récapitulatif :", from: "depuis",
+      phonePlaceholder: "+33 1 23 45 67 89", companyPlaceholder: "Mon entreprise", addressPlaceholder: "Rue et numéro", postalPlaceholder: "ex. 75001", statePlaceholder: "ex. Île‑de‑France", cityPlaceholder: "ex. Paris",
     },
   };
   const L = ui[lang] ?? ui.en;
@@ -145,6 +149,63 @@ export default function RegisterPage() {
   const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const messages: Record<string, {
+    fillAll: string;
+    pwTooShort: string;
+    pwMismatch: string;
+    acceptPrivacy: string;
+    regFailed: string;
+    regFailedDemo: string;
+    regFailedLogin: string;
+    regSuccessToast: string;
+    regSuccessRedirect: string;
+  }> = {
+    en: {
+      fillAll: "Please fill in all fields.",
+      pwTooShort: "Password must be at least 8 characters.",
+      pwMismatch: "Passwords do not match.",
+      acceptPrivacy: "Please accept the privacy policy to continue.",
+      regFailed: "Registration failed",
+      regFailedDemo: "Registration failed (demo).",
+      regFailedLogin: "Account created, but login failed",
+      regSuccessToast: "Account created successfully",
+      regSuccessRedirect: "Registered successfully. Redirecting...",
+    },
+    de: {
+      fillAll: "Bitte füllen Sie alle Felder aus.",
+      pwTooShort: "Das Passwort muss mindestens 8 Zeichen lang sein.",
+      pwMismatch: "Die Passwörter stimmen nicht überein.",
+      acceptPrivacy: "Bitte akzeptieren Sie die Datenschutzerklärung, um fortzufahren.",
+      regFailed: "Registrierung fehlgeschlagen",
+      regFailedDemo: "Registrierung fehlgeschlagen (Demo).",
+      regFailedLogin: "Konto erstellt, aber Anmeldung fehlgeschlagen",
+      regSuccessToast: "Konto erfolgreich erstellt",
+      regSuccessRedirect: "Erfolgreich registriert. Weiterleitung...",
+    },
+    fr: {
+      fillAll: "Veuillez remplir tous les champs.",
+      pwTooShort: "Le mot de passe doit contenir au moins 8 caractères.",
+      pwMismatch: "Les mots de passe ne correspondent pas.",
+      acceptPrivacy: "Veuillez accepter la politique de confidentialité pour continuer.",
+      regFailed: "Échec de l’inscription",
+      regFailedDemo: "Échec de l’inscription (démo).",
+      regFailedLogin: "Compte créé, mais connexion impossible",
+      regSuccessToast: "Compte créé avec succès",
+      regSuccessRedirect: "Inscription réussie. Redirection...",
+    },
+  };
+  const M = messages[lang] ?? messages.en;
+
+  // Map common backend error strings to localized variants
+  const translateApiError = (raw: unknown): string | null => {
+    if (!raw || typeof raw !== "string") return null;
+    const v = raw.trim();
+    // Normalize simple HTTP-style errors coming from backend
+    if (/^bad request$/i.test(v)) return M.regFailed;
+    if (/^request failed$/i.test(v)) return M.regFailed;
+    if (/^invalid credentials$/i.test(v)) return M.regFailedLogin;
+    return null;
+  };
 
   // Lazy-load SweetAlert2 when needed
   const ensureSwal = async (): Promise<any> => {
@@ -180,16 +241,20 @@ export default function RegisterPage() {
 
     const fullName = `${form.firstName || ""} ${form.lastName || ""}`.trim();
     if (!fullName || !form.email || !form.password || !form.confirm) {
-      setMessage("Please fill in all fields.");
+      setMessage(M.fillAll);
+      return;
+    }
+    if (form.password.length < 8) {
+      setMessage(M.pwTooShort);
       return;
     }
     if (form.password !== form.confirm) {
-      setMessage("Passwords do not match.");
+      setMessage(M.pwMismatch);
       return;
     }
 
     if (!form.accept) {
-      setMessage("Please accept the privacy policy to continue.");
+      setMessage(M.acceptPrivacy);
       return;
     }
 
@@ -221,7 +286,8 @@ export default function RegisterPage() {
       });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
-        setMessage(j?.error || 'Registration failed');
+        const translated = translateApiError(j?.error);
+        setMessage(translated || j?.error || M.regFailed);
         return;
       }
       // Auto sign-in via backend
@@ -232,7 +298,8 @@ export default function RegisterPage() {
       });
       if (!loginRes.ok) {
         const lj = await loginRes.json().catch(() => ({}));
-        setMessage(lj?.error || 'Account created, but login failed');
+        const translated = translateApiError(lj?.error);
+        setMessage(translated || lj?.error || M.regFailedLogin);
         return;
       }
       const data = await loginRes.json().catch(() => ({} as any));
@@ -259,11 +326,11 @@ export default function RegisterPage() {
         if (Swal) {
           Swal.fire({
             toast: true, position: 'top-end', showConfirmButton: false, timer: 2000, timerProgressBar: true,
-            icon: 'success', title: 'Account created successfully'
+            icon: 'success', title: M.regSuccessToast
           });
         }
       } catch {}
-      setMessage('Registered successfully. Redirecting...');
+      setMessage(M.regSuccessRedirect);
       const path = roleUpper === 'PROFESSIONAL' ? '/portal/professional' : '/portal/patient';
       router.replace(path);
       setTimeout(() => {
@@ -272,7 +339,7 @@ export default function RegisterPage() {
         }
       }, 50);
     } catch (err) {
-      setMessage("Registration failed (demo).");
+      setMessage(M.regFailedDemo);
     } finally {
       setSubmitting(false);
     }
@@ -285,6 +352,7 @@ export default function RegisterPage() {
     form.lastName &&
     emailValid &&
     form.password &&
+    form.password.length >= 8 &&
     form.confirm &&
     form.password === form.confirm
   );
@@ -315,6 +383,11 @@ export default function RegisterPage() {
                     <span className={`${styles.step} ${step >= 2 ? styles.active : ''}`}></span>
                     <span className={`${styles.step} ${step >= 3 ? styles.active : ''}`}></span>
                   </div>
+                  {message && (
+                    <div className="alert alert-info py-2 mt-2" role="status">
+                      {message}
+                    </div>
+                  )}
                 {step === 0 && (
                   <div>
                     <h3 className={styles.sectionTitle}>{L.sectionPersonal}</h3>
@@ -333,15 +406,18 @@ export default function RegisterPage() {
                       </div>
                       <div className="col-12">
                         <label htmlFor="phone" className="form-label">{L.phone}</label>
-                        <input id="phone" name="phone" type="tel" className="form-control" value={form.phone} onChange={onChange} autoComplete="tel" placeholder="+49 123 456789" />
+                        <input id="phone" name="phone" type="tel" className="form-control" value={form.phone} onChange={onChange} autoComplete="tel" placeholder={L.phonePlaceholder} />
                       </div>
                       <div className="col-12">
                         <label htmlFor="company" className="form-label">{L.company}</label>
-                        <input id="company" name="company" type="text" className="form-control" value={form.company} onChange={onChange} placeholder="My company" />
+                        <input id="company" name="company" type="text" className="form-control" value={form.company} onChange={onChange} placeholder={L.companyPlaceholder} />
                       </div>
                       <div className="col-md-6">
                         <label htmlFor="password" className="form-label">{t.password}</label>
                         <input id="password" name="password" type="password" className="form-control" value={form.password} onChange={onChange} autoComplete="new-password" />
+                        {form.password && form.password.length < 8 && (
+                          <div className="form-text text-danger small">{M.pwTooShort}</div>
+                        )}
                       </div>
                       <div className="col-md-6">
                         <label htmlFor="confirm" className="form-label">{t.confirm}</label>
@@ -355,9 +431,8 @@ export default function RegisterPage() {
                         </select>
                       </div>
                     </div>
-                    {message && <div className="alert alert-info py-2 mt-3" role="status">{message}</div>}
                     <div className={styles.actions}>
-                      <button type="button" className={`btn btn-primary ${styles.nextBtn}`} onClick={()=>setStep(1)} disabled={!canNext0}>Further</button>
+                      <button type="button" className={`btn btn-primary ${styles.nextBtn}`} onClick={()=>setStep(1)} disabled={!canNext0}>{L.next}</button>
                     </div>
                   </div>
                 )}
@@ -368,7 +443,7 @@ export default function RegisterPage() {
                     <div className="row g-3">
                       <div className="col-12">
                         <label htmlFor="address" className="form-label">{L.address}</label>
-                        <input id="address" name="address" type="text" className="form-control" value={form.address} onChange={onChange} autoComplete="address-line1" placeholder="Street and number" />
+                        <input id="address" name="address" type="text" className="form-control" value={form.address} onChange={onChange} autoComplete="address-line1" placeholder={L.addressPlaceholder} />
                       </div>
                       <div className="col-md-6">
                         <label htmlFor="country" className="form-label">{L.country}</label>
@@ -382,18 +457,17 @@ export default function RegisterPage() {
                       </div>
                       <div className="col-md-6">
                         <label htmlFor="postalCode" className="form-label">{L.postalCode}</label>
-                        <input id="postalCode" name="postalCode" type="text" className="form-control" value={form.postalCode} onChange={onChange} autoComplete="postal-code" placeholder="e.g. 10115" />
+                        <input id="postalCode" name="postalCode" type="text" className="form-control" value={form.postalCode} onChange={onChange} autoComplete="postal-code" placeholder={L.postalPlaceholder} />
                       </div>
                       <div className="col-12">
                         <label htmlFor="state" className="form-label">{L.state}</label>
-                        <input id="state" name="state" type="text" className="form-control" value={form.state} onChange={onChange} placeholder="e.g. Bavaria" />
+                        <input id="state" name="state" type="text" className="form-control" value={form.state} onChange={onChange} placeholder={L.statePlaceholder} />
                       </div>
                       <div className="col-12">
                         <label htmlFor="city" className="form-label">{L.city}</label>
-                        <input id="city" name="city" type="text" className="form-control" value={form.city} onChange={onChange} placeholder="e.g. Munich" />
+                        <input id="city" name="city" type="text" className="form-control" value={form.city} onChange={onChange} placeholder={L.cityPlaceholder} />
                       </div>
                     </div>
-                    {message && <div className="alert alert-info py-2 mt-3" role="status">{message}</div>}
                     <div className={styles.actionsBetween}>
                       <button type="button" className={`btn btn-light ${styles.backBtn}`} onClick={()=>setStep(0)}>{L.back}</button>
                       <button  type="button" className={`btn btn-primary ${styles.nextBtn}`} onClick={()=>setStep(2)} disabled={!canNext1}>
