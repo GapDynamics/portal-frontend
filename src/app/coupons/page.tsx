@@ -270,6 +270,136 @@ export default function CouponsCatalogPage() {
           </div>
         </div>
 
+        {/* How it works section (bottom) */}
+        <div className={styles.howSection}>
+          {lang === "de" && (
+            <div className={`card ${styles.howCard}`}>
+              <div className="card-body">
+                <h2 className={`h5 mb-3 ${styles.howTitle}`}>So funktioniert es: Personalisierte Omnicheck-Coupons für deine Kund:innen</h2>
+                <p className={styles.howIntro}>
+                  Als Omnicheck-Partner kannst du ganz unkompliziert personalisierte Coupons erwerben, die deinen Kund:innen den
+                  Zugang zur Omnicheck-Gesundheitsanalyse ermöglichen. Der Ablauf ist einfach:
+                </p>
+                <ol className={styles.howStepsGrid}>
+                  <li className={styles.howStep}>
+                    <strong>Personalisierte Coupons kaufen</strong>
+                    <br />
+                    Du bestellst die gewünschte Anzahl an Coupons direkt über deinen Partnerbereich. Jeder Coupon ist eindeutig
+                    zugeordnet und enthält einen individuellen Code, den du deinen Kund:innen weitergeben kannst – digital oder
+                    gedruckt.
+                  </li>
+                  <li className={styles.howStep}>
+                    <strong>Coupons an Kund:innen weitergeben</strong>
+                    <br />
+                    Deine Kund:innen lösen den Coupon auf der Omnicheck-Plattform ein und erhalten sofort Zugang zum umfassenden
+                    Gesundheitsfragebogen sowie zur Omnicheck-App.
+                  </li>
+                  <li className={styles.howStep}>
+                    <strong>Verbindung zwischen Kund:in und Partner</strong>
+                    <br />
+                    Bei der Registrierung können sich Kund:innen direkt mit dir als Omnicheck-Partner verbinden. Dadurch erhältst du
+                    automatisch Einsicht in die Auswertung und bist als betreuende Fachperson hinterlegt.
+                  </li>
+                  <li className={styles.howStep}>
+                    <strong>Professionelles Auswertungsgespräch</strong>
+                    <br />
+                    Nachdem die 20–30-seitige Analyse erstellt wurde, besprichst du die Ergebnisse im persönlichen
+                    Beratungsgespräch. So kannst du aufklären, priorisieren und gemeinsam konkrete nächste Schritte definieren.
+                  </li>
+                </ol>
+                <p className={`mb-0 ${styles.howOutro}`}>
+                  Mit den personalisierten Coupons machst du den Omnicheck zu einem reibungslosen, professionellen Zusatzangebot in
+                  deiner Praxis – einfach, transparent und perfekt in deinen Beratungsprozess integrierbar.
+                </p>
+              </div>
+            </div>
+          )}
+          {lang === "en" && (
+            <div className={`card ${styles.howCard}`}>
+              <div className="card-body">
+                <h2 className={`h5 mb-3 ${styles.howTitle}`}>How it works: Personalised OmniCheck coupons for your clients</h2>
+                <p className={styles.howIntro}>
+                  As an OmniCheck partner you can easily purchase personalised coupons that give your clients access to the
+                  OmniCheck health analysis. The process is simple:
+                </p>
+                <ol className={styles.howStepsGrid}>
+                  <li className={styles.howStep}>
+                    <strong>Purchase personalised coupons</strong>
+                    <br />
+                    You order the desired number of coupons directly in your partner area. Each coupon is uniquely assigned and
+                    contains an individual code that you can pass on to your clients – digitally or printed.
+                  </li>
+                  <li className={styles.howStep}>
+                    <strong>Share coupons with clients</strong>
+                    <br />
+                    Your clients redeem the coupon on the OmniCheck platform and immediately gain access to the comprehensive health
+                    questionnaire and the OmniCheck app.
+                  </li>
+                  <li className={styles.howStep}>
+                    <strong>Link between client and partner</strong>
+                    <br />
+                    During registration, clients can connect directly with you as their OmniCheck partner. This gives you automatic
+                    insight into the results and lists you as the responsible professional.
+                  </li>
+                  <li className={styles.howStep}>
+                    <strong>Professional results consultation</strong>
+                    <br />
+                    Once the 20–30 page analysis has been created, you review the results together in a personal consultation. This
+                    allows you to explain the findings, set priorities and define concrete next steps together.
+                  </li>
+                </ol>
+                <p className={`mb-0 ${styles.howOutro}`}>
+                  With personalised coupons you turn OmniCheck into a smooth, professional add-on service in your practice – simple,
+                  transparent and perfectly integrated into your counselling process.
+                </p>
+              </div>
+            </div>
+          )}
+          {lang === "fr" && (
+            <div className={`card ${styles.howCard}`}>
+              <div className="card-body">
+                <h2 className={`h5 mb-3 ${styles.howTitle}`}>Comment ça fonctionne a0: coupons OmniCheck personnalisés pour vos client·e·s</h2>
+                <p className={styles.howIntro}>
+                  En tant que partenaire OmniCheck, vous pouvez acheter très simplement des coupons personnalisés qui donnent à vos
+                  client·e·s accès à l'analyse de santé OmniCheck. Le déroulement est simple a0:
+                </p>
+                <ol className={styles.howStepsGrid}>
+                  <li className={styles.howStep}>
+                    <strong>Acheter des coupons personnalisés</strong>
+                    <br />
+                    Vous commandez le nombre souhaité de coupons directement depuis votre espace partenaire. Chaque coupon est attribué
+                    de manière unique et contient un code individuel que vous pouvez transmettre à vos client·e·s – sous forme
+                    numérique ou imprimée.
+                  </li>
+                  <li className={styles.howStep}>
+                    <strong>Transmettre les coupons aux client·e·s</strong>
+                    <br />
+                    Vos client·e·s utilisent leur coupon sur la plateforme OmniCheck et obtiennent immédiatement accès au
+                    questionnaire de santé complet ainsi qu'à l'application OmniCheck.
+                  </li>
+                  <li className={styles.howStep}>
+                    <strong>Lien entre client·e et partenaire</strong>
+                    <br />
+                    Lors de l'inscription, les client·e·s peuvent se connecter directement à vous en tant que partenaire OmniCheck.
+                    Vous obtenez ainsi automatiquement un aperçu des résultats et êtes enregistré·e comme professionnel·le de
+                    référence.
+                  </li>
+                  <li className={styles.howStep}>
+                    <strong>Entretien professionnel de restitution</strong>
+                    <br />
+                    Une fois l'analyse de 20 à 30 pages créée, vous discutez des résultats lors d'un entretien personnalisé. Vous
+                    pouvez ainsi expliquer, hiérarchiser et définir ensemble les prochaines étapes concrètes.
+                  </li>
+                </ol>
+                <p className={`mb-0 ${styles.howOutro}`}>
+                  Grâce aux coupons personnalisés, OmniCheck devient une offre complémentaire fluide et professionnelle dans votre
+                  cabinet – simple, transparente et parfaitement intégrée à votre processus de conseil.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* <div className="text-center mt-2">
           <Link href="/portal/coupons" className="btn btn-outline-secondary btn-sm">My coupons</Link>
         </div> */}

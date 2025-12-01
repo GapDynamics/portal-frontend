@@ -5,7 +5,10 @@
 
 .header {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .title {
@@ -17,6 +20,7 @@
 
 .subtitle {
   color: var(--text-secondary);
+  font-size: 16px;
 }
 
 .ribbon {
@@ -107,4 +111,78 @@
 
 .faq {
   margin-top: 36px; text-align: center; color: #6b7280;
+}
+
+.howSection {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.howCard {
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+  background: radial-gradient(circle at top left, color-mix(in srgb, var(--brand-primary) 12%, #ffffff), #ffffff 55%);
+}
+
+.howTitle {
+  font-weight: 700;
+  color: var(--brand-primary);
+}
+
+.howIntro {
+  color: var(--text-secondary);
+}
+
+.howStepsGrid {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 14px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  counter-reset: how-step;
+}
+
+.howStep {
+  border-radius: 12px;
+  padding: 12px 14px 12px 46px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e5edf8;
+  position: relative;
+}
+
+.howStep strong {
+  color: #0f172a;
+}
+
+.howStep::before {
+  counter-increment: how-step;
+  content: counter(how-step);
+  position: absolute;
+  left: 14px;
+  top: 16px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--brand-primary);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.25);
+}
+
+.howOutro {
+  color: #4b5563;
+}
+
+@media (min-width: 768px) {
+  .howStepsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

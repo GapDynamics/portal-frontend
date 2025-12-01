@@ -1,0 +1,131 @@
+.section {
+  padding: 56px 0 72px;
+}
+
+.inner {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.textCol {
+  max-width: 880px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 699px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.visual {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background: radial-gradient(120% 120% at 20% 20%, var(--brand-muted), transparent),
+              linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(245, 158, 11, 0.15));
+  border: 1px solid #e6e6e6;
+}
+
+.kicker {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(12, 97, 114, 0.08);
+  color: var(--brand-primary);
+  margin-bottom: 12px;
+  max-width: 200px;
+  text-align: center;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--brand-primary);
+  margin-bottom: 16px;
+}
+
+.lead {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.benefits {
+  list-style: none;
+  padding-left: 0;
+  margin: 20px 0 18px;
+  display: grid;
+  gap: 10px;
+  counter-reset: benefit-step;
+}
+
+.benefits li {
+  padding: 12px 14px 12px 44px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e5edf8;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+}
+
+.benefits strong {
+  color: var(--brand-primary);
+}
+
+.benefits span {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.benefits li::before {
+  counter-increment: benefit-step;
+  content: counter(benefit-step);
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--brand-primary);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.25);
+}
+
+.outro {
+  margin-top: 4px;
+  color: #4b5563;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding: 96px 0;
+  }
+
+  .benefits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

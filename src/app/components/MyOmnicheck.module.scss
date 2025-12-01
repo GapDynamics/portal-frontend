@@ -1,0 +1,50 @@
+.section {
+  padding: 56px 0 72px;
+}
+
+.textCol {
+  max-width: 720px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--brand-primary);
+  margin-bottom: 12px;
+}
+
+.lead {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.highlight {
+  margin-top: 8px;
+  font-weight: 600;
+  color: var(--brand-primary);
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 991.98px) {
+  .textCol {
+    max-width: 100%;
+  }
+}
