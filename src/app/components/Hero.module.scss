@@ -40,13 +40,20 @@
   letter-spacing: -1px;
   color: var(--brand-primary);
   text-shadow: none;
-  max-width: 850px;
+  max-width: 950px;
   margin-left: 0;
   margin-right: 0;
   text-wrap: balance;
   opacity: 0;
   animation: revealDown .6s ease-out .05s forwards;
-  margin-bottom: 50px;
+  margin-bottom: 35px;
+  font-size: 55px;
+  line-height: 55px;
+  color: #a3bb67;
+  span {
+    color: var(--brand-primary);
+    font-size: 45px;
+  }
 }
 
 .accent {
@@ -57,14 +64,14 @@
 }
 
 .heroSubtitle {
-  max-width: 600px;
-  margin: 16px 0 10px;
-  font-size: 22px;
-  line-height: 35px;
-  color: #615e5e;
-  text-align: left;
-  opacity: 0;
-  animation: revealDown .7s ease-out .14s forwards;
+    max-width: 600px;
+    margin: 0px 0 10px;
+    font-size: 18px;
+    line-height: 30px;
+    color: #615e5e;
+    text-align: left;
+    opacity: 0;
+    animation: revealDown .7s ease-out .14s forwards;
  
 }
 .heroSubtitle + .heroSubtitle { animation-delay: .22s; }
@@ -77,7 +84,7 @@
   align-items: center;
   opacity: 0;
   animation: revealDown .7s ease-out .32s forwards;
-   margin-top: 70px;
+   margin-top: 50px;
 }
 
 .actionBtn {

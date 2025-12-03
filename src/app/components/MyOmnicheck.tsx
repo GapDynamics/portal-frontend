@@ -1,7 +1,7 @@
 "use client";
 import styles from "./MyOmnicheck.module.scss";
 import { useLanguage } from "../providers/LanguageProvider";
-import MyOmnicheckImg from "../assets/images/omnicheck-partner1.png";
+import MyOmnicheckImg from "../assets/images/omnicheck-balance1.png";
 
 export default function MyOmnicheck() {
   const { lang } = useLanguage();
@@ -14,7 +14,7 @@ export default function MyOmnicheck() {
     highlight: string;
   }> = {
     de: {
-      title: "MyOmnicheck – Ihre umfassende Standortbestimmung für ganzheitliche Gesundheit!",
+      title: "MyOmnicheck – Deine umfassende Standortbestimmung für ganzheitliche Gesundheit!",
       intro:
         "Omnicheck ist ein einzigartiges Gesundheitsangebot, das Ihnen hilft, Ihren aktuellen Gesundheitszustand präzise einzuordnen und gezielt zu verbessern.",
       body1:

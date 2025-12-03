@@ -108,9 +108,27 @@ export default function OmnicheckPartner() {
     <section className={styles.section}>
       <div className="container">
         <div className="row align-items-stretch g-4">
-
-          {/* Image on the left */}
+          {/* Text on the right */}
           <div className="col-lg-6 d-flex">
+            <div className={styles.textCol}>
+
+              <span className={styles.kicker}>{t.kicker}</span>
+              <h2 className={styles.title}>{t.title}</h2>
+              <p className={styles.lead}>{t.intro1}</p>
+              <p className={styles.lead}>{t.intro2}</p>
+              <ul className={styles.benefits}>
+                {t.benefits.map((b, idx) => (
+                  <li key={idx}>
+                    <strong>{b.strong}</strong>
+                    <span>{b.sub}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className={styles.outro}>{t.outro1}</p>
+              <p className={styles.outro}>{t.outro2}</p>
+            </div>
+          </div>
+           <div className="col-lg-6 d-flex">
             <div className={styles.imageWrap}>
 
               <img
@@ -131,27 +149,6 @@ export default function OmnicheckPartner() {
                 aria-hidden="true"
                 style={{ display: "none" }}
               />
-            </div>
-          </div>
-
-          {/* Text on the right */}
-          <div className="col-lg-6 d-flex">
-            <div className={styles.textCol}>
-
-              <span className={styles.kicker}>{t.kicker}</span>
-              <h2 className={styles.title}>{t.title}</h2>
-              <p className={styles.lead}>{t.intro1}</p>
-              <p className={styles.lead}>{t.intro2}</p>
-              <ul className={styles.benefits}>
-                {t.benefits.map((b, idx) => (
-                  <li key={idx}>
-                    <strong>{b.strong}</strong>
-                    <span>{b.sub}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className={styles.outro}>{t.outro1}</p>
-              <p className={styles.outro}>{t.outro2}</p>
             </div>
           </div>
         </div>

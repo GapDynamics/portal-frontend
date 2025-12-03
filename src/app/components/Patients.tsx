@@ -8,19 +8,19 @@ export default function Patients() {
 
   const copy: Record<string, { title: string; p1: string; p2: string; more: string }> = {
     en: {
-      title: "For patients",
+      title: "For Me",
       p1: "Are you looking for competent contacts who think outside the box and take time for your individual health?",
       p2: "In our network you will find qualified experts from all over Switzerland who combine functional medicine with scientific competence, empathy and holistic thinking.",
       more: "More",
     },
     de: {
-      title: "Für Patient:innen",
+      title: "Für mich",
       p1: "Suchen Sie kompetente Ansprechpersonen, die über den Tellerrand hinausdenken und sich Zeit für Ihre individuelle Gesundheit nehmen?",
       p2: "In unserem Netzwerk finden Sie qualifizierte Expert:innen aus der ganzen Schweiz, die funktionelle Medizin mit wissenschaftlicher Kompetenz, Empathie und ganzheitlichem Denken verbinden.",
       more: "Mehr",
     },
     fr: {
-      title: "Pour les patient·e·s",
+      title: "Pour moi",
       p1: "Vous recherchez des interlocuteurs compétents qui pensent différemment et prennent le temps pour votre santé individuelle ?",
       p2: "Dans notre réseau, vous trouverez des experts qualifiés de toute la Suisse qui allient médecine fonctionnelle, compétence scientifique, empathie et pensée holistique.",
       more: "En savoir plus",

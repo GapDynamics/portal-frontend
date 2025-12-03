@@ -10,6 +10,7 @@ export default function Footer() {
   const [email, setEmail] = useState("");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [messageType, setMessageType] = useState<"ok" | "error" | "info" | null>(null);
 
   const copy: Record<string, {
     aboutTitle: string;
@@ -106,6 +107,7 @@ export default function Footer() {
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
+    setMessageType(null);
     if (!email.trim()) return;
     try {
       setSaving(true);
@@ -116,6 +118,7 @@ export default function Footer() {
       })();
       if (!token) {
         setMessage(t.newsletterLogin);
+        setMessageType("info");
         return;
       }
       const res = await fetch(`${apiBase}/users/subscription`, {
@@ -129,11 +132,14 @@ export default function Footer() {
       });
       if (!res.ok) {
         setMessage(t.newsletterError);
+        setMessageType("error");
         return;
       }
       setMessage(t.newsletterOk);
+      setMessageType("ok");
     } catch {
       setMessage(t.newsletterError);
+      setMessageType("error");
     } finally {
       setSaving(false);
     }
@@ -168,7 +174,7 @@ export default function Footer() {
             <h4 className={styles.columnTitle}>{t.quickTitle}</h4>
             <ul className={styles.links}>
               <li><a href="/">{t.linkHome}</a></li>
-              <li><a href="/about">{t.linkAbout}</a></li>
+              <li><a href="https://www.nutriteam.ch/team/" target="_blank">{t.linkAbout}</a></li>
               <li><a href="/faq">{t.linkFaq}</a></li>
               <li><a href="/contact">{t.linkContact}</a></li>
             </ul>
@@ -177,7 +183,7 @@ export default function Footer() {
           <div className="col-6 col-lg-2">
             <h4 className={styles.columnTitle}>{t.resTitle}</h4>
             <ul className={styles.links}>
-              <li><a href="#">{t.linkBlog}</a></li>
+              <li><a href="https://www.nutriteam.ch/unsere-blog-beitraege/" target="_blank">{t.linkBlog}</a></li>
               <li><a href="#">{t.linkGuides}</a></li>
               <li><a href="#">{t.linkSupport}</a></li>
             </ul>
@@ -195,15 +201,27 @@ export default function Footer() {
               />
               <button type="submit" disabled={saving}>{saving ? "..." : t.subscribe}</button>
             </form>
-            {message && <div className="mt-2 small text-muted">{message}</div>}
+            {message && (
+              <div
+                className={`${styles.newsletterMessage} ${
+                  messageType === "ok"
+                    ? styles.newsletterMessageOk
+                    : messageType === "error"
+                    ? styles.newsletterMessageError
+                    : styles.newsletterMessageInfo
+                }`}
+              >
+                {message}
+              </div>
+            )}
           </div>
         </div>
 
         <div className={styles.bottom}>
           <span>© {year} OmniCheck AI. {t.rights}</span>
           <div className={styles.bottomLinks}>
-            <a href="#">{t.linkPrivacy}</a>
-            <a href="#">{t.linkTerms}</a>
+            <a href="https://www.nutriteam.ch/datenschutz-und-haftung/" target="_blank">{t.linkPrivacy}</a>
+            <a href="https://www.nutriteam.ch/agb/" target="_blank">{t.linkTerms}</a>
             {/* <a href="#">Imprint</a> */}
           </div>
         </div>

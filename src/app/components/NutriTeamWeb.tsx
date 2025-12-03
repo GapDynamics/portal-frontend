@@ -1,7 +1,7 @@
 "use client";
 import styles from "./NutriTeamWeb.module.scss";
 import { useLanguage } from "../providers/LanguageProvider";
-import MockImage from '../assets/images/nutriTeam-mockup.png'
+import MockImage from '../assets/images/nutriTeam-mockup1.png'
 
 export default function NutriTeamWeb() {
   const { lang } = useLanguage();

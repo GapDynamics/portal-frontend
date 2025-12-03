@@ -7,24 +7,24 @@ export default function Hero() {
 
   const copy: Record<string, { title: string; lead: string; desc: string; ctaPrimary: string; ctaSecondary: string }>= {
     en: {
-      title: "Network for Functional Medicine",
-      lead: "Health is more than the absence of disease — it’s the result of a finely tuned interaction between body, mind, and environment.",
+      title: "AI Health Analysis",
+      lead: "With the help of our AI technology, which is tailored to traditional Mediterranean nutrition, hormone balance, microbiome optimization and training, we provide precise, evidence-based recommendations that are individually tailored to you. Our AI-supported application analyzes your personal needs and develops personalized nutrition and exercise strategies to take your health to the next level.If needed, you can also discuss your results with our healthcare professionals.",
       desc: "Our network brings together physicians, therapists, and healthcare professionals dedicated to functional medicine — a modern, root-cause approach that sees the person as a whole.",
-      ctaPrimary: "For Patients",
+      ctaPrimary: "For Me",
       ctaSecondary: "For Professionals",
     },
     de: {
-      title: "Netzwerk für Funktionelle Medizin",
-      lead: "Gesundheit bedeutet mehr als die Abwesenheit von Krankheit – sie ist das Ergebnis eines fein abgestimmten Zusammenspiels von Körper, Geist und Umwelt.",
+      title: "KI-Gesundheitsanalyse",
+      lead: "Mithilfe unserer KI-Technologie, die auf die traditionelle mediterrane Ernährung, Hormonbalance, Mikrobiom-Optimierung und Training abgestimmt ist, liefern wir präzise, evidenzbasierte Empfehlungen, die individuell auf dich zugeschnitten sind. Unsere KI-gestützte Anwendung analysiert deine persönlichen Bedürfnisse und entwickelt personalisierte Ernährungs- und Bewegungsstrategien, um deine Gesundheit auf ein neues Level zu heben. Bei Bedarf kannst du deine Auswertung auch mit unseren Fachpersonen besprechen.",
       desc: "Unser Netzwerk vereint Ärzt:innen, Therapeut:innen und Heilpraktiker:innen, die sich der funktionellen Medizin verschrieben haben – einer modernen, ursachenorientierten Herangehensweise, die den Menschen als Ganzes betrachtet.",
-      ctaPrimary: "Für Patient:innen",
+      ctaPrimary: "Für mich",
       ctaSecondary: "Für Fachpersonen",
-    },
+    },    
     fr: {
-      title: "Réseau de Médecine Fonctionnelle",
-      lead: "La santé ne se résume pas à l’absence de maladie – elle résulte d’une interaction harmonieuse entre le corps, l’esprit et l’environnement.",
+      title: "Analyse de santé par IA",
+      lead: "Grâce à notre technologie d’IA, adaptée à l’alimentation méditerranéenne traditionnelle, à l’équilibre hormonal, à l’optimisation du microbiome et à l’entraînement, nous fournissons des recommandations précises et fondées sur des preuves, entièrement personnalisées pour toi. Notre application basée sur l’IA analyse tes besoins personnels et élabore des stratégies individualisées en matière de nutrition et d’activité physique afin de porter ta santé à un niveau supérieur. Si nécessaire, tu peux également discuter tes résultats avec nos professionnel·le·s de santé.",
       desc: "Notre réseau réunit des médecins, thérapeutes et professionnels de santé engagés dans la médecine fonctionnelle – une approche moderne et causale qui considère la personne dans sa globalité.",
-      ctaPrimary: "Pour les patient·e·s",
+      ctaPrimary: "Pour moi",
       ctaSecondary: "Pour les professionnel·le·s",
     },
   };
@@ -35,9 +35,9 @@ export default function Hero() {
     <main className={styles.main}>
       <section className={styles.hero}>
         <div className="container">
-        <h1 className={styles.heroTitle}><span className={styles.accent}>{t.title}</span></h1>
+        <h1 className={styles.heroTitle}>MyOmniCheck<br/><span className={styles.accent}>{t.title}</span></h1>
         <p className={styles.heroSubtitle}>{t.lead}</p>
-        <p className={styles.heroSubtitle}>{t.desc}</p>
+        {/* <p className={styles.heroSubtitle}>{t.desc}</p> */}
 
         <div className={styles.actions}>
           <a href="#" className={styles.actionBtn}>

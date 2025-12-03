@@ -93,6 +93,23 @@
 .newsletter button:hover { box-shadow: 0 8px 22px rgba(15,23,42,0.24); transform: translateY(-1px); }
 .newsletter button:active { transform: translateY(0); }
 
+.newsletterMessage {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.newsletterMessageOk {
+  color: #bbf7d0; /* light green */
+}
+
+.newsletterMessageError {
+  color: #fecaca; /* light red */
+}
+
+.newsletterMessageInfo {
+  color: #e5e7eb; /* neutral gray */
+}
+
 .bottom {
   margin-top: 28px;
   border-top: 1px solid rgba(255,255,255,.1);

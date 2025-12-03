@@ -60,7 +60,7 @@
   font-weight: 600;
   text-decoration: none;
 }
-.primaryBtn:hover { background: #1e40af; }
+.primaryBtn:hover { background: var(--brand-primary); }
 
 @media (max-width: 960px) {
   .grid { grid-template-columns: 1fr; }
