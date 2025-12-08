@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
 import { useMemo, useRef, useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useLanguage } from "@/app/providers/LanguageProvider";
+import { getSocket } from "../socketClient";
 
 type Message = {
   id: string;
@@ -11,21 +12,6 @@ type Message = {
   body: string;
   createdAt: string;
 };
-
-const now = new Date();
-function minus(mins: number) { return new Date(now.getTime() - mins * 60000).toISOString(); }
-
-const mockUserId = "me_123";
-
-const mockMessages: Message[] = [
-  { id: "m1", fromId: "pro_anna", toId: mockUserId, body: "Hello! How are you feeling today?", createdAt: minus(120) },
-  { id: "m2", fromId: "pro_anna", toId: mockUserId, body: "Any chest discomfort?", createdAt: minus(119) },
-  { id: "m3", fromId: mockUserId, toId: "pro_anna", body: "Feeling better, minor discomfort.", createdAt: minus(110) },
-  { id: "m4", fromId: "pro_anna", toId: mockUserId, body: "Great. Please continue medication.", createdAt: minus(100) },
-  { id: "m5", fromId: mockUserId, toId: "pro_anna", body: "Noted. Can we schedule a follow-up on Friday 2pm?", createdAt: minus(95) },
-  { id: "m6", fromId: "pro_anna", toId: mockUserId, body: "Friday 2pm works.", createdAt: minus(60) },
-  { id: "m7", fromId: mockUserId, toId: "pro_anna", body: "Thanks!", createdAt: minus(58) },
-];
 
 export default function ChatThreadPage() {
   const pathname = usePathname();
@@ -39,13 +25,134 @@ export default function ChatThreadPage() {
   const t = copy[lang] ?? copy.en;
   const [draft, setDraft] = useState("");
   const endRef = useRef<HTMLDivElement | null>(null);
-  const items = useMemo(() => mockMessages, []);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const apiBase = (process.env.NEXT_PUBLIC_API_BASE || "https://gdp.codefest.io/app7").replace(/\/$/, "");
+  const searchParams = useSearchParams();
+  const peerUserId = searchParams?.get("peer") || "";
 
+  // Load initial history from REST API
+  useEffect(() => {
+    let cancelled = false;
+    async function loadMessages() {
+      setLoading(true);
+      setError(null);
+      try {
+        const getToken = (): string | null => {
+          try {
+            if (typeof window !== "undefined") {
+              const ls = window.localStorage.getItem("auth_token");
+              if (ls) return ls;
+            }
+          } catch {}
+          try {
+            if (typeof document !== "undefined") {
+              const m = document.cookie.match(/(?:^|; )auth_token=([^;]+)/);
+              if (m) return decodeURIComponent(m[1]);
+            }
+          } catch {}
+          return null;
+        };
+
+        const token = getToken();
+        if (!token) {
+          if (!cancelled) setError("Not authenticated");
+          return;
+        }
+
+        if (!peerId) {
+          if (!cancelled) setError("Conversation not found");
+          return;
+        }
+
+        const res = await fetch(`${apiBase}/chat/conversations/${encodeURIComponent(peerId)}/messages`, {
+          headers: {
+            "Accept": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) {
+          if (!cancelled) setError("Failed to load messages");
+          return;
+        }
+        const data = await res.json();
+        if (cancelled) return;
+        const mapped: Message[] = Array.isArray(data) ? data.map((m: any) => ({
+          id: String(m.id ?? ""),
+          fromId: m.sender?.id != null ? String(m.sender.id) : "",
+          toId: "",
+          body: m.content ?? "",
+          createdAt: m.createdAt ?? "",
+        })) : [];
+        setMessages(mapped);
+      } catch {
+        if (!cancelled) setError("Failed to load messages");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadMessages();
+    return () => { cancelled = true; };
+  }, [apiBase, peerId]);
+
+  const items = useMemo(() => messages, [messages]);
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [items.length]);
 
+  // Connect Socket.io for real-time updates
+  useEffect(() => {
+    const socket = getSocket();
+    if (!socket) return;
+
+    const onReceive = (msg: any) => {
+      try {
+        // Try to match on conversation id when available
+        const convId = String((msg as any).conversationId ?? (msg as any).conversation?.id ?? "");
+        if (convId && convId !== peerId) return;
+      } catch {}
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: String(msg.id ?? `ws-${Date.now()}`),
+          fromId: msg.sender?.id != null ? String(msg.sender.id) : "",
+          toId: "",
+          body: msg.content ?? "",
+          createdAt: msg.createdAt ?? new Date().toISOString(),
+        },
+      ]);
+    };
+
+    socket.on("receiveMessage", onReceive);
+    return () => {
+      try { socket.off("receiveMessage", onReceive); } catch {}
+    };
+  }, [peerId]);
+
   function send() {
-    if (!draft.trim()) return;
+    const text = draft.trim();
+    if (!text) return;
+    // Optimistically append the message locally so it appears in the UI immediately.
+    const optimistic: Message = {
+      id: `local-${Date.now()}`,
+      fromId: "me",
+      toId: peerUserId || peerId,
+      body: text,
+      createdAt: new Date().toISOString(),
+    };
+    setMessages((prev) => [...prev, optimistic]);
     setDraft("");
+
+    // Also emit to backend via WebSocket when available
+    try {
+      const socket = getSocket();
+      if (socket) {
+        socket.emit("sendMessage", {
+          recipientId: peerUserId || peerId,
+          content: text,
+        });
+      }
+    } catch {}
   }
 
   return (
@@ -78,16 +185,19 @@ export default function ChatThreadPage() {
               <Link href="/portal/chat" className="btn btn-outline-secondary btn-sm d-lg-none">{t.back}</Link>
             </div>
             <div className="card-body" style={{ height: 520, overflowY: "auto", background: "#f8fafc" }}>
-              {items.map((m) => {
-                const mine = m.fromId === mockUserId;
-                return (
-                  <div key={m.id} className={`d-flex mb-2 ${mine ? "justify-content-end" : "justify-content-start"}`}>
-                    <div className={`p-2 rounded-3 ${mine ? "bg-light" : "text-white"}`} style={{ maxWidth: 520, ...(mine ? {} : { backgroundColor: 'var(--brand-primary)' }) }}>
-                      <div>{m.body}</div>
-                    </div>
+              {loading && (
+                <div className="text-center text-muted">Loading messages5</div>
+              )}
+              {error && !loading && (
+                <div className="alert alert-danger" role="alert">{error}</div>
+              )}
+              {!loading && !error && items.map((m) => (
+                <div key={m.id} className="d-flex mb-2 justify-content-start">
+                  <div className="p-2 rounded-3 text-white" style={{ maxWidth: 520, backgroundColor: 'var(--brand-primary)' }}>
+                    <div>{m.body}</div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
               <div ref={endRef} />
             </div>
             <div className="card-body border-top">

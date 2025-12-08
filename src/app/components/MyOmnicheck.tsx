@@ -16,13 +16,13 @@ export default function MyOmnicheck() {
     de: {
       title: "MyOmnicheck – Deine umfassende Standortbestimmung für ganzheitliche Gesundheit!",
       intro:
-        "Omnicheck ist ein einzigartiges Gesundheitsangebot, das Ihnen hilft, Ihren aktuellen Gesundheitszustand präzise einzuordnen und gezielt zu verbessern.",
+        "Omnicheck ist ein einzigartiges Gesundheitsangebot, das dir hilft, deinen aktuellen Gesundheitszustand präzise einzuordnen und gezielt zu verbessern.",
       body1:
-        "Im Mittelpunkt steht ein ausführlicher, fundierter Fragebogen, der die drei zentralen Bereiche moderner Präventionsmedizin abdeckt: mediterraner Lebensstil, Hormonbalance und Mikrobiom. Auf Basis Ihrer Angaben wird eine 20–30 Seiten umfassende persönliche Auswertung erstellt. Diese Analyse zeigt klar auf, wo Sie gesundheitlich stehen, welche Faktoren besonders relevant sind und welche Schritte für Ihre körperliche und mentale Balance wichtig sind. Die Ergebnisse können anschließend gemeinsam mit einer Fachperson oder einem zertifizierten Omnicheck-Partner besprochen werden, sodass Sie eine professionelle Einordnung und individuelle Empfehlungen erhalten.",
+        "Im Mittelpunkt steht ein ausführlicher, fundierter Fragebogen, der die drei zentralen Bereiche moderner Präventionsmedizin abdeckt: mediterraner Lebensstil, Hormonbalance und Mikrobiom. Auf Basis deiner Angaben wird eine 20–30 Seiten umfassende persönliche Auswertung erstellt. Diese Analyse zeigt dir klar, wo du gesundheitlich stehst, welche Faktoren besonders relevant sind und welche Schritte für deine körperliche und mentale Balance wichtig sind. Die Ergebnisse kannst du anschließend gemeinsam mit einer Fachperson oder einem zertifizierten Omnicheck-Partner besprechen, sodass du eine professionelle Einordnung und individuelle Empfehlungen erhältst.",
       body2:
-        "Ergänzend dazu erhalten Sie Zugang zur Omnicheck-App, die alle Ihre Gesundheitsdaten sicher bündelt. Ein besonderes Highlight ist das integrierte KI-gestützte Ernährungstagebuch: Durch ein einfaches Fotoprotokoll erkennt die App Ihre Mahlzeiten automatisch und unterstützt Sie dabei, Ihr Essverhalten transparent und mühelos zu dokumentieren.",
+        "Ergänzend dazu erhältst du Zugang zur Omnicheck-App, die alle deine Gesundheitsdaten sicher bündelt. Ein besonderes Highlight ist das integrierte KI-gestützte Ernährungstagebuch: Durch ein einfaches Fotoprotokoll erkennt die App deine Mahlzeiten automatisch und unterstützt dich dabei, dein Essverhalten transparent und mühelos zu dokumentieren.",
       highlight:
-        "Omnicheck verbindet präzise Analyse, persönliche Betreuung und moderne Technologie – für ein ganzheitliches Verständnis Ihrer Gesundheit und eine klare Orientierung auf Ihrem Weg zu mehr Wohlbefinden.",
+        "Omnicheck verbindet präzise Analyse, persönliche Betreuung und moderne Technologie – für ein ganzheitliches Verständnis deiner Gesundheit und eine klare Orientierung auf deinem Weg zu mehr Wohlbefinden.",
     },
     en: {
       title: "MyOmniCheck – your comprehensive baseline for holistic health!",

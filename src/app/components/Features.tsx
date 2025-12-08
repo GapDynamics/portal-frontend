@@ -28,11 +28,11 @@ export default function Features() {
     de: {
       heading: "Warum OmniCheck AI?",
       sub: "Wir erleichtern es, vertrauenswürdige Gesundheitsfachpersonen in Ihrer Nähe zu finden und zu kontaktieren.",
-      f1t: "Fachpersonen finden", f1d: "Durchsuchen Sie unser umfassendes Verzeichnis verifizierter Gesundheitsfachpersonen in Europa.",
-      f2t: "Standortbasierte Suche", f2d: "Entdecken Sie Fachpersonen in Ihrer Nähe mit interaktiver Karte und Filter.",
+      f1t: "Fachpersonen finden", f1d: "Durchsuche unser umfassendes Verzeichnis verifizierter Gesundheitsfachpersonen in Europa.",
+      f2t: "Standortbasierte Suche", f2d: "Entdecke Fachpersonen in deiner Nähe mit interaktiver Karte und Filter.",
       f3t: "Verifizierte Profile", f3d: "Alle Profile sind überprüft – für Qualität und Vertrauen.",
-      f4t: "Einfache Buchung", f4d: "Vereinbaren Sie Termine direkt über die Buchungslinks der Fachpersonen.",
-      f5t: "Mehrsprachige Unterstützung", f5d: "Finden Sie Fachpersonen, die Ihre Sprache sprechen (Deutsch, Englisch, Französisch).",
+      f4t: "Einfache Buchung", f4d: "Vereinbare Termine direkt über die Buchungslinks der Fachpersonen.",
+      f5t: "Mehrsprachige Unterstützung", f5d: "Finde Fachpersonen, die deine Sprache sprechen (Deutsch, Englisch, Französisch).",
       f6t: "Unser Netzwerk beitreten", f6d: "Gesundheitsfachpersonen können sich registrieren und mit Patient:innen vernetzen.",
     },
     fr: {

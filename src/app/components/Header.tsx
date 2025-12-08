@@ -15,7 +15,8 @@ export default function Header() {
   const [fullName, setFullName] = useState<string>("");
   const [menuOpen, setMenuOpen] = useState(false); // user dropdown
   const [navOpen, setNavOpen] = useState(false);   // mobile navbar
-  const menuRef = useRef<HTMLDivElement | null>(null);
+  const desktopMenuRef = useRef<HTMLDivElement | null>(null);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const hasToken = () => {
@@ -41,8 +42,10 @@ export default function Header() {
 
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
-      if (!menuRef.current) return;
-      if (!menuRef.current.contains(e.target as Node)) setMenuOpen(false);
+      const target = e.target as Node;
+      const desktopContains = desktopMenuRef.current?.contains(target);
+      const mobileContains = mobileMenuRef.current?.contains(target);
+      if (!desktopContains && !mobileContains) setMenuOpen(false);
     }
     function onKey(e: KeyboardEvent) { if (e.key === 'Escape') setMenuOpen(false); }
     document.addEventListener('mousedown', onDocClick);
@@ -51,14 +54,16 @@ export default function Header() {
   }, []);
 
   function logout() {
-    try { localStorage.removeItem('auth_token'); } catch {}
-    try { localStorage.removeItem('user_role'); } catch {}
-    try { localStorage.removeItem('fullName'); } catch {}
-    try { localStorage.removeItem('demo_userId'); } catch {}
+    try { localStorage.clear(); } catch {}
     try { document.cookie = 'auth_token=; Path=/; Max-Age=0; SameSite=Lax'; } catch {}
     try { document.cookie = 'user_role=; Path=/; Max-Age=0; SameSite=Lax'; } catch {}
     setLoggedIn(false);
     router.replace('/');
+    try {
+      if (typeof window !== 'undefined') {
+        window.location.assign('/');
+      }
+    } catch {}
   }
 
   function goToDashboard() {
@@ -85,7 +90,7 @@ export default function Header() {
       dashboard: "Dashboard", logout: "Logout", langLabel: "Language",
     },
     de: {
-      home: "Start", directory: "Verzeichnis", coupons: "Gutscheine", register: "Registrieren", login: "Anmelden", about: "Über uns", faq: "FAQ", contact: "Kontakt", ai: "OmniCheck", messages: "Nachrichten",
+      home: "Start", directory: "Verzeichnis", coupons: "Coupons", register: "Registrieren", login: "Anmelden", about: "Über uns", faq: "FAQ", contact: "Kontakt", ai: "OmniCheck", messages: "Nachrichten",
       dashboard: "Portal", logout: "Abmelden", langLabel: "Sprache",
     },
     fr: {
@@ -130,7 +135,7 @@ export default function Header() {
           <div className="d-none d-lg-flex align-items-center gap-2">
             <a className={`${styles.haBtn}`} href="https://ki.nutriteam.ch/?utm_source=nutriteam-network&utm_medium=nav&utm_campaign=ai-health" target="_blank" rel="noopener noreferrer">{t.ai}</a>
             {loggedIn ? (
-              <div className="position-relative" ref={menuRef}>
+              <div className="position-relative" ref={desktopMenuRef}>
                 <button type="button" onClick={()=>setMenuOpen((v)=>!v)} className="btn btn-link p-0 d-flex align-items-center text-decoration-none" aria-haspopup="menu" aria-expanded={menuOpen} style={{ color: '#fff' }}>
                   <span aria-hidden className="d-inline-flex align-items-center justify-content-center" style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid #e5e7eb', background: '#f8fafc', color: '#334155', fontWeight: 700 }}>
                     {(fullName || 'U').slice(0,1)}
@@ -179,7 +184,7 @@ export default function Header() {
           <div className="d-flex d-lg-none flex-column gap-2 mt-3">
             <a className={`${styles.haBtn}`} href="https://ki.nutriteam.ch/?utm_source=nutriteam-network&utm_medium=nav&utm_campaign=ai-health" target="_blank" rel="noopener noreferrer">{t.ai}</a>
             {loggedIn ? (
-              <div className="position-relative" ref={menuRef}>
+              <div className="position-relative" ref={mobileMenuRef}>
                 <button
                   type="button"
                   onClick={()=>setMenuOpen((v)=>!v)}

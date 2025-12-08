@@ -126,7 +126,7 @@ export default function ProfessionalPortalPage() {
       if (specialties) payload.specialties = specialties;
       if (city) payload.city = city;
       if (country) payload.country = country;
-      if (address) payload.address = address;
+      // if (address) payload.address = address;
       if (phone) { payload.telephone = phone; }
       if (profilePictureUrl && !profilePictureUrl.startsWith('blob:')) payload.profilePictureUrl = profilePictureUrl;
       if (Number.isFinite(latVal)) payload.latitude = latVal;
