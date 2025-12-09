@@ -8,7 +8,7 @@ export default function PortalIndexPage() {
   const { lang } = useLanguage();
   const copy: Record<string, { h1: string; sub: string; patient: string; pro: string; }> = {
     en: { h1: "Your portal", sub: "Choose your workspace.", patient: "Patient portal", pro: "Professional portal" },
-    de: { h1: "Ihr Portal", sub: "Wählen Sie Ihren Arbeitsbereich.", patient: "Patient:innen-Portal", pro: "Fachpersonen-Portal" },
+    de: { h1: "Ihr Portal", sub: "Wählen Sie deinem Arbeitsbereich.", patient: "Patient:innen-Portal", pro: "Fachpersonen-Portal" },
     fr: { h1: "Votre portail", sub: "Choisissez votre espace.", patient: "Portail patient", pro: "Portail professionnel" },
   };
   const t = copy[lang] ?? copy.en;

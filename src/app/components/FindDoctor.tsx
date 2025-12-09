@@ -26,7 +26,7 @@ export default function FindDoctor() {
     },
     de: {
       kicker: "Arzt/Ärztin finden",
-      heading: "Finden Sie Ihre passende Fachperson",
+      heading: "Finden Sie deine passende Fachperson",
       sub: "Verbinden Sie sich mit unserem Netzwerk zertifizierter Gesundheitsfachpersonen",
       nameLabel: "Name der Fachperson",
       specLabel: "Fachgebiet",

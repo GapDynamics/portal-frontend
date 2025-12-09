@@ -62,7 +62,7 @@ export default function Footer() {
       quickTitle: "Schnellzugriff",
       resTitle: "Ressourcen",
       newsletterTitle: "Bleiben Sie informiert",
-      newsletterPlaceholder: "Ihre E‑Mail‑Adresse",
+      newsletterPlaceholder: "deine E‑Mail‑Adresse",
       subscribe: "Abonnieren",
       newsletterOk: "Newsletter-Abonnement aktualisiert.",
       newsletterError: "Abonnement konnte nicht aktualisiert werden.",

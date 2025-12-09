@@ -41,9 +41,9 @@ export default function OmnicheckPartner() {
         },
       ],
       outro1:
-        "Als Partner stärkst du deine Position als ganzheitliche Fachperson, erweiterst dein Leistungsangebot und begleitest deine Kund:innen noch gezielter auf ihrem Weg zu mehr Gesundheit und Wohlbefinden.",
+        "Als Partner stärkst du deine Position als ganzheitliche Fachperson, erweiterst dein Leistungsangebot und begleitest deine Kund:innen noch gezielter auf deinem Weg zu mehr Gesundheit und Wohlbefinden.",
       outro2:
-        "Werde Teil des Omnicheck-Netzwerks – und unterstütze Menschen dabei, ihre Gesundheit besser zu verstehen und aktiv zu gestalten.",
+        "Werde Teil des Omnicheck-Netzwerks – und unterstütze Menschen dabei, deine Gesundheit besser zu verstehen und aktiv zu gestalten.",
     },
     en: {
       kicker: "For OmniCheck partners",

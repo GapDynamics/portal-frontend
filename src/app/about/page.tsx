@@ -47,7 +47,7 @@ export default function AboutPage() {
       h1: "Stärkung der funktionellen, präventiven und ganzheitlichen Gesundheit",
       sub: "OmniCheck Network verbindet Patient:innen und verifizierte Fachpersonen zur Zusammenarbeit für bessere Ergebnisse.",
       missionTitle: "Unsere Mission",
-      missionText: "Wir bauen ein vertrauenswürdiges, inklusives Netzwerk, das Menschen befähigt, passende Gesundheitspartner zu finden, hochwertige Orientierung zu erhalten und ihren Weg selbstbewusst zu gestalten.",
+      missionText: "Wir bauen ein vertrauenswürdiges, inklusives Netzwerk, das Menschen befähigt, passende Gesundheitspartner zu finden, hochwertige Orientierung zu erhalten und deinen Weg selbstbewusst zu gestalten.",
       valuesTitle: "Unsere Werte",
       v1: "Vertrauen",
       v1d: "Verifizierte Profile, transparente Informationen und Datenschutz an erster Stelle.",
