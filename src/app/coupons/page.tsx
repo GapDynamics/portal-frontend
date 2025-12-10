@@ -116,7 +116,7 @@ export default function CouponsCatalogPage() {
 
   const [qty, setQty] = useState(10);
   const [plan, setPlan] = useState<"private" | "enterprise">("enterprise");
-  const baseUnitCents = 8900;
+  const baseUnitCents = 2900;
   const formatCHF = (cents: number) => `CHF ${(cents / 100).toFixed(2)}`;
   const oneUnitPriceText = useMemo(() => formatCHF(baseUnitCents), []);
   const discountRate = useMemo(() => {
