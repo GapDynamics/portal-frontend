@@ -69,7 +69,7 @@ export default function MyOmnicheck() {
               <p className={styles.lead}>{t.intro}</p>
               <p className={styles.lead}>{t.body1}</p>
               <p className={styles.lead}>{t.body2}</p>
-              <p className={styles.highlight}>{t.highlight}</p>
+              <p className={styles.highlight} mb-0>{t.highlight}</p>
             </div>
           </div>
         </div>

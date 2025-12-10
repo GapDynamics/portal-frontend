@@ -16,8 +16,8 @@ export default function NutriTeamWeb() {
     de: {
       title: "OmniCheck Health Assistant",
       // sub: "KI-gestützte Orientierung für schnelle Einblicke.",
-      desc: "Beginne mit einer kurzen KIEinschätzung und erhalte personalisierte Vorschläge und nächste Schritte. Sicher, privat und schnell.",
-      longDesc: "Personalisierte Ernährungsberatung — Unsere zertifizierten Ernährungsexpert:innen erstellen individuelle Pläne und begleiten dich kontinuierlich auf deinem Weg zur Gewichtsreduktion. Mit unserem fortschrittlichen LLMModell, abgestimmt auf mediterrane Ernährung, Hormonbalance, MikrobiomOptimierung und Fitness, liefern wir präzise, evidenzbasierte Empfehlungen. Unsere KIgestützte Anwendung analysiert deine individuellen Bedürfnisse und entwickelt personalisierte Ernährungsstrategien, die deine Gesundheit auf das nächste Level heben. Starte deine Transformation noch heute und erlebe Präzision und Effizienz datengetriebener Ernährungsberatung.",
+      desc: "Beginne mit einer kurzen KI-Einschätzung und erhalte personalisierte Vorschläge und nächste Schritte. Sicher, privat und schnell.",
+      longDesc: "Personalisierte Ernährungsberatung — Unsere zertifizierten Ernährungsexpert:innen erstellen individuelle Pläne und begleiten dich kontinuierlich auf deinem Weg zur Gewichtsreduktion. Mit unserem fortschrittlichen LLMModell, abgestimmt auf mediterrane Ernährung, Hormonbalance, Mikrobiom Optimierung und Fitness, liefern wir präzise, evidenzbasierte Empfehlungen. Unsere KI gestützte Anwendung analysiert deine individuellen Bedürfnisse und entwickelt personalisierte Ernährungsstrategien, die deine Gesundheit auf das nächste Level heben. Starte deine Transformation noch heute und erlebe Präzision und Effizienz datengetriebener Ernährungsberatung.",
       cta: "Health Assistant öffnen",
     },
     fr: {

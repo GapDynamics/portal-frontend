@@ -50,8 +50,8 @@
 
 .featureCard:hover {
   transform: translateY(-2px);
-  border-color: #cbea7b !important;
-  background: #cbea7b;
+  border-color: #b0d15c !important;
+  background: #b0d15c;
   box-shadow: 0 10px 28px rgba(25,119,204,0.25);
 }
 
@@ -62,8 +62,8 @@
   width: 64px;
   height: 64px;
   border-radius: 8px;
-  background: #cbea7b;
-  color: #cbea7b;
+  background: #b0d15c;
+  color: #b0d15c;
   margin-bottom: 16px;
   transition: transform .18s ease;
   svg {
@@ -80,7 +80,7 @@
 .featureCard:hover .featureCardHeading { color: #ffffff; }
 .featureCard:hover p { color: rgba(255,255,255,0.9); }
 .featureCard:hover .featureIcon { background: #ffffff; svg {
-  path, rect, circle { color: #cbea7b }
+  path, rect, circle { color: #b0d15c }
 } }
 .featureCard:hover .featureIcon { transform: scale(1.06); }
 
