@@ -162,7 +162,7 @@ export default function PatientPortalPage() {
       errSaveFailed: "Speichern fehlgeschlagen",
       errGenericFailed: "Fehler",
       noticePhotoUploaded: "Foto hochgeladen",
-      noticePhotoSelected: "Foto ausgewählt. Klicken Sie auf Upload zum Senden.",
+      noticePhotoSelected: "Foto ausgewählt. Klicken du auf Upload zum Senden.",
       saved: "Gespeichert",
     },
     fr: {

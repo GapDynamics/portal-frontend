@@ -27,7 +27,7 @@ export default function MobileApp() {
     de: {
       title: "OmniCheck AI Mobile-App",
       subtitle: "Ihr Gesundheitsbegleiter – jederzeit und überall.",
-      desc: "Verfolgen Sie deinen Gesundheitsweg und greifen Sie unterwegs auf Ressourcen zu. Persönlicher Plan und Erinnerungen immer griffbereit.",
+      desc: "Verfolgen du deinen Gesundheitsweg und greifen du unterwegs auf Ressourcen zu. Persönlicher Plan und Erinnerungen immer griffbereit.",
       f1: "Persönlicher Plan und Erinnerungen",
       f2: "Fortschritt und Gewohnheiten verfolgen",
       f3: "Ressourcen und Leitfäden, offline verfügbar",

@@ -15,8 +15,8 @@ export default function Patients() {
     },
     de: {
       title: "Für mich",
-      p1: "Suchen Sie kompetente Ansprechpersonen, die über den Tellerrand hinausdenken und sich Zeit für deine individuelle Gesundheit nehmen?",
-      p2: "In unserem Netzwerk finden Sie qualifizierte Expert:innen aus der ganzen Schweiz, die funktionelle Medizin mit wissenschaftlicher Kompetenz, Empathie und ganzheitlichem Denken verbinden.",
+      p1: "Suchen du kompetente Ansprechpersonen, die über den Tellerrand hinausdenken und sich Zeit für deine individuelle Gesundheit nehmen?",
+      p2: "In unserem Netzwerk finden du qualifizierte Expert:innen aus der ganzen Schweiz, die funktionelle Medizin mit wissenschaftlicher Kompetenz, Empathie und ganzheitlichem Denken verbinden.",
       more: "Mehr",
     },
     fr: {

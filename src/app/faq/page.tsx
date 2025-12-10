@@ -29,11 +29,11 @@ export default function FaqPage() {
       qa: [
         { q: "Was ist das OmniCheck Network?", a: "Eine Plattform, die Patient:innen mit verifizierten Fachpersonen aus der funktionellen, präventiven und ganzheitlichen Medizin verbindet." },
         { q: "Ist die Nutzung kostenlos?", a: "Das Stöbern ist kostenlos. Erweiterte Funktionen für Fachpersonen können künftig kostenpflichtig sein." },
-        { q: "Wie finde ich Fachpersonen?", a: "Nutzen Sie die Verzeichnis-Seite, um nach Stadt, Land oder Beruf zu suchen und Profile auf der Karte zu entdecken." },
+        { q: "Wie finde ich Fachpersonen?", a: "Nutzen du die Verzeichnis-Seite, um nach Stadt, Land oder Beruf zu suchen und Profile auf der Karte zu entdecken." },
         { q: "Welche Länder werden unterstützt?", a: "Wir decken den Großteil Europas ab und erweitern unser Angebot fortlaufend." },
         { q: "Wie werden meine Daten geschützt?", a: "Wir folgen Privacy-by-Design und erheben nur notwendige Daten." },
       ],
-      contact: "Noch Fragen? Kontaktieren Sie uns",
+      contact: "Noch Fragen? Kontaktieren du uns",
     },
     fr: {
       h1: "Questions fréquentes",

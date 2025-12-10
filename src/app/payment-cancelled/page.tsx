@@ -16,14 +16,14 @@ export default function PaymentCancelledPage() {
     de: {
       badge: "Zahlung abgebrochen",
       title: "Deine Zahlung wurde abgebrochen",
-      body: "Es wurde kein Betrag abgebucht. Sie können zur Preisübersicht zurückkehren und es erneut versuchen.",
+      body: "Es wurde kein Betrag abgebucht. Du kannst zur Preisübersicht zurückkehren und es erneut versuchen.",
       backPricing: "Zur Preisübersicht",
       goHome: "Zur Startseite",
     },
     fr: {
       badge: "Paiement annulé",
       title: "Votre paiement a été annulé",
-      body: "Vous n'avez pas été débité. Vous pouvez revenir aux tarifs pour réessayer.",
+      body: "Vous n'avez pas été débité. Tu peux revenir aux tarifs pour réessayer.",
       backPricing: "Retour aux tarifs",
       goHome: "Aller à l’accueil",
     },

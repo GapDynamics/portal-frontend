@@ -381,7 +381,7 @@ export default function ProfessionalPortalPage() {
       errGeoUnsupported: "Geolokalisierung nicht unterstützt",
       errGeoFailed: "Standort konnte nicht ermittelt werden",
       noticeSaved: "Profil gespeichert",
-      noticePhotoSelected: "Foto ausgewählt. Klicken Sie auf Upload zum Senden.",
+      noticePhotoSelected: "Foto ausgewählt. Klicken du auf Upload zum Senden.",
       noticePhotoUploaded: "Foto hochgeladen",
       metricProfile: "Profilvollständigkeit",
       metricInquiries: "Neue Anfragen",

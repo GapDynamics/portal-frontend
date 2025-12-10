@@ -61,7 +61,7 @@ export default function Footer() {
       aboutText: "Eine Community, die Patient:innen und Fachpersonen in der funktionellen, präventiven und ganzheitlichen Medizin verbindet.",
       quickTitle: "Schnellzugriff",
       resTitle: "Ressourcen",
-      newsletterTitle: "Bleiben Sie informiert",
+      newsletterTitle: "Bleiben du informiert",
       newsletterPlaceholder: "deine E‑Mail‑Adresse",
       subscribe: "Abonnieren",
       newsletterOk: "Newsletter-Abonnement aktualisiert.",
