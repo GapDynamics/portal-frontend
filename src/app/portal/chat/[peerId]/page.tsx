@@ -28,9 +28,34 @@ export default function ChatThreadPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [profile, setProfile] = useState<any | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
   const apiBase = (process.env.NEXT_PUBLIC_API_BASE || "https://gdp.codefest.io/app7").replace(/\/$/, "");
   const searchParams = useSearchParams();
   const peerUserId = searchParams?.get("peer") || "";
+
+  // Load professional profile
+  useEffect(() => {
+    let cancelled = false;
+    async function loadProfile() {
+      if (!peerId) return;
+      try {
+        setProfileLoading(true);
+        const res = await fetch(`${apiBase}/profiles/${encodeURIComponent(peerId)}`, {
+          headers: { "Accept": "application/json" },
+        });
+        if (!res.ok) throw new Error("Profile not found");
+        const data = await res.json();
+        if (!cancelled) setProfile(data);
+      } catch (err) {
+        if (!cancelled) setProfile(null);
+      } finally {
+        if (!cancelled) setProfileLoading(false);
+      }
+    }
+    loadProfile();
+    return () => { cancelled = true; };
+  }, [apiBase, peerId]);
 
   // Load initial history from REST API
   useEffect(() => {
@@ -73,6 +98,14 @@ export default function ChatThreadPage() {
           },
         });
         if (!res.ok) {
+          // If conversation doesn't exist yet, that's okay - just show empty messages
+          if (res.status === 404) {
+            if (!cancelled) {
+              setMessages([]);
+              setError(null);
+            }
+            return;
+          }
           if (!cancelled) setError("Failed to load messages");
           return;
         }
@@ -87,7 +120,7 @@ export default function ChatThreadPage() {
         })) : [];
         setMessages(mapped);
       } catch {
-        if (!cancelled) setError("Failed to load messages");
+        if (!cancelled) setError(null); // Don't show error for new conversations
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -132,6 +165,7 @@ export default function ChatThreadPage() {
   function send() {
     const text = draft.trim();
     if (!text) return;
+    
     // Optimistically append the message locally so it appears in the UI immediately.
     const optimistic: Message = {
       id: `local-${Date.now()}`,
@@ -143,17 +177,27 @@ export default function ChatThreadPage() {
     setMessages((prev) => [...prev, optimistic]);
     setDraft("");
 
-    // Also emit to backend via WebSocket when available
+    // Send message via WebSocket - the backend will persist it
     try {
       const socket = getSocket();
-      if (socket) {
+      if (socket && socket.connected) {
         socket.emit("sendMessage", {
-          recipientId: peerUserId || peerId,
+          recipientId: peerId,
           content: text,
         });
+      } else {
+        console.warn("WebSocket not connected. Message may not be delivered.");
       }
-    } catch {}
+    } catch (err) {
+      console.error("Failed to send message:", err);
+    }
   }
+
+  const displayName = profile?.displayName || (profile?.user ? `${profile.user.firstName || ''} ${profile.user.lastName || ''}`.trim() : '') || 'Professional';
+  const specialty = profile?.specialties || '';
+  const location = [profile?.city, profile?.country].filter(Boolean).join(', ');
+  const subtitle = [specialty, location].filter(Boolean).join(' • ');
+  const initial = displayName.charAt(0).toUpperCase();
 
   return (
     <div className="container" style={{ paddingTop: 140, paddingBottom: 24 }}>
@@ -162,10 +206,10 @@ export default function ChatThreadPage() {
           <div className="card">
             <div className="card-body d-flex align-items-center justify-content-between">
               <div className="d-flex align-items-center gap-3">
-                <div className="rounded-circle text-white d-inline-flex align-items-center justify-content-center" style={{ width: 40, height: 40, backgroundColor: 'var(--brand-primary)' }}>A</div>
+                <div className="rounded-circle text-white d-inline-flex align-items-center justify-content-center" style={{ width: 40, height: 40, backgroundColor: 'var(--brand-primary)' }}>{initial}</div>
                 <div>
-                  <div className="fw-semibold">Dr. Anna Keller</div>
-                  <div className="text-muted small">Cardiology • Zurich</div>
+                  <div className="fw-semibold">{displayName}</div>
+                  {subtitle && <div className="text-muted small">{subtitle}</div>}
                 </div>
               </div>
               <Link href="/portal/chat" className="btn btn-outline-secondary btn-sm">{t.back}</Link>
@@ -176,20 +220,23 @@ export default function ChatThreadPage() {
           <div className="card">
             <div className="card-body border-bottom d-flex align-items-center justify-content-between" style={{ position: "sticky", top: 0, zIndex: 1 }}>
               <div className="d-flex align-items-center gap-3">
-                <div className="rounded-circle text-white d-inline-flex align-items-center justify-content-center" style={{ width: 40, height: 40, backgroundColor: 'var(--brand-primary)' }}>A</div>
+                <div className="rounded-circle text-white d-inline-flex align-items-center justify-content-center" style={{ width: 40, height: 40, backgroundColor: 'var(--brand-primary)' }}>{initial}</div>
                 <div>
-                  <div className="fw-semibold">Dr. Anna Keller</div>
-                  <div className="text-muted small">Cardiology • Zurich</div>
+                  <div className="fw-semibold">{displayName}</div>
+                  {subtitle && <div className="text-muted small">{subtitle}</div>}
                 </div>
               </div>
               <Link href="/portal/chat" className="btn btn-outline-secondary btn-sm d-lg-none">{t.back}</Link>
             </div>
             <div className="card-body" style={{ height: 520, overflowY: "auto", background: "#f8fafc" }}>
               {loading && (
-                <div className="text-center text-muted">Loading messages5</div>
+                <div className="text-center text-muted">Loading messages...</div>
               )}
               {error && !loading && (
                 <div className="alert alert-danger" role="alert">{error}</div>
+              )}
+              {!loading && !error && items.length === 0 && (
+                <div className="text-center text-muted">No messages yet. Start the conversation!</div>
               )}
               {!loading && !error && items.map((m) => (
                 <div key={m.id} className="d-flex mb-2 justify-content-start">
@@ -202,7 +249,7 @@ export default function ChatThreadPage() {
             </div>
             <div className="card-body border-top">
               <div className="d-flex gap-2">
-                <input className="form-control" placeholder={t.placeholder(peerId)} value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") send(); }} />
+                <input className="form-control" placeholder={t.placeholder(displayName)} value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") send(); }} />
                 <button className="btn btn-primary" style={{ backgroundColor: 'var(--brand-primary)', borderColor: 'var(--brand-primary)' }} onClick={send}>{t.send}</button>
               </div>
               <div className="d-flex gap-2 mt-2">

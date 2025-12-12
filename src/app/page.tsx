@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import Hero from "./components/Hero";
+import GetTheApp from "./components/GetTheApp";
 import Features from "./components/Features";
 // import FindDoctor from "./components/FindDoctor";
 import NutriTeamWeb from "./components/NutriTeamWeb";
@@ -17,6 +18,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <Hero />
+      <GetTheApp />
       <MyOmnicheck />
       <OmnicheckPartner />
       <Features />
