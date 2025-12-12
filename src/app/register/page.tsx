@@ -103,7 +103,7 @@ export default function RegisterPage() {
       sectionInterests: "Your interests", interestMobile: "Mobile App", interestMobileDesc: "Interested in our iOS & Android app?", interestWeb: "Web App", interestWebDesc: "Interested in our web platform?", interestBoth: "Both", interestBothDesc: "Interested in all our platforms?",
       back: "Back", next: "Further",
       sectionConfirm: "Confirmation", newsletterLabel: "I would like to subscribe to the newsletter", acceptPrefix: "I accept the ", privacy: "privacy policy", acceptSuffix: ".", summary: "Summary:", from: "from",
-      phonePlaceholder: "+49 123 456789", companyPlaceholder: "My company", addressPlaceholder: "Street and number", postalPlaceholder: "e.g. 10115", statePlaceholder: "e.g. Bavaria", cityPlaceholder: "e.g. Munich",
+      phonePlaceholder: "+41 123 456789", companyPlaceholder: "My company", addressPlaceholder: "Street and number", postalPlaceholder: "e.g. 10115", statePlaceholder: "e.g. Bavaria", cityPlaceholder: "e.g. Munich",
     },
     de: {
       headerTitle: "Jetzt kostenlos registrieren", headerSub: "Registriere dich und erhalte sofort Zugriff auf unsere Apps",
@@ -113,7 +113,7 @@ export default function RegisterPage() {
       sectionInterests: "Deine Interessen", interestMobile: "Mobile‑App", interestMobileDesc: "Interessiert an unserer iOS & Android‑App?", interestWeb: "Web‑App", interestWebDesc: "Interessiert an unserer Web‑Plattform?", interestBoth: "Beides", interestBothDesc: "Interessiert an allen unseren Plattformen?",
       back: "Zurück", next: "Weiter",
       sectionConfirm: "Bestätigung", newsletterLabel: "Ich möchte den Newsletter abonnieren", acceptPrefix: "Ich akzeptiere die ", privacy: "Datenschutzerklärung", acceptSuffix: ".", summary: "Zusammenfassung:", from: "aus",
-      phonePlaceholder: "+49 123 456789", companyPlaceholder: "Mein Unternehmen", addressPlaceholder: "Straße und Hausnummer", postalPlaceholder: "z. B. 10115", statePlaceholder: "z. B. Bayern", cityPlaceholder: "z. B. München",
+      phonePlaceholder: "+41 123 456789", companyPlaceholder: "Mein Unternehmen", addressPlaceholder: "Straße und Hausnummer", postalPlaceholder: "z. B. 10115", statePlaceholder: "z. B. Bayern", cityPlaceholder: "z. B. München",
     },
     fr: {
       headerTitle: "Inscrivez‑vous gratuitement", headerSub: "Créez un compte et accédez instantanément à nos applications",
