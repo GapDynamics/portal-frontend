@@ -23,8 +23,8 @@ function PaymentSuccessContent() {
     de: {
       badge: "Zahlung erfolgreich",
       title: "Vielen Dank für deinen Kauf!",
-      body: "Du kannst deinen Gutschein für unsere Gesundheits-App ab sofort einlösen.",
-      backPricing: "Meine Gutscheine",
+      body: "Du kannst deinen Coupon für unsere Gesundheits-App ab sofort einlösen.",
+      backPricing: "Meine Coupons",
       goHome: "Zur Startseite",
       verifying: "Kauf wird überprüft...",
       codesTitle: "Hier sind deine Coupon-Codes:",

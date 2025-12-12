@@ -32,7 +32,7 @@ function CouponsSuccessContent() {
   const { lang } = useLanguage();
   const copy: Record<string, { title: string; desc: string; toMy: string; again: string }>= {
     en: { title: "Purchase successful", desc: "Your coupon codes are generated and saved to your account.", toMy: "Go to My Coupons", again: "Buy again" },
-    de: { title: "Meine Gutscheine", desc: "Deine Gutscheincodes wurden erstellt und gespeichert.", toMy: "Zu meinen Gutscheine", again: "Weitere Gutscheine kaufen" },
+    de: { title: "Meine Coupons", desc: "Deine Coupon codes wurden erstellt und gespeichert.", toMy: "Zu meinen Coupons", again: "Weitere Coupons kaufen" },
     fr: { title: "Achat réussi", desc: "Vos codes coupons ont été générés et enregistrés.", toMy: "Aller à Mes coupons", again: "Acheter à nouveau" },
   };
   const t = copy[lang] ?? copy.en;

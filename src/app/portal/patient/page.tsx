@@ -151,7 +151,7 @@ export default function PatientPortalPage() {
       profileTitle: "Profil", profileSub: "Aktualisiere deine Angaben, damit Fachpersonen dich besser unterstützen können.",
       labelFullName: "Vollständiger Name", labelLanguages: "Sprachen", labelPhone: "Telefon", labelCity: "Stadt", labelCountry: "Land", labelAddress: "Adresse", labelLat: "Breite", labelLng: "Länge",
       btnChangePhoto: "Foto ändern", btnUploadPhoto: "Foto hochladen", btnUseLocation: "Meinen Standort verwenden", btnSave: "Speichern", savingLabel: "Speichern…", messagesLabel: "Nachrichten", profilePicLabel: "Profilbild",
-      couponsTitle: "Meine Gutscheine", couponsEmpty: "Noch keine Gutscheine.", couponsViewAll: "Alle ansehen", couponsCode: "Code", couponsStatus: "Status", couponsAvailable: "Verfügbar", couponsRedeemed: "Eingelöst", couponsLoading: "Wird geladen…", couponsLoadFailed: "Gutscheine konnten nicht geladen werden",
+      couponsTitle: "Meine Coupons", couponsEmpty: "Noch keine Coupons.", couponsViewAll: "Alle ansehen", couponsCode: "Code", couponsStatus: "Status", couponsAvailable: "Verfügbar", couponsRedeemed: "Eingelöst", couponsLoading: "Wird geladen…", couponsLoadFailed: "Coupons konnten nicht geladen werden",
       errNotAuthenticated: "Nicht authentifiziert",
       errUploadFailed: "Upload fehlgeschlagen",
       errUploadUrlMissing: "Upload‑URL fehlt",

@@ -12,7 +12,7 @@ export default function MyCouponsPage() {
     title: string; empty: string; buy: string; code: string; status: string; active: string; redeemed: string; copy: string; copied: string; redeem: string; purchasedOn: string; prev: string; next: string; page: string; of: string;
   }>= {
     en: { title: "My Coupons", empty: "No coupons yet.", buy: "Buy more coupons", code: "Code", status: "Status", active: "Available", redeemed: "Redeemed", copy: "Copy", copied: "Copied!", redeem: "Redeem", purchasedOn: "Purchased on", prev: "Prev", next: "Next", page: "Page", of: "of" },
-    de: { title: "Meine Gutscheine", empty: "Noch keine Gutscheine.", buy: "Weitere Gutscheine kaufen", code: "Code", status: "Status", active: "Verfügbar", redeemed: "Eingelöst", copy: "Kopieren", copied: "Kopiert!", redeem: "Einlösen", purchasedOn: "Gekauft am", prev: "Zurück", next: "Weiter", page: "Seite", of: "von" },
+    de: { title: "Meine Coupons", empty: "Noch keine Coupons.", buy: "Weitere Coupons kaufen", code: "Code", status: "Status", active: "Verfügbar", redeemed: "Eingelöst", copy: "Kopieren", copied: "Kopiert!", redeem: "Einlösen", purchasedOn: "Gekauft am", prev: "Zurück", next: "Weiter", page: "Seite", of: "von" },
     fr: { title: "Mes coupons", empty: "Aucun coupon pour l’instant.", buy: "Acheter plus de coupons", code: "Code", status: "Statut", active: "Disponible", redeemed: "Utilisé", copy: "Copier", copied: "Copié !", redeem: "Utiliser", purchasedOn: "Acheté le", prev: "Préc.", next: "Suiv.", page: "Page", of: "sur" },
   };
   const t = copy[lang] ?? copy.en;

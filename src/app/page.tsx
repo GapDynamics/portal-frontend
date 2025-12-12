@@ -13,7 +13,7 @@ import OmnicheckPartner from "./components/OmnicheckPartner";
 // import MobileApp from "./components/MobileApp";
 import AppPlatforms from "./components/AppPlatforms";
 import Footer from "./components/Footer";
-
+import NutriTeamWebNew from "./components/NutriTeamWebNew";
 export default function Home() {
   return (
     <div className={styles.page}>
@@ -24,6 +24,7 @@ export default function Home() {
       <Features />
       {/* <FindDoctor /> */}
       <NutriTeamWeb />
+      <NutriTeamWebNew />
       {/* <Mission /> */}
       {/* <Patients /> */}
       {/* <Professionals /> */}

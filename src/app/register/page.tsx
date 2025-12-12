@@ -413,7 +413,7 @@ export default function RegisterPage() {
                     <span className={`${styles.step} ${step >= 0 ? styles.active : ''}`}></span>
                     <span className={`${styles.step} ${step >= 1 ? styles.active : ''}`}></span>
                     <span className={`${styles.step} ${step >= 2 ? styles.active : ''}`}></span>
-                    <span className={`${styles.step} ${step >= 3 ? styles.active : ''}`}></span>
+                    {/* <span className={`${styles.step} ${step >= 3 ? styles.active : ''}`}></span> */}
                   </div>
                   {message && (
                     <div className="alert alert-info py-2 mt-2" role="status">
@@ -509,7 +509,7 @@ export default function RegisterPage() {
                   </div>
                 )}
 
-                {step === 2 && (
+                {/* {step === 2 && (
                   <div>
                     <h3 className={styles.sectionTitle}>{L.sectionInterests}</h3>
                     <div className={styles.choices} role="radiogroup" aria-label={L.sectionInterests}>
@@ -540,9 +540,9 @@ export default function RegisterPage() {
                       <button type="button" className={`btn btn-primary ${styles.nextBtn}`} onClick={()=>setStep(3)}>{L.next}</button>
                     </div>
                   </div>
-                )}
+                )} */}
 
-                {step === 3 && (
+                {step === 2 && (
                   <div>
                     <h3 className={styles.sectionTitle}>{L.sectionConfirm}</h3>
                     <div className="form-check mb-2">
@@ -557,7 +557,7 @@ export default function RegisterPage() {
                       <strong>{L.summary}</strong> {`${form.firstName} ${form.lastName}`.trim()} ({form.email}) {L.from} {form.city || '—'} , {form.country || '—'}
                     </div>
                     <div className={styles.actionsBetween}>
-                      <button type="button" className={`btn btn-light ${styles.backBtn}`} onClick={()=>setStep(2)}>{L.back}</button>
+                      <button type="button" className={`btn btn-light ${styles.backBtn}`} onClick={()=>setStep(1)}>{L.back}</button>
                       <button type="submit" className={`btn btn-primary ${styles.nextBtn}`} disabled={submitting || !form.accept}>
                         {submitting ? "..." : L.next}
                       </button>

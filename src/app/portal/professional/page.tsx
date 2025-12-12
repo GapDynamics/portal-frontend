@@ -223,7 +223,7 @@ export default function ProfessionalPortalPage() {
           setLat(latVal);
           setLng(lngVal);
           resolve();
-        }, (err) => reject(err), { enableHighAccuracy: true, timeout: 8000 });
+        }, (err) => reject(err), { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
       });
 
       // Reverse geocode into human-readable address, city and country
@@ -244,7 +244,16 @@ export default function ProfessionalPortalPage() {
         }
       }
     } catch (e: any) {
-      setNotice(e?.message || t.errGeoFailed);
+      // Handle specific geolocation error codes
+      if (e?.code === 1) {
+        // PERMISSION_DENIED
+        setNotice(t.errGeoPermissionDenied);
+      } else if (e?.code === 3) {
+        // TIMEOUT
+        setNotice(t.errGeoTimeout);
+      } else {
+        setNotice(e?.message || t.errGeoFailed);
+      }
     }
   }
   async function saveLocation() {
@@ -285,7 +294,7 @@ export default function ProfessionalPortalPage() {
     btnUseLocation: string; btnSave: string; savingLabel: string;
     errNotAuthenticated: string; errSaveFailed: string; errGenericFailed: string;
     errPhotoSelectFailed: string; errPhotoUploadFailed: string; errUploadFailed: string; errUploadUrlMissing: string;
-    errGeoUnsupported: string; errGeoFailed: string;
+    errGeoUnsupported: string; errGeoFailed: string; errGeoTimeout: string; errGeoPermissionDenied: string;
     noticeSaved: string; noticePhotoSelected: string; noticePhotoUploaded: string;
     metricProfile: string; metricInquiries: string; metricUnread: string;
     locationWarning: string;
@@ -331,6 +340,8 @@ export default function ProfessionalPortalPage() {
       errUploadUrlMissing: "Upload URL missing",
       errGeoUnsupported: "Geolocation not supported",
       errGeoFailed: "Failed to get location",
+      errGeoTimeout: "Location request timed out. Please try again.",
+      errGeoPermissionDenied: "Location permission denied. Please enable location access in your browser settings.",
       noticeSaved: "Profile saved",
       noticePhotoSelected: "Photo selected. Click Upload to send.",
       noticePhotoUploaded: "Photo uploaded",
@@ -380,6 +391,8 @@ export default function ProfessionalPortalPage() {
       errUploadUrlMissing: "Upload-URL fehlt",
       errGeoUnsupported: "Geolokalisierung nicht unterstützt",
       errGeoFailed: "Standort konnte nicht ermittelt werden",
+      errGeoTimeout: "Zeitüberschreitung bei der Standortanfrage. Bitte versuche es erneut.",
+      errGeoPermissionDenied: "Standortzugriff verweigert. Bitte aktiviere den Standortzugriff in deinen Browsereinstellungen.",
       noticeSaved: "Profil gespeichert",
       noticePhotoSelected: "Foto ausgewählt. Klicken du auf Upload zum Senden.",
       noticePhotoUploaded: "Foto hochgeladen",
@@ -429,6 +442,8 @@ export default function ProfessionalPortalPage() {
       errUploadUrlMissing: "URL d’upload manquante",
       errGeoUnsupported: "Géolocalisation non prise en charge",
       errGeoFailed: "Impossible d’obtenir la position",
+      errGeoTimeout: "Délai d'attente de la demande de localisation expiré. Veuillez réessayer.",
+      errGeoPermissionDenied: "Autorisation de localisation refusée. Veuillez activer l'accès à la localisation dans les paramètres de votre navigateur.",
       noticeSaved: "Profil enregistré",
       noticePhotoSelected: "Photo sélectionnée. Cliquez sur Upload pour l’envoyer.",
       noticePhotoUploaded: "Photo téléversée",

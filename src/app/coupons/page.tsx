@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/app/providers/LanguageProvider";
 import styles from "./page.module.scss";
 import Footer from "@/app/components/Footer";
@@ -18,6 +19,7 @@ function genCode() {
 }
 
 export default function CouponsCatalogPage() {
+  const router = useRouter();
   const { lang } = useLanguage();
   const copy: Record<string, {
     title: string; lead: string; price: string; qty: string; buy: string;
@@ -29,6 +31,7 @@ export default function CouponsCatalogPage() {
     offApplied: (n: number)=>string; noDiscount: string;
     estTotal: string; perCoupon: string;
     mustSignIn: string;
+    redirectToLogin: string;
     checkoutFailed: string;
     checkoutMissingUrl: string;
     checkoutStartFailed: string;
@@ -55,6 +58,7 @@ export default function CouponsCatalogPage() {
       estTotal: "Estimated total:",
       perCoupon: "per coupon",
       mustSignIn: "Please sign in to continue.",
+      redirectToLogin: "You will be redirected to the login page.",
       checkoutFailed: "Checkout failed",
       checkoutMissingUrl: "Checkout failed: missing redirect URL.",
       checkoutStartFailed: "Failed to start checkout. Please try again.",
@@ -81,6 +85,7 @@ export default function CouponsCatalogPage() {
       estTotal: "Geschätzte Summe:",
       perCoupon: "pro coupon",
       mustSignIn: "Bitte melde dich an um fortzufahren!",
+      redirectToLogin: "Du wirst zur Anmeldeseite weitergeleitet.",
       checkoutFailed: "Checkout fehlgeschlagen",
       checkoutMissingUrl: "Checkout fehlgeschlagen: Weiterleitungs-URL fehlt.",
       checkoutStartFailed: "Checkout konnte nicht gestartet werden. Bitte versuch es erneut.",
@@ -107,6 +112,7 @@ export default function CouponsCatalogPage() {
       estTotal: "Total estimé :",
       perCoupon: "par coupon",
       mustSignIn: "Veuillez vous connecter pour continuer.",
+      redirectToLogin: "Vous serez redirigé vers la page de connexion.",
       checkoutFailed: "Échec du paiement",
       checkoutMissingUrl: "Échec du paiement : URL de redirection manquante.",
       checkoutStartFailed: "Impossible de démarrer le paiement. Veuillez réessayer.",
@@ -116,7 +122,7 @@ export default function CouponsCatalogPage() {
 
   const [qty, setQty] = useState(10);
   const [plan, setPlan] = useState<"private" | "enterprise">("enterprise");
-  const baseUnitCents = 2999;
+  const baseUnitCents = 2990;
   const formatCHF = (cents: number) => `CHF ${(cents / 100).toFixed(2)}`;
   const oneUnitPriceText = useMemo(() => formatCHF(baseUnitCents), []);
   const discountRate = useMemo(() => {
@@ -132,6 +138,20 @@ export default function CouponsCatalogPage() {
   const estTotalText = useMemo(() => formatCHF(estTotalCents), [estTotalCents]);
   const apiBase = (process.env.NEXT_PUBLIC_API_BASE || "https://gdp.codefest.io/app7").replace(/\/$/, "");
 
+  // Lazy-load SweetAlert2 if not present
+  const ensureSwal = async (): Promise<any> => {
+    if (typeof window === 'undefined') return null;
+    const w = window as any;
+    if (w.Swal) return w.Swal;
+    await new Promise<void>((resolve) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js';
+      s.async = true; s.onload = () => resolve();
+      document.body.appendChild(s);
+    });
+    return (window as any).Swal;
+  };
+
   async function handleBuy(n?: number) {
     const selectedPlan = plan === "private" ? "individual" : "enterprise";
     const desiredQty = n ?? qty;
@@ -143,7 +163,20 @@ export default function CouponsCatalogPage() {
         return null;
       })();
       if (!token) {
-        alert(t.mustSignIn);
+        const Swal = await ensureSwal();
+        if (Swal) {
+          await Swal.fire({
+            icon: 'warning',
+            title: t.mustSignIn,
+            text: t.redirectToLogin,
+            showConfirmButton: true,
+            confirmButtonText: 'Go to Login',
+            timer: 3000,
+            timerProgressBar: true,
+            confirmButtonColor: '#1a3129',
+          });
+        }
+        router.push('/login');
         return;
       }
       const res = await fetch(`${apiBase}/payments/create-checkout-session`, {
@@ -153,18 +186,69 @@ export default function CouponsCatalogPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
+        // Handle 401 Unauthorized specifically
+        if (res.status === 401) {
+          const Swal = await ensureSwal();
+          if (Swal) {
+            await Swal.fire({
+              icon: 'error',
+              title: 'Unauthorized',
+              text: t.mustSignIn,
+              showConfirmButton: true,
+              confirmButtonText: 'Go to Login',
+              timer: 3000,
+              timerProgressBar: true,
+              confirmButtonColor: '#1a3129',
+            });
+          }
+          router.push('/login');
+          return;
+        }
         const msg = data?.message || data?.error || t.checkoutFailed;
-        alert(typeof msg === 'string' ? msg : t.checkoutFailed);
+        const Swal = await ensureSwal();
+        if (Swal) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: typeof msg === 'string' ? msg : t.checkoutFailed,
+            showConfirmButton: true,
+            confirmButtonColor: '#1a3129',
+          });
+        } else {
+          alert(typeof msg === 'string' ? msg : t.checkoutFailed);
+        }
         return;
       }
       if (data?.url) {
         window.location.href = data.url;
       } else {
-        alert(t.checkoutMissingUrl);
+        const Swal = await ensureSwal();
+        if (Swal) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: t.checkoutMissingUrl,
+            showConfirmButton: true,
+            confirmButtonColor: '#1a3129',
+          });
+        } else {
+          alert(t.checkoutMissingUrl);
+        }
       }
     } catch (e) {
       console.error(e);
-      alert(t.checkoutStartFailed);
+      const Swal = await ensureSwal();
+      if (Swal) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: t.checkoutStartFailed,
+          showConfirmButton: true,
+          confirmButtonColor: '#1a3129',
+        });
+      } else {
+        alert(t.checkoutStartFailed);
+      }
     }
   }
 

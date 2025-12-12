@@ -17,10 +17,10 @@ export default function ChatThreadPage() {
   const pathname = usePathname();
   const peerId = pathname.split("/").pop() || "";
   const { lang } = useLanguage();
-  const copy: Record<string, { back: string; send: string; attach: string; schedule: string; placeholder: (name: string) => string }>= {
-    en: { back: "Back", send: "Send", attach: "Attach", schedule: "Schedule", placeholder: (n) => `Message ${n}…` },
-    de: { back: "Zurück", send: "Senden", attach: "Anhängen", schedule: "Planen", placeholder: (n) => `Nachricht an ${n}…` },
-    fr: { back: "Retour", send: "Envoyer", attach: "Joindre", schedule: "Planifier", placeholder: (n) => `Message à ${n}…` },
+  const copy: Record<string, { back: string; send: string; attach: string; schedule: string; placeholder: (name: string) => string; noMessages: string }>= {
+    en: { back: "Back", send: "Send", attach: "Attach", schedule: "Schedule", placeholder: (n) => `Message ${n}…`, noMessages: "No messages yet. Start the conversation!" },
+    de: { back: "Zurück", send: "Senden", attach: "Anhängen", schedule: "Planen", placeholder: (n) => `Nachricht an ${n}…`, noMessages: "Noch keine Nachrichten. Starte die Unterhaltung!" },
+    fr: { back: "Retour", send: "Envoyer", attach: "Joindre", schedule: "Planifier", placeholder: (n) => `Message à ${n}…`, noMessages: "Aucun message pour le moment. Commencez la conversation !" },
   };
   const t = copy[lang] ?? copy.en;
   const [draft, setDraft] = useState("");
@@ -236,7 +236,7 @@ export default function ChatThreadPage() {
                 <div className="alert alert-danger" role="alert">{error}</div>
               )}
               {!loading && !error && items.length === 0 && (
-                <div className="text-center text-muted">No messages yet. Start the conversation!</div>
+                <div className="text-center text-muted">{t.noMessages}</div>
               )}
               {!loading && !error && items.map((m) => (
                 <div key={m.id} className="d-flex mb-2 justify-content-start">
