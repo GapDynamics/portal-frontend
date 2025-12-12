@@ -140,6 +140,10 @@
 @media (max-width: 800px) {
   .heroTitle {
     font-size: 36px;
+    line-height: 45px;
+    span {
+      font-size: 32px;
+    }
   }
   .hero { 
     align-items: center; 

@@ -110,3 +110,9 @@
   margin: 4px 6px;
   border-radius: 1px;
 }
+
+@media (max-width: 768px) {
+ .navbarNav {
+    padding: 1.5rem 1rem !important;
+ }   
+}

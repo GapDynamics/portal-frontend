@@ -9,8 +9,8 @@
 .heroBg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(60% 50% at 15% 5%, rgba(255,255,255,0.6), rgba(255,255,255,0) 60%),
-              radial-gradient(50% 40% at 100% 10%, rgba(255,255,255,0.5), rgba(255,255,255,0) 60%);
+  // background: radial-gradient(60% 50% at 15% 5%, rgba(255,255,255,0.6), rgba(255,255,255,0) 60%),
+  //             radial-gradient(50% 40% at 100% 10%, rgba(255,255,255,0.5), rgba(255,255,255,0) 60%);
   pointer-events: none;
 }
 

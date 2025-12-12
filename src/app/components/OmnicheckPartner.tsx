@@ -109,7 +109,7 @@ export default function OmnicheckPartner() {
       <div className="container">
         <div className="row align-items-stretch g-4">
           {/* Text on the right */}
-          <div className="col-lg-6 d-flex">
+          <div className="col-lg-6 d-flex order-2 order-lg-1">
             <div className={styles.textCol}>
 
               <span className={styles.kicker}>{t.kicker}</span>
@@ -128,7 +128,7 @@ export default function OmnicheckPartner() {
               <p className={styles.outro}>{t.outro2}</p>
             </div>
           </div>
-           <div className="col-lg-6 d-flex">
+           <div className="col-lg-6 d-flex order-1 order-lg-12">
             <div className={styles.imageWrap}>
 
               <img

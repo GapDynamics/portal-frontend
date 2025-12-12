@@ -33,20 +33,24 @@ export default function NutriTeamWebNew() {
   return (
     <section className={styles.section}>
       <div className="container">
-        <div className={styles.wrap}>
-             <div>
-            <a href="https://www.hin.ch/de/index.cfm" target="_blank" rel="noopener noreferrer"> <img src={Hin.src} alt="Hin" /></a>
-            <h2 className={styles.title}>{t.title}</h2>
-            {/* <p className={styles.subtitle}>{t.sub}</p> */}
-            <p className={styles.desc}>{t.desc}</p>
-            {/* <p className={styles.desc}>{t.longDesc}</p> */}
-            {/* <a className={styles.badgeLink} href="https://ki.nutriteam.ch/?utm_source=nutriteam-network&utm_medium=homepage&utm_campaign=health-assistant" target="_blank" rel="noopener noreferrer">
-              <svg className={styles.badgeIcon} viewBox="0 0 24 24" fill="none"><path d="M3 12h18M12 3v18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-              <span>{t.cta}</span>
-            </a> */}
+        <div className="row align-items-center g-4">
+          <div className="col-lg-6 order-2 order-lg-1">
+            <div>
+              <a href="https://www.hin.ch/de/index.cfm" target="_blank" rel="noopener noreferrer"> <img src={Hin.src} alt="Hin" /></a>
+              <h2 className={styles.title}>{t.title}</h2>
+              {/* <p className={styles.subtitle}>{t.sub}</p> */}
+              <p className={styles.desc}>{t.desc}</p>
+              {/* <p className={styles.desc}>{t.longDesc}</p> */}
+              {/* <a className={styles.badgeLink} href="https://ki.nutriteam.ch/?utm_source=nutriteam-network&utm_medium=homepage&utm_campaign=health-assistant" target="_blank" rel="noopener noreferrer">
+                <svg className={styles.badgeIcon} viewBox="0 0 24 24" fill="none"><path d="M3 12h18M12 3v18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                <span>{t.cta}</span>
+              </a> */}
+            </div>
           </div>
-           <div className={styles.mock}>
-            <img className={styles.mockImg} src={MockImageNew.src} alt="NutriTeam" />
+          <div className="col-lg-6 order-1 order-lg-2">
+            <div className={styles.mock}>
+              <img className={styles.mockImg} src={MockImageNew.src} alt="NutriTeam" />
+            </div>
           </div>
         </div>
       </div>

@@ -175,6 +175,32 @@
 }
 
 @media (max-width: 767.98px) {
-  .toolbar { flex-direction: column; top: 64px; }
-  .map { height: 360px; }
+  .toolbar { 
+    flex-direction: column; 
+    top: 64px; 
+  }
+  
+  .filters {
+    flex-direction: column;
+    width: 100%;
+    
+    button, select {
+      width: 100%;
+    }
+  }
+  
+  .fitMap {
+    width: 100% !important;
+  }
+  
+  .select {
+    min-width: 100%;
+  }
+  
+  .map { 
+    height: 360px; 
+  }
+  .header h1 {
+    font-size: 32px;
+  }
 }

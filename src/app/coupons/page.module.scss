@@ -52,7 +52,12 @@
   width: 100%;
   flex: 1 1 auto;
 }
-
+@media (max-width: 768px) {
+    .title {
+        font-size: 32px;
+        margin-top: 20px;
+    }
+}
 @media (min-width: 768px) {
   /* Remove bottom margin between equal-height columns on md+ */
   .grid :global(.col-md-6.mb-3) { margin-bottom: 0 !important; }
@@ -185,4 +190,5 @@
   .howStepsGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+ 
 }
