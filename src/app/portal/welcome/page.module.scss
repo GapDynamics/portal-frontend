@@ -54,12 +54,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 44px;
-  padding: 10px 14px;
+  height: 50px;
+  width: 150px;
+  // padding: 10px 14px;
   border-radius: 12px;
   background: #0f172a;
   color: #ffffff;
   border: 1px solid rgba(15, 23, 42, 0.15);
+}
+.storeBadge img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
 }
 
 .storeBadgeTitle {
@@ -254,10 +260,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 18px;
+  padding: 14px 22px;
   border-radius: 14px;
-  min-height: 48px;
-  min-width: 180px;
+  min-height: 58px;
+  min-width: 230px;
+  font-size: 16px;
   background: var(--brand-primary);
   color: #fff;
   font-weight: 800;
@@ -277,10 +284,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 18px;
+  padding: 14px 22px;
   border-radius: 14px;
-  min-height: 48px;
-  min-width: 180px;
+  min-height: 58px;
+  min-width: 230px;
+  font-size: 16px;
   background: #0f172a;
   color: #ffffff;
   font-weight: 800;
