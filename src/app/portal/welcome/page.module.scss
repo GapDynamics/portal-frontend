@@ -1,0 +1,862 @@
+.page {
+  padding-top: 60px;
+  background: linear-gradient(180deg, rgba(187, 222, 251, 0.65), rgba(255, 255, 255, 1) 60%);
+  min-height: 100vh;
+}
+
+.landingMain {
+  padding-top: 120px;
+  background: linear-gradient(180deg, rgba(187, 222, 251, 0.75), rgba(255, 255, 255, 1) 62%);
+}
+
+.topNavBar {
+  position: fixed;
+  top: 35px;
+  left: 0;
+  right: 0;
+  z-index: 200;
+}
+
+.topNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 15px;
+  overflow: visible;
+  position: relative;
+  z-index: 50;
+  background-color: #fff;
+  border-radius: 1.5rem;
+}
+
+.landingFooter {
+  padding: 44px 0 70px;
+  background: #ffffff;
+}
+
+.footerTop {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 28px;
+  align-items: start;
+  padding-top: 8px;
+}
+
+.footerBadges {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.storeBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+}
+
+.storeBadgeTitle {
+  font-size: 10px;
+  opacity: 0.85;
+  line-height: 1;
+}
+
+.storeBadgeName {
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.storeBadgeImg {
+  display: block;
+  height: 22px;
+  width: auto;
+}
+
+.footerCols {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.footerColTitle {
+  font-weight: 900;
+  color: #0f172a;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.footerLink {
+  display: block;
+  color: #334155;
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.footerLink:hover {
+  color: #0f172a;
+}
+
+.footerMid {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.footerSocials {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.footerSocial {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  background: #ffffff;
+}
+
+.footerLegal {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footerCopyright {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.footerLegalLinks {
+  display: inline-flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footerLinkInline {
+  color: #334155;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.footerLinkInline:hover {
+  color: #0f172a;
+}
+
+.footerBrandBig {
+  margin-top: 26px;
+  font-weight: 1000;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  font-size: 110px;
+  color: #0f172a;
+  opacity: 0.92;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brandLogo {
+  width: 160px;
+  height: auto;
+}
+
+.brandLogoMask {
+  width: 190px;
+  height: 40px;
+  background: #1a3129;
+  -webkit-mask-image: var(--logo-url);
+  mask-image: var(--logo-url);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: left center;
+  mask-position: left center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.links {
+  display: none;
+  align-items: center;
+  gap: 26px;
+}
+
+.link {
+  color: #111827;
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+.link:hover {
+  opacity: 1;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: var(--brand-primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.hero {
+  text-align: center;
+  padding: 34px 0 8px;
+}
+
+.h1 {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  font-size: 44px;
+  color: #111827;
+  margin: 0 auto;
+  max-width: 860px;
+  margin-bottom: 50px;
+}
+
+.sub {
+  margin-top: 14px;
+  color: #334155;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.heroCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border-radius: 14px;
+  min-height: 48px;
+  min-width: 180px;
+  background: var(--brand-primary);
+  color: #fff;
+  font-weight: 800;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.heroActions {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.heroCtaSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border-radius: 14px;
+  min-height: 48px;
+  min-width: 180px;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 800;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.heroCtaSecondary:hover {
+  filter: brightness(0.95);
+}
+
+.note {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.modalBackdropBtn {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.modalCard {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.28);
+  padding: 16px;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.modalTitle {
+  font-weight: 900;
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.modalClose {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.modalForm {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.modalLabel {
+  display: grid;
+  gap: 6px;
+  text-align: left;
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 12px;
+}
+
+.modalInput {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #ffffff;
+  padding: 10px 12px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.modalInput:focus {
+  outline: none;
+  border-color: rgba(26, 49, 41, 0.55);
+  box-shadow: 0 0 0 4px rgba(26, 49, 41, 0.12);
+}
+
+.modalError {
+  color: #b91c1c;
+  font-weight: 800;
+  font-size: 12px;
+  text-align: left;
+}
+
+.modalActions {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modalPrimaryBtn {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--brand-primary);
+  color: #ffffff;
+  font-weight: 900;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.modalSecondaryBtn {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 900;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+}
+
+.modalSuccess {
+  margin-top: 14px;
+  text-align: left;
+}
+
+.modalSuccessTitle {
+  font-weight: 900;
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.modalSuccessText {
+  margin-top: 6px;
+  color: #475569;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.modalEmbedWrap {
+  margin-top: 12px;
+}
+
+.modalEmbedTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.modalEmbed {
+  width: 100%;
+  height: min(70vh, 620px);
+  border: 0;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.mascotWrap {
+  margin: 26px auto 0;
+  width: 170px;
+  height: 170px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+}
+
+.mascot {
+  width: 130px;
+  height: auto;
+}
+
+.screenshotsSection {
+  margin-top: 18px;
+  padding: 14px 0 6px;
+}
+
+.screenshotsTrack {
+  display: flex;
+  gap: 18px;
+  align-items: flex-end;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 10px 2px 22px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.screenshotsTrack::-webkit-scrollbar {
+  display: none;
+}
+
+.phoneShot {
+  flex: 0 0 auto;
+  width: 220px;
+  height: 467px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 3px solid rgba(15, 23, 42, 0.85);
+  box-shadow: 0 20px 55px rgba(15, 23, 42, 0.14);
+  overflow: hidden;
+  scroll-snap-align: center;
+}
+
+.phoneShotImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.goalsSection {
+  margin-top: 22px;
+  padding-bottom: 10px;
+  overflow: hidden;
+}
+
+.goalsPanel {
+  border-radius: 18px;
+  padding: 26px 18px 78px;
+  background: linear-gradient(180deg, rgba(26, 49, 41, 0.92), rgba(26, 49, 41, 0.78));
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.12);
+}
+
+.goalsTitle {
+  margin: 0;
+  color: #ffffff;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-size: 40px;
+  line-height: 1.05;
+}
+
+.goalsCards {
+  margin-top: -52px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 2px 12px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.goalsCards::-webkit-scrollbar {
+  display: none;
+}
+
+.goalCard {
+  flex: 0 0 auto;
+  width: 240px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+  scroll-snap-align: start;
+}
+
+.goalLabel {
+  font-weight: 900;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.goalImgWrap {
+  margin-top: 10px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f8fafc;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.goalImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.reviewsCtaSection {
+  margin-top: 34px;
+  padding: 54px 0 72px;
+  background: linear-gradient(180deg, rgba(187, 222, 251, 0.25), rgba(255, 255, 255, 1) 60%);
+}
+
+.reviewsKicker {
+  text-align: center;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 16px;
+}
+
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.reviewCard {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.06);
+}
+
+.reviewStars {
+  color: #f59e0b;
+  letter-spacing: 1px;
+  font-size: 14px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.reviewText {
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.reviewMeta {
+  margin-top: 10px;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.reviewsCtaHero {
+  margin-top: 34px;
+  text-align: center;
+}
+
+.reviewsMascotRow {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.reviewsMascot {
+  width: 120px;
+  height: auto;
+}
+
+.reviewsCtaTitle {
+  margin: 0 auto;
+  max-width: 760px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.03;
+  font-size: 46px;
+  color: #0f172a;
+}
+
+.reviewsCtaButton {
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: var(--brand-primary);
+  color: #fff;
+  font-weight: 800;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.reviewsCtaNote {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+
+
+.cardRow {
+  margin-top: 28px;
+  padding-bottom: 40px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  padding: 16px;
+  min-height: 160px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.06);
+}
+
+.cardTitle {
+  font-weight: 900;
+  font-size: 14px;
+  margin: 0;
+  color: #0f172a;
+}
+
+.cardValue {
+  margin-top: 14px;
+  font-weight: 900;
+  font-size: 40px;
+  color: var(--brand-primary);
+}
+
+.cardText {
+  margin-top: 8px;
+  color: #475569;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.langWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 190px;
+  z-index: 60;
+}
+
+.langWrap::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px 12px;
+  opacity: 0.85;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%230f172a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.langSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 6px 22px 6px 10px;
+  margin: 0;
+  font-weight: 800;
+  font-size: 16px;
+  color: #0f172a;
+  text-align: center;
+  width: auto;
+  min-width: 64px;
+  cursor: pointer;
+  outline: none;
+}
+
+@media (min-width: 992px) {
+  .links {
+    display: inline-flex;
+  }
+  .h1 {
+    font-size: 70px;
+  }
+  .goalsTitle {
+    font-size: 56px;
+  }
+  .goalsPanel {
+    padding: 32px 26px 96px;
+  }
+  .goalsCards {
+    margin-top: -64px;
+  }
+  .goalCard {
+    width: 260px;
+  }
+  .screenshotsTrack {
+    overflow-x: visible;
+    justify-content: center;
+  }
+  .phoneShot {
+    width: 240px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .page {
+    padding-top: 110px;
+  }
+  .landingMain {
+    padding-top: 88px;
+  }
+  .brandLogo {
+    width: 140px;
+  }
+  .brandLogoMask {
+    width: 160px;
+    height: 28px;
+  }
+  .h1 {
+    font-size: 40px;
+  }
+  .screenshotsTrack {
+    gap: 14px;
+    justify-content: flex-start;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .phoneShot {
+    width: 200px;
+  }
+  .reviewsGrid {
+    grid-template-columns: 1fr;
+  }
+  .reviewsCtaTitle {
+    font-size: 34px;
+  }
+  .footerTop {
+    grid-template-columns: 1fr;
+  }
+  .footerCols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .footerMid {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .footerLegal {
+    justify-content: flex-start;
+  }
+  .footerBrandBig {
+    font-size: 70px;
+  }
+  .cards {
+    grid-template-columns: 1fr;
+  }
+  .langSelect {
+    font-size: 15px;
+  }
+}

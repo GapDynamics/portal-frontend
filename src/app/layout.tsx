@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.scss";
-import Header from "./components/Header";
+import AppShell from "./components/AppShell";
 import { LanguageProvider } from "./providers/LanguageProvider";
 import Script from "next/script";
 
@@ -35,8 +35,9 @@ export default function RootLayout({
         /></head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <LanguageProvider>
-          <Header />
-          {children}
+          <AppShell>
+            {children}
+          </AppShell>
         </LanguageProvider>
        <Script
           src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
