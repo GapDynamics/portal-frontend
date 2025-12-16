@@ -557,6 +557,20 @@
   -ms-overflow-style: none;
 }
 
+@media (max-width: 576px) {
+  .goalsSection {
+    overflow: visible;
+  }
+
+  .goalsCards {
+    justify-content: flex-start;
+    margin-top: -36px;
+    padding-left: 16px;
+    padding-right: 16px;
+    scroll-padding-left: 16px;
+  }
+}
+
 .goalsCards::-webkit-scrollbar {
   display: none;
 }
@@ -598,7 +612,6 @@
 }
 
 .reviewsCtaSection {
-  margin-top: 34px;
   padding: 54px 0 72px;
   background: linear-gradient(180deg, rgba(187, 222, 251, 0.25), rgba(255, 255, 255, 1) 60%);
 }

@@ -10,7 +10,7 @@ import Screenshot2 from "@/app/assets/images/sc-2.jpg";
 import Screenshot3 from "@/app/assets/images/sc-3.jpg";
 import Screenshot4 from "@/app/assets/images/sc-4.jpg";
 import Screenshot5 from "@/app/assets/images/sc-5.png";
-import GoalImg1 from "@/app/assets/images/build-muscle.jpg";
+import GoalImg1 from "@/app/assets/images/lose-weight1.jpg";
 import GoalImg2 from "@/app/assets/images/lose-weight.jpg";
 import GoalImg3 from "@/app/assets/images/healthy-routine.jpg";
 import GoalImg4 from "@/app/assets/images/maintain-weight.jpg";

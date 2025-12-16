@@ -1,19 +1,41 @@
 "use client";
 import Link from "next/link";
-import { useMemo, useRef, useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useMemo, useRef, useEffect, useState, type ChangeEvent } from "react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/app/providers/LanguageProvider";
-import { getSocket } from "../socketClient";
+import { getSocket } from "@/app/portal/chat/socketClient";
+
+ function getPayloadFromToken(token: string): { sub: string } | null {
+   try {
+     const payload = token.split(".")[1];
+     if (!payload) return null;
+     return JSON.parse(atob(payload));
+   } catch (e) {
+     console.error("Failed to decode token", e);
+     return null;
+   }
+ }
+
+ type Participant = {
+   id: string | number;
+   firstName?: string;
+   lastName?: string;
+   profile?: { profilePictureUrl?: string };
+ };
 
 type Message = {
-  id: string;
-  fromId: string;
-  toId: string;
+  id: string | number;
+  fromId?: string | number;
+  toId?: string | number;
+  sender?: Participant;
   body: string;
   createdAt: string;
+  readAt?: string | Date;
+  conversationId?: string | number;
 };
 
 export default function ChatThreadPage() {
+  const router = useRouter();
   const pathname = usePathname();
   const peerId = pathname.split("/").pop() || "";
   const { lang } = useLanguage();
@@ -26,6 +48,7 @@ export default function ChatThreadPage() {
   const [draft, setDraft] = useState("");
   const endRef = useRef<HTMLDivElement | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<any | null>(null);
@@ -33,6 +56,35 @@ export default function ChatThreadPage() {
   const apiBase = (process.env.NEXT_PUBLIC_API_BASE || "https://gdp.codefest.io/app7").replace(/\/$/, "");
   const searchParams = useSearchParams();
   const peerUserId = searchParams?.get("peer") || "";
+
+  const conversationId = peerId;
+  const recipientId = peerUserId;
+
+  const normalizeMessage = (raw: any): Message => {
+    const body = raw?.body ?? raw?.content ?? "";
+    const sender = raw?.sender ?? raw?.user ?? raw?.from ?? null;
+    const fromId = raw?.fromId ?? raw?.senderId ?? raw?.sender_id ?? sender?.id ?? raw?.userId ?? raw?.user_id;
+    const convId = raw?.conversationId ?? raw?.conversation_id ?? raw?.convId ?? raw?.conv_id;
+    return {
+      id: raw?.id ?? `local-${Date.now()}`,
+      fromId,
+      sender,
+      body,
+      createdAt: raw?.createdAt ?? raw?.created_at ?? raw?.timestamp ?? new Date().toISOString(),
+      readAt: raw?.readAt ?? raw?.read_at,
+      conversationId: convId,
+    };
+  };
+
+  const myUserId = useMemo(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const token = window.localStorage.getItem("auth_token");
+        if (token) return getPayloadFromToken(token)?.sub;
+      }
+    } catch {}
+    return null;
+  }, []);
 
   // Load professional profile
   useEffect(() => {
@@ -61,6 +113,13 @@ export default function ChatThreadPage() {
   useEffect(() => {
     let cancelled = false;
     async function loadMessages() {
+      if (!conversationId || conversationId === "new") {
+        setLoading(false);
+        setError(null);
+        setMessages([]);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       try {
@@ -86,12 +145,12 @@ export default function ChatThreadPage() {
           return;
         }
 
-        if (!peerId) {
+        if (!conversationId) {
           if (!cancelled) setError("Conversation not found");
           return;
         }
 
-        const res = await fetch(`${apiBase}/chat/conversations/${encodeURIComponent(peerId)}/messages`, {
+        const res = await fetch(`${apiBase}/chat/conversations/${encodeURIComponent(conversationId)}/messages`, {
           headers: {
             "Accept": "application/json",
             "Authorization": `Bearer ${token}`,
@@ -111,14 +170,17 @@ export default function ChatThreadPage() {
         }
         const data = await res.json();
         if (cancelled) return;
-        const mapped: Message[] = Array.isArray(data) ? data.map((m: any) => ({
-          id: String(m.id ?? ""),
-          fromId: m.sender?.id != null ? String(m.sender.id) : "",
-          toId: "",
-          body: m.content ?? "",
-          createdAt: m.createdAt ?? "",
-        })) : [];
-        setMessages(mapped);
+
+        const list = Array.isArray(data) ? data : (data?.messages ?? []);
+        setMessages(list.map(normalizeMessage));
+
+        const otherUser = (data?.conversation?.participants || []).find(
+          (p: Participant) => String(p?.id) !== String(myUserId)
+        );
+        if (otherUser) setProfile({ user: otherUser, displayName: `${otherUser.firstName ?? ""} ${otherUser.lastName ?? ""}`.trim() });
+
+        const socket = getSocket();
+        if (socket) socket.emit("messagesRead", { conversationId: parseInt(String(conversationId), 10) });
       } catch {
         if (!cancelled) setError(null); // Don't show error for new conversations
       } finally {
@@ -128,7 +190,7 @@ export default function ChatThreadPage() {
 
     loadMessages();
     return () => { cancelled = true; };
-  }, [apiBase, peerId]);
+  }, [apiBase, conversationId, myUserId]);
 
   const items = useMemo(() => messages, [messages]);
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [items.length]);
@@ -138,33 +200,103 @@ export default function ChatThreadPage() {
     const socket = getSocket();
     if (!socket) return;
 
-    const onReceive = (msg: any) => {
-      try {
-        // Try to match on conversation id when available
-        const convId = String((msg as any).conversationId ?? (msg as any).conversation?.id ?? "");
-        if (convId && convId !== peerId) return;
-      } catch {}
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: String(msg.id ?? `ws-${Date.now()}`),
-          fromId: msg.sender?.id != null ? String(msg.sender.id) : "",
-          toId: "",
-          body: msg.content ?? "",
-          createdAt: msg.createdAt ?? new Date().toISOString(),
-        },
-      ]);
+    const onReceiveMessage = (msg: any) => {
+      const newConversationId = String(msg?.conversationId ?? msg?.conversation?.id ?? "");
+      if (conversationId === "new" && newConversationId) {
+        router.replace(`/portal/chat/${newConversationId}`);
+      }
+      if (newConversationId && (newConversationId === conversationId || conversationId === "new")) {
+        const incoming = normalizeMessage(msg);
+        setMessages((prev) => {
+          // 1) If message already exists by id, don't append.
+          if (incoming?.id != null && prev.some((m) => String(m.id) === String(incoming.id))) return prev;
+
+          const incomingFromMe = String(incoming.sender?.id ?? incoming.fromId) === String(myUserId);
+          if (!incomingFromMe) return [...prev, incoming];
+
+          // 2) Reconcile optimistic local message with echoed server message
+          // If the last message is a local optimistic one with same body, replace it.
+          const lastIndex = prev.length - 1;
+          if (lastIndex < 0) return [incoming];
+
+          const last = prev[lastIndex];
+          const isLastLocal = typeof last.id === "string" && last.id.startsWith("local-");
+          const sameBody = String(last.body ?? "") === String(incoming.body ?? "");
+
+          let withinWindow = false;
+          try {
+            const a = new Date(String(last.createdAt)).getTime();
+            const b = new Date(String(incoming.createdAt)).getTime();
+            if (Number.isFinite(a) && Number.isFinite(b)) withinWindow = Math.abs(b - a) < 15000;
+          } catch {
+            withinWindow = false;
+          }
+
+          if (isLastLocal && sameBody && withinWindow) {
+            const next = prev.slice();
+            next[lastIndex] = { ...last, ...incoming };
+            return next;
+          }
+
+          // fallback: append
+          return [...prev, incoming];
+        });
+        socket.emit("messagesRead", { conversationId: parseInt(newConversationId, 10) });
+      }
     };
 
-    socket.on("receiveMessage", onReceive);
-    return () => {
-      try { socket.off("receiveMessage", onReceive); } catch {}
+    const onTyping = (payload: { convId?: string | number; userId?: string | number }) => {
+      const convId = payload?.convId;
+      const userId = payload?.userId;
+      if (!convId || !userId || !conversationId) return;
+      if (String(convId) === String(conversationId) && String(userId) !== String(myUserId)) setIsTyping(true);
     };
-  }, [peerId]);
+
+    const onStopTyping = (payload: { convId?: string | number; userId?: string | number }) => {
+      const convId = payload?.convId;
+      const userId = payload?.userId;
+      if (!convId || !userId || !conversationId) return;
+      if (String(convId) === String(conversationId) && String(userId) !== String(myUserId)) setIsTyping(false);
+    };
+
+    const onMessagesSeen = (payload: { convId?: string | number; readerId?: string | number }) => {
+      const convId = payload?.convId;
+      const readerId = payload?.readerId;
+      if (!convId || !readerId || !conversationId) return;
+      if (String(convId) !== String(conversationId) || String(readerId) === String(myUserId)) return;
+      setMessages((prev) => prev.map((m) => (m.readAt ? m : { ...m, readAt: new Date() })));
+    };
+
+    socket.on("receiveMessage", onReceiveMessage);
+    socket.on("typing", onTyping);
+    socket.on("stopTyping", onStopTyping);
+    socket.on("messagesSeen", onMessagesSeen);
+    return () => {
+      try {
+        socket.off("receiveMessage", onReceiveMessage);
+        socket.off("typing", onTyping);
+        socket.off("stopTyping", onStopTyping);
+        socket.off("messagesSeen", onMessagesSeen);
+      } catch {}
+    };
+  }, [conversationId, myUserId, router]);
+
+  // Typing indicator logic
+  const typingTimeoutRef = useRef<any>(null);
+  const handleDraftChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDraft(e.target.value);
+    const socket = getSocket();
+    if (!socket || !conversationId || conversationId === "new") return;
+    socket.emit("isTyping", { conversationId: parseInt(String(conversationId), 10) });
+    clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit("stopTyping", { conversationId: parseInt(String(conversationId), 10) });
+    }, 2000);
+  };
 
   function send() {
     const text = draft.trim();
-    if (!text) return;
+    if (!text || !myUserId) return;
     
     // Optimistically append the message locally so it appears in the UI immediately.
     const optimistic: Message = {
@@ -180,13 +312,18 @@ export default function ChatThreadPage() {
     // Send message via WebSocket - the backend will persist it
     try {
       const socket = getSocket();
-      if (socket && socket.connected) {
-        socket.emit("sendMessage", {
-          recipientId: peerId,
-          content: text,
-        });
-      } else {
-        console.warn("WebSocket not connected. Message may not be delivered.");
+      if (socket) {
+        const payload: { content: string; conversationId?: number; recipientId?: number } = { content: text };
+        if (conversationId && conversationId !== "new") {
+          payload.conversationId = parseInt(String(conversationId), 10);
+        } else if (recipientId) {
+          payload.recipientId = parseInt(String(recipientId), 10);
+        }
+        if (payload.conversationId || payload.recipientId) {
+          socket.emit("sendMessage", payload);
+        } else {
+          console.warn("Missing conversationId/recipientId. Message not sent.");
+        }
       }
     } catch (err) {
       console.error("Failed to send message:", err);
@@ -238,18 +375,41 @@ export default function ChatThreadPage() {
               {!loading && !error && items.length === 0 && (
                 <div className="text-center text-muted">{t.noMessages}</div>
               )}
-              {!loading && !error && items.map((m) => (
-                <div key={m.id} className="d-flex mb-2 justify-content-start">
-                  <div className="p-2 rounded-3 text-white" style={{ maxWidth: 520, backgroundColor: 'var(--brand-primary)' }}>
-                    <div>{m.body}</div>
+              {!loading && !error && items.map((m, index) => {
+                const isMe = m.fromId === "me" || String(m.sender?.id ?? m.fromId) === String(myUserId);
+                const isLastMessage = index === items.length - 1;
+                const isRead = isLastMessage && isMe && m.readAt;
+                const text = m.body ?? (m as any)?.content ?? "";
+
+                return (
+                  <div key={String(m.id)}>
+                    <div className={`d-flex mb-2 ${isMe ? "justify-content-end" : "justify-content-start"}`}>
+                      <div
+                        className="p-2 rounded-3"
+                        style={{
+                          maxWidth: 520,
+                          backgroundColor: isMe ? "#E2E8F0" : "var(--brand-primary)",
+                          color: isMe ? "#1E293B" : "#FFFFFF",
+                          wordBreak: "break-word",
+                        }}
+                      >
+                        <div>{text}</div>
+                      </div>
+                    </div>
+                    {isRead && (
+                      <div className="text-end text-muted small" style={{ marginTop: -5, marginRight: 5 }}>
+                        Seen
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
+              {isTyping && <div className="text-muted small p-2"><i>Typing...</i></div>}
               <div ref={endRef} />
             </div>
             <div className="card-body border-top">
               <div className="d-flex gap-2">
-                <input className="form-control" placeholder={t.placeholder(displayName)} value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") send(); }} />
+                <input className="form-control" placeholder={t.placeholder(displayName)} value={draft} onChange={handleDraftChange} onKeyDown={(e) => { if (e.key === "Enter") send(); }} />
                 <button className="btn btn-primary" style={{ backgroundColor: 'var(--brand-primary)', borderColor: 'var(--brand-primary)' }} onClick={send}>{t.send}</button>
               </div>
               <div className="d-flex gap-2 mt-2">

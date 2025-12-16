@@ -2,11 +2,13 @@
 import Footer from "../components/Footer";
 import styles from "./page.module.scss";
 import { useLanguage } from "../providers/LanguageProvider";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function DirectoryPage() {
   const { lang } = useLanguage();
+  const router = useRouter();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
   const [googleReady, setGoogleReady] = useState(false);
@@ -19,13 +21,56 @@ export default function DirectoryPage() {
   const [category, setCategory] = useState("");
   const markersRef = useRef<any[]>([]);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-  const [professionals, setProfessionals] = useState<Array<{ id: string | number; name: string; city: string; country: string; category: string; lat?: number | null; lng?: number | null; distance?: number }>>([]);
+  const [professionals, setProfessionals] = useState<Array<{ id: string | number; userId?: number | string; name: string; city: string; country: string; category: string; lat?: number | null; lng?: number | null; distance?: number }>>([]);
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState("");
   const [selectedProfile, setSelectedProfile] = useState<any | null>(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
   // Centralized API base (fallback to provided IP if env not set)
   const apiBase = (process.env.NEXT_PUBLIC_API_BASE || "https://gdp.codefest.io/app7").replace(/\/$/, "");
+
+  const lastSearchCenterRef = useRef<{ lat: number; lon: number } | null>(null);
+
+  async function handleStartChat(recipientId: number | string | undefined | null) {
+    if (recipientId == null || recipientId === "") {
+      alert("Cannot start chat: recipient ID is missing.");
+      return;
+    }
+
+    const recipientIdStr = (() => {
+      const raw = String(recipientId).trim();
+      if (/^\d+$/.test(raw)) return raw;
+      const n = Number(raw);
+      return Number.isFinite(n) ? String(n) : raw;
+    })();
+
+    try {
+      setLoading(true);
+      const token = window.localStorage.getItem("auth_token");
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+
+      const res = await fetch(`${apiBase}/chat/find-or-create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ recipientId: recipientIdStr }),
+      });
+      if (!res.ok) throw new Error("Failed to start chat session");
+      const conversation = await res.json();
+      if (conversation?.id != null) router.push(`/portal/chat/${conversation.id}`);
+      else router.push(`/portal/chat/new?peer=${encodeURIComponent(recipientIdStr)}`);
+    } catch (e) {
+      console.error("Failed to start chat:", e);
+      alert("Could not start chat session. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const copy: Record<string, {
     h1: string;
@@ -136,19 +181,23 @@ export default function DirectoryPage() {
 
   // Helper to load nearby profiles from backend (public endpoint)
   const loadNearby = async (lat: number, lon: number, radius = 50, specialty?: string) => {
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+    const safeRadius = Number.isFinite(radius) ? radius : 50;
     try {
       setLoading(true);
+      lastSearchCenterRef.current = { lat, lon };
       const params = new URLSearchParams();
       params.set('lat', String(lat));
       params.set('lon', String(lon));
-      if (radius != null) params.set('radius', String(radius));
+      if (safeRadius != null) params.set('radius', String(safeRadius));
       if (specialty && specialty.trim()) params.set('specialty', specialty.trim());
-      const url = `${apiBase}/profiles/nearby?${params.toString()}`;
+      const url = `${apiBase}/profiles/search?${params.toString()}`;
       const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
       if (!res.ok) throw new Error('Failed nearby');
       const arr = await res.json();
       const mapped = Array.isArray(arr) ? arr.map((p: any) => ({
         id: (p.id ?? p.profileId ?? p.userId ?? p._id),
+        userId: (p.userId ?? p.user?.id ?? p.account?.id),
         name: p.displayName || `${p.firstName ?? ''} ${p.lastName ?? ''}`.trim() || '—',
         city: p.city || '',
         country: p.country || '',
@@ -164,6 +213,13 @@ export default function DirectoryPage() {
       setLoading(false);
     }
   };
+
+  // When category changes, reload results from the last known location (if any)
+  useEffect(() => {
+    const c = lastSearchCenterRef.current;
+    if (!c) return;
+    loadNearby(c.lat, c.lon, 50, category || undefined);
+  }, [category]);
 
   // Initial load: try user's current location, fallback to Switzerland center
   useEffect(() => {
@@ -451,7 +507,7 @@ export default function DirectoryPage() {
       console.warn('Geolocation error', err);
     }, { enableHighAccuracy: true, timeout: 8000 });
   };
-  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearchKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       geocodeAndCenter(query.trim());
@@ -462,6 +518,8 @@ export default function DirectoryPage() {
     const map = mapRef.current;
     if (!map) return;
     try {
+      // Backend is currently returning 400 for /profiles/search?q=..., so
+      // we geocode text -> coordinates and then call /profiles/search?lat&lon.
       if (provider === 'google') {
         const g = (window as any).google;
         if (!g || !g.maps) {
@@ -476,12 +534,13 @@ export default function DirectoryPage() {
               const feature = data?.features?.[0];
               if (feature && Array.isArray(feature.center)) {
                 const [lng, lat] = feature.center as [number, number];
+                if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
                 setMapTo(lat, lng, 10);
                 // Marker only when Leaflet is active
                 const L = (window as any).L;
                 if (L && markerRef.current && typeof markerRef.current.remove === 'function') { try { markerRef.current.remove(); } catch {} }
                 if (L && !((map as any).setCenter)) { markerRef.current = L.marker([lat, lng]).addTo(map); }
-                await loadNearby(lat, lng, 50);
+                await loadNearby(lat, lng, 50, category || undefined);
                 const place = feature?.place_name as string | undefined; if (place) setLocation(place);
                 return;
               }
@@ -495,11 +554,12 @@ export default function DirectoryPage() {
             const item = Array.isArray(ndata) ? ndata[0] : null;
             if (item && item.lat && item.lon) {
               const lat = parseFloat(item.lat), lng = parseFloat(item.lon);
+              if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
               setMapTo(lat, lng, 10);
               const L = (window as any).L;
               if (L && markerRef.current && typeof markerRef.current.remove === 'function') { try { markerRef.current.remove(); } catch {} }
               if (L && !((map as any).setCenter)) { markerRef.current = L.marker([lat, lng]).addTo(map); }
-              await loadNearby(lat, lng, 50);
+              await loadNearby(lat, lng, 50, category || undefined);
               if (item.display_name) setLocation(item.display_name);
               return;
             }
@@ -516,7 +576,7 @@ export default function DirectoryPage() {
               try {
                 const la = typeof loc.lat === 'function' ? loc.lat() : undefined;
                 const lo = typeof loc.lng === 'function' ? loc.lng() : undefined;
-                if (typeof la === 'number' && typeof lo === 'number') { loadNearby(la, lo, 50); }
+                if (typeof la === 'number' && typeof lo === 'number') { loadNearby(la, lo, 50, category || undefined); }
               } catch {}
               const comps = results[0].address_components || [];
               const getType = (type: string) => comps.find((c: any) => c.types.includes(type));
@@ -538,12 +598,13 @@ export default function DirectoryPage() {
           const feature = data?.features?.[0];
           if (feature && Array.isArray(feature.center)) {
             const [lng, lat] = feature.center as [number, number];
+            if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
             setMapTo(lat, lng, 10);
             const L = (window as any).L;
             if (L && markerRef.current && typeof markerRef.current.remove === 'function') { try { markerRef.current.remove(); } catch {} }
             if (L && !((map as any).setCenter)) { markerRef.current = L.marker([lat, lng]).addTo(map); }
             // Load nearby for this geocoded location
-            loadNearby(lat, lng, 50);
+            loadNearby(lat, lng, 50, category || undefined);
             const place = feature?.place_name as string | undefined;
             if (place) setLocation(place);
             return;
@@ -557,12 +618,13 @@ export default function DirectoryPage() {
         const item = Array.isArray(ndata) ? ndata[0] : null;
         if (item && item.lat && item.lon) {
           const lat = parseFloat(item.lat), lng = parseFloat(item.lon);
+          if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
           setMapTo(lat, lng, 10);
           const L = (window as any).L;
           if (L && markerRef.current && typeof markerRef.current.remove === 'function') { try { markerRef.current.remove(); } catch {} }
           if (L && !((map as any).setCenter)) { markerRef.current = L.marker([lat, lng]).addTo(map); }
           // Load nearby for this geocoded location
-          loadNearby(lat, lng, 50);
+          loadNearby(lat, lng, 50, category || undefined);
           const label = [item.display_name].filter(Boolean).join(', ');
           if (label) setLocation(label);
         }
@@ -640,7 +702,17 @@ export default function DirectoryPage() {
                           <h5 className="card-title mb-1">{selectedProfile.displayName || (selectedProfile.user ? `${selectedProfile.user.firstName ?? ''} ${selectedProfile.user.lastName ?? ''}`.trim() : '')}</h5>
                           <div className="text-muted small">{[selectedProfile.specialties, selectedProfile.city, selectedProfile.country].filter(Boolean).join(' • ')}</div>
                         </div>
-                        <a style={{backgroundColor:"var(--brand-primary)",color:"white", border: "1px solid var(--brand-primary)"}} className="btn btn-sm btn-primary" href={`/portal/chat/${selectedProfile.id}`}>{t.messageBtn}</a>
+                        <a
+                          style={{backgroundColor:"var(--brand-primary)",color:"white", border: "1px solid var(--brand-primary)"}}
+                          className="btn btn-sm btn-primary"
+                          href={`/portal/chat/new?peer=${encodeURIComponent(String(selectedProfile?.user?.id ?? selectedProfile?.userId ?? selectedProfile?.id ?? ""))}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleStartChat(selectedProfile?.user?.id ?? selectedProfile?.userId ?? selectedProfile?.id);
+                          }}
+                        >
+                          {t.messageBtn}
+                        </a>
                       </div>
                       {selectedProfile.bio ? (<p className="mt-2 mb-0">{selectedProfile.bio}</p>) : null}
                     </div>
@@ -668,7 +740,17 @@ export default function DirectoryPage() {
                           ) : (
                             <button className="btn btn-sm btn-outline-secondary" disabled title={t.profileUnavailable}>{t.viewBtn}</button>
                           ); })()}
-                          <Link style={{backgroundColor:"var(--brand-primary)",color:"white", border: "1px solid var(--brand-primary)"}} href={`/portal/chat/${p.id}`} className="btn btn-sm btn-primary">{t.messageBtn}</Link>
+                          <Link
+                            style={{backgroundColor:"var(--brand-primary)",color:"white", border: "1px solid var(--brand-primary)"}}
+                            href={`/portal/chat/new?peer=${encodeURIComponent(String((p as any)?.userId ?? p.id))}`}
+                            className="btn btn-sm btn-primary"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleStartChat((p as any)?.userId ?? p.id);
+                            }}
+                          >
+                            {t.messageBtn}
+                          </Link>
                         </div>
                       </li>
                     ))}

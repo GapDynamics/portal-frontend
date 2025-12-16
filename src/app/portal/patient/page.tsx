@@ -4,6 +4,16 @@ import Footer from "../../components/Footer";
 import { useLanguage } from "../../providers/LanguageProvider";
 import { useEffect, useState } from "react";
 
+ function getPayloadFromToken(token: string): { sub: string } | null {
+   try {
+     const payload = token.split(".")[1];
+     if (!payload) return null;
+     return JSON.parse(atob(payload));
+   } catch {
+     return null;
+   }
+ }
+
 export default function PatientPortalPage() {
   const { lang } = useLanguage();
   const [dash, setDash] = useState<any | null>(null);
@@ -35,6 +45,7 @@ export default function PatientPortalPage() {
           return null;
         })();
         if (!token) return;
+        const myUserId = getPayloadFromToken(token)?.sub ?? null;
         const res = await fetch(`${apiBase}/dashboard`, { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` } });
         if (!res.ok) return;
         const j = await res.json();
@@ -76,6 +87,34 @@ export default function PatientPortalPage() {
           setPurchErr(e?.message || t.couponsLoadFailed);
           setPurchases([]);
         }
+
+        try {
+          const resChat = await fetch(`${apiBase}/chat/conversations`, { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` } });
+          if (resChat.ok) {
+            const list = await resChat.json().catch(() => ([]));
+            const convos = Array.isArray(list) ? list : [];
+            const unread = convos.reduce((sum: number, convo: any) => {
+              if (typeof convo?.unreadCount === 'number') return sum + convo.unreadCount;
+              if (typeof convo?._count?.unread === 'number') return sum + convo._count.unread;
+              if (typeof convo?._count?.unreadMessages === 'number') return sum + convo._count.unreadMessages;
+              const msgs = Array.isArray(convo?.messages) ? convo.messages : [];
+              if (!msgs.length || !myUserId) return sum;
+              const u = msgs.filter((m: any) => {
+                const readAt = m?.readAt ?? m?.read_at;
+                const senderId = m?.sender?.id ?? m?.fromId ?? m?.senderId ?? m?.sender_id;
+                if (readAt) return false;
+                return String(senderId) !== String(myUserId);
+              }).length;
+              return sum + u;
+            }, 0);
+
+            setDash((prev: any) => {
+              const base = prev ?? j ?? {};
+              const stats = { ...(base?.stats ?? {}), unreadMessages: unread };
+              return { ...base, stats };
+            });
+          }
+        } catch {}
       } catch {}
     })();
   }, []);
@@ -332,7 +371,7 @@ export default function PatientPortalPage() {
                 </div>
               )}
               <span className="ms-2 fw-semibold">{name || dash?.welcomeName || ''}</span>
-              <a href="/messages" className="ms-3 d-inline-flex align-items-center text-decoration-none">
+              <a href="/portal/chat" className="ms-3 d-inline-flex align-items-center text-decoration-none">
                 <span className="badge bg-secondary me-2">{typeof (dash?.stats?.unreadMessages) === 'number' ? dash.stats.unreadMessages : 0}</span>
                 <span className="text-muted small">{t.messagesLabel}</span>
               </a>

@@ -10,13 +10,13 @@ function getToken(): string | null {
       const ls = window.localStorage.getItem("auth_token");
       if (ls) return ls;
     }
-  } catch {}
+  } catch { }
   try {
     if (typeof document !== "undefined") {
       const m = document.cookie.match(/(?:^|; )auth_token=([^;]+)/);
       if (m) return decodeURIComponent(m[1]);
     }
-  } catch {}
+  } catch { }
   return null;
 }
 
@@ -56,6 +56,6 @@ export function disconnectSocket() {
     if (socket) {
       socket.disconnect();
     }
-  } catch {}
+  } catch { }
   socket = null;
 }
