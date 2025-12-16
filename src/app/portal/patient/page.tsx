@@ -351,27 +351,29 @@ export default function PatientPortalPage() {
     <main className={styles.wrapper}>
       <div className="container">
         <header className={styles.header}>
-          <div className="d-flex justify-content-between align-items-center">
+          <div className={`d-flex justify-content-between align-items-center ${styles.portalHeaderTop}`}>
             <div>
               <h1>{t.h1}</h1>
               <p>{t.sub}</p>
             </div>
-            <div className="d-inline-flex align-items-center">
-              {profilePicturePreviewUrl || (profilePictureUrl && !imgError) ? (
-                <img
-                  key={(profilePicturePreviewUrl || profilePictureUrl) as string}
-                  src={profilePicturePreviewUrl || profilePictureUrl || ''}
-                  alt="Profile"
-                  style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: '50%', border: '1px solid #e5e7eb' }}
-                  onError={() => { setProfilePicturePreviewUrl(null); setImgError(true); }}
-                />
-              ) : (
-                <div aria-hidden className="d-flex align-items-center justify-content-center" style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid #e5e7eb', background: '#f8fafc', color: '#334155', fontWeight: 700 }}>
-                  {(name || dash?.welcomeName || 'P').slice(0,1)}
-                </div>
-              )}
-              <span className="ms-2 fw-semibold">{name || dash?.welcomeName || ''}</span>
-              <a href="/portal/chat" className="ms-3 d-inline-flex align-items-center text-decoration-none">
+            <div className={`d-inline-flex align-items-center ${styles.portalHeaderRight}`}>
+              <div className={styles.portalHeaderIdentity}>
+                {profilePicturePreviewUrl || (profilePictureUrl && !imgError) ? (
+                  <img
+                    key={(profilePicturePreviewUrl || profilePictureUrl) as string}
+                    src={profilePicturePreviewUrl || profilePictureUrl || ''}
+                    alt="Profile"
+                    style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: '50%', border: '1px solid #e5e7eb' }}
+                    onError={() => { setProfilePicturePreviewUrl(null); setImgError(true); }}
+                  />
+                ) : (
+                  <div aria-hidden className="d-flex align-items-center justify-content-center" style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid #e5e7eb', background: '#f8fafc', color: '#334155', fontWeight: 700 }}>
+                    {(name || dash?.welcomeName || 'P').slice(0,1)}
+                  </div>
+                )}
+                <span className={`ms-2 fw-semibold ${styles.portalHeaderName}`}>{name || dash?.welcomeName || ''}</span>
+              </div>
+              <a href="/portal/chat" className={`ms-3 d-inline-flex align-items-center text-decoration-none ${styles.portalHeaderMessages}`}>
                 <span className="badge bg-secondary me-2">{typeof (dash?.stats?.unreadMessages) === 'number' ? dash.stats.unreadMessages : 0}</span>
                 <span className="text-muted small">{t.messagesLabel}</span>
               </a>

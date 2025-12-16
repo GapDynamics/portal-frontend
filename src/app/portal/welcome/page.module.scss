@@ -561,7 +561,15 @@
   .goalsSection {
     overflow: visible;
   }
-
+.phoneShot {
+  height: 400px;
+}
+.topNavBar {
+  top: 15px;
+}
+.modalPrimaryBtn, .modalSecondaryBtn {
+  font-size: 14px;
+}
   .goalsCards {
     justify-content: flex-start;
     margin-top: -36px;

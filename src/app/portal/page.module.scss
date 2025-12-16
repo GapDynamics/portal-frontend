@@ -60,3 +60,54 @@
 .topCenter a { text-decoration: none; color: inherit; font-weight: 600; }
 .topRight { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
 .avatarSm { width: 28px; height: 28px; border-radius: 50%; background: #e2e8f0; display:flex; align-items:center; justify-content:center; font-weight:700; color: var(--brand-primary); }
+
+.portalHeaderTop {
+  gap: 12px;
+}
+
+.portalHeaderRight {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.portalHeaderIdentity {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.portalHeaderName {
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 576px) {
+  .portalHeaderTop {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .portalHeaderRight {
+    flex-wrap: nowrap;
+    width: 100%;
+    justify-content: space-between !important;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .portalHeaderIdentity {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .portalHeaderMessages {
+    margin-left: 0 !important;
+    width: auto;
+    margin-top: 0;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}

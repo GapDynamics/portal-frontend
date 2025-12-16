@@ -81,6 +81,10 @@ export default function Header() {
     }
   }
 
+  function closeMobileNav() {
+    setNavOpen(false);
+  }
+
   const nav: Record<string, {
     home: string; directory: string; coupons: string; register: string; login: string; about: string; faq: string; contact: string; ai: string; messages: string;
     dashboard: string; logout: string; langLabel: string;
@@ -121,13 +125,13 @@ export default function Header() {
 
         <div className={`navbar-collapse ${navOpen ? "show" : "collapse"}`} id="mainNav">
           <ul className="navbar-nav mx-auto">
-            <li className="nav-item"><Link className={`nav-link ${pathname === '/' ? styles.active : ''}`} href="/">{t.home}</Link></li>
-            <li className="nav-item"><Link className={`nav-link ${pathname?.startsWith('/directory') ? styles.active : ''}`} href="/directory">{t.directory}</Link></li>
-            <li className="nav-item"><Link className={`nav-link ${pathname?.startsWith('/coupons') ? styles.active : ''}`} href="/coupons">{t.coupons}</Link></li>
-            <li className="nav-item"><Link className={`nav-link ${pathname?.startsWith('/register') ? styles.active : ''}`} href="/register">{t.register}</Link></li>
-            <li className="nav-item"><Link className={`nav-link ${pathname?.startsWith('/contact') ? styles.active : ''}`} href="/contact">{t.contact}</Link></li>
+            <li className="nav-item"><Link onClick={closeMobileNav} className={`nav-link ${pathname === '/' ? styles.active : ''}`} href="/">{t.home}</Link></li>
+            <li className="nav-item"><Link onClick={closeMobileNav} className={`nav-link ${pathname?.startsWith('/directory') ? styles.active : ''}`} href="/directory">{t.directory}</Link></li>
+            <li className="nav-item"><Link onClick={closeMobileNav} className={`nav-link ${pathname?.startsWith('/coupons') ? styles.active : ''}`} href="/coupons">{t.coupons}</Link></li>
+            <li className="nav-item"><Link onClick={closeMobileNav} className={`nav-link ${pathname?.startsWith('/register') ? styles.active : ''}`} href="/register">{t.register}</Link></li>
+            <li className="nav-item"><Link onClick={closeMobileNav} className={`nav-link ${pathname?.startsWith('/contact') ? styles.active : ''}`} href="/contact">{t.contact}</Link></li>
             {loggedIn && (
-              <li className="nav-item"><Link className={`nav-link ${pathname?.startsWith('/portal/chat') ? styles.active : ''}`} href="/portal/chat">{t.messages}</Link></li>
+              <li className="nav-item"><Link onClick={closeMobileNav} className={`nav-link ${pathname?.startsWith('/portal/chat') ? styles.active : ''}`} href="/portal/chat">{t.messages}</Link></li>
             )}
             
           </ul>
@@ -182,7 +186,7 @@ export default function Header() {
 
           {/* Mobile / tablet actions below nav links */}
           <div className="d-flex d-lg-none flex-column gap-2 mt-3">
-            <a className={`${styles.haBtn}`} href="https://ki.nutriteam.ch/?utm_source=nutriteam-network&utm_medium=nav&utm_campaign=ai-health" target="_blank" rel="noopener noreferrer">{t.ai}</a>
+            <a onClick={closeMobileNav} className={`${styles.haBtn}`} href="https://ki.nutriteam.ch/?utm_source=nutriteam-network&utm_medium=nav&utm_campaign=ai-health" target="_blank" rel="noopener noreferrer">{t.ai}</a>
             {loggedIn ? (
               <div className="position-relative" ref={mobileMenuRef}>
                 <button
@@ -207,18 +211,18 @@ export default function Header() {
                 </button>
                 {menuOpen && (
                   <div role="menu" className={`${styles.userMenu} shadow-sm`}>
-                    <button role="menuitem" className={styles.userMenuItem} onClick={()=>{ setMenuOpen(false); goToDashboard(); }}>
+                    <button role="menuitem" className={styles.userMenuItem} onClick={()=>{ setMenuOpen(false); setNavOpen(false); goToDashboard(); }}>
                       {t.dashboard}
                     </button>
                     <div className={styles.userMenuDivider} />
-                    <button role="menuitem" className={styles.userMenuItem} style={{ color: '#fca5a5' }} onClick={()=>{ setMenuOpen(false); logout(); }}>
+                    <button role="menuitem" className={styles.userMenuItem} style={{ color: '#fca5a5' }} onClick={()=>{ setMenuOpen(false); setNavOpen(false); logout(); }}>
                       {t.logout}
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <Link href="/login" className={styles.navBtn}>
+              <Link onClick={closeMobileNav} href="/login" className={styles.navBtn}>
                 <span>{t.login}</span>
               </Link>
             )}
