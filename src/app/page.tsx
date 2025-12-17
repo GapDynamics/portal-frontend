@@ -55,7 +55,7 @@ export default function Home() {
       },
       goals: {
         title: "Reach your goals, your way",
-        labels: { build: "Build muscles", lose: "Lose weight", routines: "Build healthy routines", maintain: "Maintain weight" },
+        labels: { build: "Build muscles", lose: "Lose weight", routines: "Build healthy routines", maintain: "Personal Training Plan" },
       },
       cta: { title: "Ready to see results? Start your plan today.", button: "Get started", note: "Set up your account in minutes" },
       footer: {
@@ -83,7 +83,7 @@ export default function Home() {
       },
       goals: {
         title: "Erreiche deine Ziele – auf deine Weise",
-        labels: { build: "Muskeln aufbauen", lose: "Abnehmen", routines: "Gesunde Routinen aufbauen", maintain: "Gewicht halten" },
+        labels: { build: "Muskeln aufbauen", lose: "Abnehmen", routines: "Gesunde Routinen aufbauen", maintain: "Personalisierter Trainingsplan" },
       },
       cta: { title: "Bereit für Ergebnisse? Starte deinen Plan noch heute.", button: "Loslegen", note: "Konto in wenigen Minuten einrichten" },
       footer: {
@@ -111,7 +111,7 @@ export default function Home() {
       },
       goals: {
         title: "Atteignez vos objectifs, à votre façon",
-        labels: { build: "Prendre du muscle", lose: "Perdre du poids", routines: "Créer des routines saines", maintain: "Maintenir le poids" },
+        labels: { build: "Prendre du muscle", lose: "Perdre du poids", routines: "Créer des routines saines", maintain: "Personalisierter Trainingsplan" },
       },
       cta: { title: "Prêt à voir des résultats ? Commencez votre plan dès aujourd’hui.", button: "Commencer", note: "Créez votre compte en quelques minutes" },
       footer: {

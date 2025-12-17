@@ -31,6 +31,20 @@ export default function DirectoryPage() {
 
   const lastSearchCenterRef = useRef<{ lat: number; lon: number } | null>(null);
 
+  const toSpecialtyParam = (raw: string) => {
+    const v = (raw ?? "").trim();
+    if (!v) return "";
+    const map: Record<string, string> = {
+      doctor: "Doctor",
+      therapist: "Therapist",
+      nutrition: "Nutrition",
+      dietitian: "Dietitian",
+      nutritionist: "Nutritionist",
+      coach: "Coach",
+    };
+    return map[v.toLowerCase()] ?? v;
+  };
+
   async function handleStartChat(recipientId: number | string | undefined | null) {
     if (recipientId == null || recipientId === "") {
       alert("Cannot start chat: recipient ID is missing.");
@@ -190,7 +204,8 @@ export default function DirectoryPage() {
       params.set('lat', String(lat));
       params.set('lon', String(lon));
       if (safeRadius != null) params.set('radius', String(safeRadius));
-      if (specialty && specialty.trim()) params.set('specialty', specialty.trim());
+      const sp = specialty ? toSpecialtyParam(specialty) : '';
+      if (sp) params.set('specialty', sp);
       const url = `${apiBase}/profiles/search?${params.toString()}`;
       const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
       if (!res.ok) throw new Error('Failed nearby');
@@ -214,11 +229,48 @@ export default function DirectoryPage() {
     }
   };
 
+  const loadByQuery = async (q: string, specialty?: string) => {
+    const queryText = (q ?? '').trim();
+    if (!queryText) return;
+    try {
+      setLoading(true);
+      lastSearchCenterRef.current = null;
+      const params = new URLSearchParams();
+      params.set('q', queryText);
+      const sp = specialty ? toSpecialtyParam(specialty) : '';
+      if (sp) params.set('specialty', sp);
+      const url = `${apiBase}/profiles/search?${params.toString()}`;
+      const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      if (!res.ok) throw new Error('Failed search');
+      const arr = await res.json();
+      const mapped = Array.isArray(arr) ? arr.map((p: any) => ({
+        id: (p.id ?? p.profileId ?? p.userId ?? p._id),
+        userId: (p.userId ?? p.user?.id ?? p.account?.id),
+        name: p.displayName || `${p.firstName ?? ''} ${p.lastName ?? ''}`.trim() || '—',
+        city: p.city || '',
+        country: p.country || '',
+        category: p.specialties || '',
+        lat: typeof p.latitude === 'number' ? p.latitude : null,
+        lng: typeof p.longitude === 'number' ? p.longitude : null,
+        distance: typeof p.distance === 'number' ? p.distance : undefined,
+      })) : [];
+      setProfessionals(mapped);
+    } catch {
+      setProfessionals([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // When category changes, reload results from the last known location (if any)
   useEffect(() => {
     const c = lastSearchCenterRef.current;
-    if (!c) return;
-    loadNearby(c.lat, c.lon, 50, category || undefined);
+    if (c) {
+      loadNearby(c.lat, c.lon, 50, category || undefined);
+      return;
+    }
+    const q = query.trim();
+    if (q) loadByQuery(q, category || undefined);
   }, [category]);
 
   // Initial load: try user's current location, fallback to Switzerland center
@@ -510,7 +562,7 @@ export default function DirectoryPage() {
   const handleSearchKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      geocodeAndCenter(query.trim());
+      loadByQuery(query.trim(), category || undefined);
     }
   };
   async function geocodeAndCenter(q: string) {
@@ -518,8 +570,8 @@ export default function DirectoryPage() {
     const map = mapRef.current;
     if (!map) return;
     try {
-      // Backend is currently returning 400 for /profiles/search?q=..., so
-      // we geocode text -> coordinates and then call /profiles/search?lat&lon.
+      await loadByQuery(q, category || undefined);
+      return;
       if (provider === 'google') {
         const g = (window as any).google;
         if (!g || !g.maps) {
@@ -541,7 +593,8 @@ export default function DirectoryPage() {
                 if (L && markerRef.current && typeof markerRef.current.remove === 'function') { try { markerRef.current.remove(); } catch {} }
                 if (L && !((map as any).setCenter)) { markerRef.current = L.marker([lat, lng]).addTo(map); }
                 await loadNearby(lat, lng, 50, category || undefined);
-                const place = feature?.place_name as string | undefined; if (place) setLocation(place);
+                const place = (feature as any)?.place_name;
+                if (typeof place === 'string' && place) setLocation(place);
                 return;
               }
             }
@@ -605,8 +658,8 @@ export default function DirectoryPage() {
             if (L && !((map as any).setCenter)) { markerRef.current = L.marker([lat, lng]).addTo(map); }
             // Load nearby for this geocoded location
             loadNearby(lat, lng, 50, category || undefined);
-            const place = feature?.place_name as string | undefined;
-            if (place) setLocation(place);
+            const place = (feature as any)?.place_name;
+            if (typeof place === 'string' && place) setLocation(place);
             return;
           }
         }
